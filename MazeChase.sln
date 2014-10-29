@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MazeChase", "MazeChase\Maze
 EndProject
 Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MazeChaseContent", "MazeChase\MazeChaseContent\MazeChaseContent.contentproj", "{5AFBF00F-6710-4642-B3C9-7DD108B0887E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xTile", "xTile", "{1C4D522A-D39A-4EE9-87B2-BE9C8FBA4DBE}"
+	ProjectSection(SolutionItems) = preProject
+		xTile\xTile.dll = xTile\xTile.dll
+		xTile\xTile.Pipeline.dll = xTile\xTile.Pipeline.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
