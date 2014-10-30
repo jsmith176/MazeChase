@@ -33,10 +33,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Maze.tide">
-      <Name>Maze</Name>
-      <Importer>TideImporter</Importer>
-      <Processor>TideProcessor</Processor>
+    <Compile Include="PacMan.png">
+      <Name>PacMan</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -47,10 +47,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PacMan.png">
-      <Name>PacMan</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+    <Compile Include="Maze.tide">
+      <Name>Maze</Name>
+      <Importer>TideImporter</Importer>
+      <Processor>TideProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

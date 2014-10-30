@@ -4,9 +4,26 @@
   <TileSheets>
     <TileSheet Id="tile sheet">
       <Description><![CDATA[]]></Description>
-      <ImageSource><![CDATA[Maze_Tiles.png]]></ImageSource>
+      <ImageSource><![CDATA[..\MazeChaseContent\Maze_Tiles.png]]></ImageSource>
       <Alignment SheetSize="12 x 8" TileSize="16 x 16" Margin="0 x 0" Spacing="0 x 0" />
-      <Properties />
+      <Properties>
+        <Property Key="@TileIndex@1@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@2@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@3@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@4@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@5@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@0@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@12@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@14@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@15@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@17@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@24@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@25@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@26@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@27@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@28@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@29@Wall" Type="Int32"><![CDATA[1]]></Property>
+      </Properties>
     </TileSheet>
   </TileSheets>
   <Layers>
@@ -34,7 +51,11 @@
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
-          <Static Index="1" BlendMode="Alpha" />
+          <Static Index="1" BlendMode="Alpha">
+            <Properties>
+              <Property Key="Wall" Type="Int32"><![CDATA[1]]></Property>
+            </Properties>
+          </Static>
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />

@@ -13,6 +13,8 @@ using Microsoft.Xna.Framework.Media;
 using xTile;
 using xTile.Dimensions;
 using xTile.Display;
+using xTile.Layers;
+using xTile.Tiles;
 
 namespace MazeChase
 {
@@ -26,7 +28,8 @@ namespace MazeChase
         InputManager inputManager;
         Player player;
         Vector2 origin;
-        Location tileUnderPlayer;
+        Layer layer;
+        Tile tileUnderPlayer, tileAbovePlayer, tileRightOfPlayer, tileBelowPlayer, tileLeftOfPlayer;
 
         // Commit Test Comment
 
@@ -72,6 +75,9 @@ namespace MazeChase
 
             // Initialise InputManager
             inputManager = new InputManager();
+
+            // Initialise Map Layer
+            layer = map.GetLayer("maze layer");
         }
 
         /// <summary>
@@ -124,40 +130,44 @@ namespace MazeChase
             // and update viewport for camera movement
             map.Update(gameTime.ElapsedGameTime.Milliseconds);
 
+            // Determine tiles around player
+            tileUnderPlayer = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + player.getPosition().X), (int)(viewport.Y + player.getPosition().Y)))];
+            tileAbovePlayer = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + player.getPosition().X), (int)(viewport.Y + player.getPosition().Y - 12)))];
+            tileRightOfPlayer = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + player.getPosition().X + 12), (int)(viewport.Y + player.getPosition().Y)))];
+            tileBelowPlayer = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + player.getPosition().X), (int)(viewport.Y + player.getPosition().Y + 12)))];
+            tileLeftOfPlayer = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + player.getPosition().X - 12), (int)(viewport.Y + player.getPosition().Y)))];
+
             // Check for input
             inputManager.Update(gameTime);
 
-            if (inputManager.getLastKeyPressed() == Keys.Up)
+            if (inputManager.getLastKeyPressed() == Keys.Up && !isWall(tileAbovePlayer))
             {
                 if (viewport.Y > 0 && player.getPosition().Y == origin.Y)
                     viewport.Y -= speed;
                 else if (player.getPosition().Y > 0)
                     player.Move(0, -speed);
             }
-            if (inputManager.getLastKeyPressed() == Keys.Right)
+            if (inputManager.getLastKeyPressed() == Keys.Right && !isWall(tileRightOfPlayer))
             {
                 if (viewport.X < map.DisplayWidth - viewport.Width && player.getPosition().X == origin.X)
                     viewport.X += speed;
                 else if (player.getPosition().X < viewport.Width)
                     player.Move(speed, 0);
             }
-            if (inputManager.getLastKeyPressed() == Keys.Down)
+            if (inputManager.getLastKeyPressed() == Keys.Down && !isWall(tileBelowPlayer))
             {
                 if (viewport.Y < map.DisplayHeight - viewport.Height && player.getPosition().Y == origin.Y)
                     viewport.Y += speed;
                 else if (player.getPosition().Y < viewport.Height)
                     player.Move(0, speed);
             }
-            if (inputManager.getLastKeyPressed() == Keys.Left)
+            if (inputManager.getLastKeyPressed() == Keys.Left && !isWall(tileLeftOfPlayer))
             {
                 if (viewport.X > 0 && player.getPosition().X == origin.X)
                     viewport.X -= speed;
                 else if (player.getPosition().X > 0)
                     player.Move(-speed, 0);
             }
-
-            // Update tile position
-            tileUnderPlayer = new Location((int)(viewport.X + player.getPosition().X) / 16, (int)(viewport.Y + player.getPosition().Y) / 16);
 
             // Update player
             player.Update(gameTime);
@@ -186,6 +196,19 @@ namespace MazeChase
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        bool isWall(Tile tile)
+        {
+            for (int i = 0; i < tile.TileIndexProperties.Count; ++i)
+            {
+                if (tile.TileIndexProperties.ElementAt(i).Key.Equals("Wall"))
+                {
+                    if (tile.TileIndexProperties.ElementAt(i).Value == 1)
+                        return true;
+                }
+            }
+            return false;
         }
     }
 }
