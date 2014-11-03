@@ -20,8 +20,7 @@ namespace MazeChase
         GraphicsDevice graphicsDevice;
         InputManager inputManager;
         Layer layer;
-        //Tile tileUnderPlayer, tileAbovePlayer, tileRightOfPlayer, tileBelowPlayer, tileLeftOfPlayer;
-        //int[,] intersections;
+        int[,] intersections;
 
         // xTile map, display device reference, and rendering viewport
         Map map;
@@ -50,7 +49,7 @@ namespace MazeChase
 
             // Initialise Map Layer
             layer = map.GetLayer("maze layer");
-            //defineIntersections();
+            defineIntersections();
         }
 
         public virtual void LoadContent()
@@ -103,51 +102,65 @@ namespace MazeChase
             return false;
         }
 
-        //void defineIntersections()
-        //{
-        //    intersections = new int[layer.LayerWidth, layer.LayerHeight];
-        //    Tile currentTile, above, right, below, left;
-        //    for (int i = 0; i < layer.LayerWidth; i++)
-        //    {
-        //        for (int j = 0; j < layer.LayerHeight; j++)
-        //        {
-        //            currentTile = layer.Tiles[new Location(i * 16, j * 16)];
+        public bool isIntersection(int playerX, int playerY)
+        {
+            if (intersections[viewport.X + (playerX / 16), viewport.Y + (playerY / 16)] == 1)
+                return true;
+            return false;
+        }
 
-        //            if (i > 0)
-        //                above = layer.Tiles[new Location(i * 16, (j * 16) - 16)];
-        //            else
-        //                above = null;
-        //            if (j < layer.DisplayWidth - 16)
-        //                right = layer.Tiles[new Location((i * 16) + 16, j * 16)];
-        //            else
-        //                right = null;
-        //            if (i < layer.DisplayHeight)
-        //                below = layer.Tiles[new Location(i * 16, (j * 16) + 16)];
-        //            else
-        //                below = null;
-        //            if (j > 0)
-        //                left = layer.Tiles[new Location((i * 16) - 16, j * 16)];
-        //            else
-        //                left = null;
+        void defineIntersections()
+        {
+            intersections = new int[layer.LayerWidth, layer.LayerHeight];
+            Tile currentTile, above, right, below, left;
+            for (int i = 0; i < layer.LayerWidth; i++)
+            {
+                for (int j = 0; j < layer.LayerHeight; j++)
+                {
+                    currentTile = layer.Tiles[i, j];
 
-        //            if (above != null && below != null)
-        //            {
-        //                if (left != null || right != null)
-        //                {
-        //                    intersections[i, j] = 1;
-        //                }
-        //            }
-        //            else if (left != null && right != null)
-        //            {
-        //                if (above != null || below != null)
-        //                {
-        //                    intersections[i, j] = 1;
-        //                }
-        //            }
-        //            else
-        //                intersections[i, j] = 0;
-        //        }
-        //    }
-        //}
+                    if (j > 0)
+                        above = layer.Tiles[i, j - 1];
+                    else
+                        above = null;
+                    if (i < layer.LayerWidth - 1)
+                        right = layer.Tiles[i + 1, j];
+                    else
+                        right = null;
+                    if (j < layer.LayerHeight - 1)
+                        below = layer.Tiles[i, j + 1];
+                    else
+                        below = null;
+                    if (i > 0)
+                        left = layer.Tiles[i - 1, j];
+                    else
+                        left = null;
+
+                    if (currentTile.TileIndexProperties.Count > 0)
+                    {
+                        if (currentTile.TileIndexProperties.ElementAt(0).Key.Equals("Wall"))
+                        {
+                            intersections[i, j] = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (above != null && right != null && below != null && left != null)
+                        {
+                            if (above.TileIndexProperties.Count == 0 || below.TileIndexProperties.Count == 0)
+                            {
+                                if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
+                                    intersections[i, j] = 1;
+                            }
+                            else if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
+                            {
+                                if (above.TileIndexProperties.Count == 0 || below.TileIndexProperties.Count == 0)
+                                    intersections[i, j] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

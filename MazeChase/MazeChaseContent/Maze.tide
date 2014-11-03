@@ -23,6 +23,14 @@
         <Property Key="@TileIndex@27@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@28@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@29@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@6@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@8@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@30@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@32@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@7@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@18@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@20@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@31@Wall" Type="Int32"><![CDATA[1]]></Property>
       </Properties>
     </TileSheet>
   </TileSheets>

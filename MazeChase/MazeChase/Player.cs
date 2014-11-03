@@ -10,8 +10,7 @@ namespace MazeChase
     class Player
     {
         Texture2D texture;
-        Vector2 position, currentFrame, sheetSize, frameSize;
-        Vector2 speed;
+        Vector2 position, currentFrame, sheetSize, frameSize, speed;
         Rectangle sourceRectangle;
         Color color;
         float timeSinceLastFrame = 0;

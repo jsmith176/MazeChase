@@ -87,6 +87,7 @@ namespace MazeChase
             mapManager.Update(gameTime);
 
             // Check for input
+
             if (inputManager.getLastKeyPressed() == Keys.Up && !mapManager.isWall(player.getPosition().X, player.getPosition().Y - 10))
             {
                 if (mapManager.getViewport().Y > 0 && player.getPosition().Y == origin.Y)
