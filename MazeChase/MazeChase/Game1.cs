@@ -122,7 +122,9 @@ namespace MazeChase
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            {
                 this.Exit();
+            }
 
             // TODO: Add your update logic here
 
@@ -142,31 +144,52 @@ namespace MazeChase
 
             if (inputManager.getLastKeyPressed() == Keys.Up && !isWall(tileAbovePlayer))
             {
-                if (viewport.Y > 0 && player.getPosition().Y == origin.Y)
+                if (viewport.Y > 0 && player.getPosition().Y == origin.Y) {
                     viewport.Y -= speed;
+                    player.Move(0, -speed, false);
+                }
+
                 else if (player.getPosition().Y > 0)
-                    player.Move(0, -speed);
+                {
+                    player.Move(0, -speed, true);
+                }
             }
             if (inputManager.getLastKeyPressed() == Keys.Right && !isWall(tileRightOfPlayer))
             {
                 if (viewport.X < map.DisplayWidth - viewport.Width && player.getPosition().X == origin.X)
+                {
                     viewport.X += speed;
+                    player.Move(speed, 0, false);
+                }
+                    
                 else if (player.getPosition().X < viewport.Width)
-                    player.Move(speed, 0);
+                {
+                    player.Move(speed, 0, true);
+                }
             }
             if (inputManager.getLastKeyPressed() == Keys.Down && !isWall(tileBelowPlayer))
             {
                 if (viewport.Y < map.DisplayHeight - viewport.Height && player.getPosition().Y == origin.Y)
+                {
                     viewport.Y += speed;
+                    player.Move(0, speed, false);
+                }
                 else if (player.getPosition().Y < viewport.Height)
-                    player.Move(0, speed);
+                {
+                    player.Move(0, speed, true);
+                }
             }
             if (inputManager.getLastKeyPressed() == Keys.Left && !isWall(tileLeftOfPlayer))
             {
                 if (viewport.X > 0 && player.getPosition().X == origin.X)
+                {
                     viewport.X -= speed;
+                    player.Move(-speed, 0, false);
+                }
                 else if (player.getPosition().X > 0)
-                    player.Move(-speed, 0);
+                {
+                    player.Move(-speed, 0, true);
+                }
             }
 
             // Update player
