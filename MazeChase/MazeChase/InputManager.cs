@@ -11,6 +11,7 @@ namespace MazeChase
     class InputManager
     {
         Keys lastKeyPressed = Keys.F1; // An unused key for initialization purposes
+        Keys previousKeyPressed = Keys.F1;
 
         public virtual void Update(GameTime gameTime)
         {
@@ -36,6 +37,11 @@ namespace MazeChase
         public Keys getLastKeyPressed()
         {
             return lastKeyPressed;
+        }
+
+        public void resetKey()
+        {
+            lastKeyPressed = previousKeyPressed;
         }
     }
 }
