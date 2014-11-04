@@ -102,7 +102,7 @@ namespace MazeChase
             return false;
         }
 
-        public bool isIntersection(int playerX, int playerY)
+        public bool isIntersectionUnderPlayer(int playerX, int playerY)
         {
             if (intersections[(viewport.X + playerX) / 16, (viewport.Y + playerY) / 16] == 1)
                 return true;
@@ -151,13 +151,19 @@ namespace MazeChase
                             {
                                 if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
                                     intersections[i, j] = 1;
+                                else
+                                    intersections[i, j] = 2;
                             }
                             else if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
                             {
                                 if (above.TileIndexProperties.Count == 0 || below.TileIndexProperties.Count == 0)
                                     intersections[i, j] = 1;
+                                else
+                                    intersections[i, j] = 2;
                             }
                         }
+                        else
+                            intersections[i, j] = 2;
                     }
                 }
             }
