@@ -18,7 +18,8 @@ namespace MazeChase
         InputManager inputManager;
         MapManager mapManager;
         Player player;
-        Vector2 origin;
+        Vector2 origin, direction;
+        bool playerMove = false;
 
         // Player speed
         int speed = 2;
@@ -60,6 +61,8 @@ namespace MazeChase
 
             player = new Player(playerTexture, origin);
 
+            direction = Vector2.Zero;
+
         }
 
         protected override void UnloadContent()
@@ -87,55 +90,72 @@ namespace MazeChase
             mapManager.Update(gameTime);
 
             // Check for input
+            player.Move(speed * (int)direction.X, speed * (int)direction.Y, true);
 
-            if (inputManager.getLastKeyPressed() == Keys.Up && !mapManager.isWall(player.getPosition().X, player.getPosition().Y - 10))
+            if (inputManager.getLastKeyPressed() == Keys.Up && mapManager.isIntersection((int)player.getPosition().X, (int)player.getPosition().Y))
             {
                 if (mapManager.getViewport().Y > 0 && player.getPosition().Y == origin.Y)
                 {
                     mapManager.moveViewport(0, -speed);
-                    player.Move(0, -speed, false);
+                    direction.X = 0;
+                    direction.Y = -1;
+                    playerMove = false;
                 }
 
                 else if (player.getPosition().Y > 0)
                 {
-                    player.Move(0, -speed, true);
+                    direction.X = 0;
+                    direction.Y = -1;
+                    playerMove = true;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Right && !mapManager.isWall(player.getPosition().X + 10, player.getPosition().Y))
+            if (inputManager.getLastKeyPressed() == Keys.Right && mapManager.isIntersection((int)player.getPosition().X, (int)player.getPosition().Y))
             {
                 if (mapManager.getViewport().X < mapManager.getMap().DisplayWidth - mapManager.getViewport().Width && player.getPosition().X == origin.X)
                 {
                     mapManager.moveViewport(speed, 0);
-                    player.Move(speed, 0, false);
+                    direction.X = 1;
+                    direction.Y = 0;
+                    playerMove = false;
                 }
 
                 else if (player.getPosition().X < mapManager.getViewport().Width)
                 {
-                    player.Move(speed, 0, true);
+                    direction.X = 1;
+                    direction.Y = 0;
+                    playerMove = true;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Down && !mapManager.isWall(player.getPosition().X, player.getPosition().Y + 10))
+            if (inputManager.getLastKeyPressed() == Keys.Down && mapManager.isIntersection((int)player.getPosition().X, (int)player.getPosition().Y))
             {
                 if (mapManager.getViewport().Y < mapManager.getMap().DisplayHeight - mapManager.getViewport().Height && player.getPosition().Y == origin.Y)
                 {
                     mapManager.moveViewport(0, speed);
-                    player.Move(0, speed, false);
+                    direction.X = 0;
+                    direction.Y = 1;
+                    playerMove = false;
                 }
                 else if (player.getPosition().Y < mapManager.getViewport().Height)
                 {
-                    player.Move(0, speed, true);
+                    direction.X = 0;
+                    direction.Y = 1;
+                    playerMove = true;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Left && !mapManager.isWall(player.getPosition().X - 10, player.getPosition().Y))
+            if (inputManager.getLastKeyPressed() == Keys.Left && mapManager.isIntersection((int)player.getPosition().X, (int)player.getPosition().Y))
             {
                 if (mapManager.getViewport().X > 0 && player.getPosition().X == origin.X)
                 {
                     mapManager.moveViewport(-speed, 0);
-                    player.Move(-speed, 0, false);
+                    direction.X = -1;
+                    direction.Y = 0;
+                    playerMove = false;
                 }
                 else if (player.getPosition().X > 0)
                 {
-                    player.Move(-speed, 0, true);
+                    direction.X = -1;
+                    direction.Y = 0;
+                    playerMove = true;
                 }
             }
 

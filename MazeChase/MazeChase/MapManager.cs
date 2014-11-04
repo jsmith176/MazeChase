@@ -104,7 +104,7 @@ namespace MazeChase
 
         public bool isIntersection(int playerX, int playerY)
         {
-            if (intersections[viewport.X + (playerX / 16), viewport.Y + (playerY / 16)] == 1)
+            if (intersections[(viewport.X + playerX) / 16, (viewport.Y + playerY) / 16] == 1)
                 return true;
             return false;
         }
