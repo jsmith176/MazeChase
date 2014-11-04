@@ -18,7 +18,7 @@ namespace MazeChase
         InputManager inputManager;
         MapManager mapManager;
         Player player;
-        Vector2 origin, movement, tileAbovePlayer, tileBelowPlayer, tileLeftOfPlayer, tileRightOfPlayer;
+        Vector2 origin, movement, tileUnderPlayer, tileAbovePlayer, tileBelowPlayer, tileLeftOfPlayer, tileRightOfPlayer;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT};
         direction movementDirection;
 
@@ -91,35 +91,86 @@ namespace MazeChase
             mapManager.Update(gameTime);
 
             // Update tiles around player
+            tileUnderPlayer = new Vector2(player.getPosition().X, player.getPosition().Y);
             tileAbovePlayer = new Vector2(player.getPosition().X, player.getPosition().Y - 9);
             tileBelowPlayer = new Vector2(player.getPosition().X, player.getPosition().Y + 9);
             tileLeftOfPlayer = new Vector2(player.getPosition().X - 9, player.getPosition().Y);
             tileRightOfPlayer = new Vector2(player.getPosition().X + 9, player.getPosition().Y);
 
             // Check for input
+
+            if (movementDirection == direction.DOWN)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Up)
+                {
+                    movementDirection = direction.UP;
+                    movement.X = 0;
+                    movement.Y = -1;
+                }
+            }
+            else if (movementDirection == direction.UP)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Down)
+                {
+                    movementDirection = direction.DOWN;
+                    movement.X = 0;
+                    movement.Y = 1;
+                }
+            }
+            else if (movementDirection == direction.LEFT)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Right)
+                {
+                    movementDirection = direction.RIGHT;
+                    movement.X = 1;
+                    movement.Y = 0;
+                }
+            }
+            else if (movementDirection == direction.RIGHT)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Left)
+                {
+                    movementDirection = direction.LEFT;
+                    movement.X = -1;
+                    movement.Y = 0;
+                }
+            }
+            
             if (inputManager.getLastKeyPressed() == Keys.Up && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileAbovePlayer.X, tileAbovePlayer.Y))
             {
-                movementDirection = direction.UP;
-                movement.X = 0;
-                movement.Y = -1;
+                if ((player.getPosition().X + mapManager.getViewport().X) % 24 == 0)// where 24 is the tile width (or height) +  an offset of 1/2 tile width (or height)
+                {
+                    movementDirection = direction.UP;
+                    movement.X = 0;
+                    movement.Y = -1;
+                }
             }
             if (inputManager.getLastKeyPressed() == Keys.Right && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileRightOfPlayer.X, tileRightOfPlayer.Y))
             {
-                movementDirection = direction.RIGHT;
-                movement.X = 1;
-                movement.Y = 0;
+                if ((player.getPosition().Y + mapManager.getViewport().Y) % 24 == 0)
+                {
+                    movementDirection = direction.RIGHT;
+                    movement.X = 1;
+                    movement.Y = 0;
+                }
             }
             if (inputManager.getLastKeyPressed() == Keys.Down && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileBelowPlayer.X, tileBelowPlayer.Y))
             {
-                movementDirection = direction.DOWN;
-                movement.X = 0;
-                movement.Y = 1;
+                if ((player.getPosition().X + mapManager.getViewport().X) % 24 == 0)
+                {
+                    movementDirection = direction.DOWN;
+                    movement.X = 0;
+                    movement.Y = 1;
+                }
             }
             if (inputManager.getLastKeyPressed() == Keys.Left && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileLeftOfPlayer.X, tileLeftOfPlayer.Y))
             {
-                movementDirection = direction.LEFT;
-                movement.X = -1;
-                movement.Y = 0;
+                if ((player.getPosition().Y + mapManager.getViewport().Y) % 24 == 0)
+                {
+                    movementDirection = direction.LEFT;
+                    movement.X = -1;
+                    movement.Y = 0;
+                }
             }
 
             // Check for walls

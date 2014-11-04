@@ -31,6 +31,16 @@
         <Property Key="@TileIndex@18@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@20@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@31@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@9@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@10@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@21@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@23@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@33@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@34@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@35@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@84@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@86@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@85@Wall" Type="Int32"><![CDATA[1]]></Property>
       </Properties>
     </TileSheet>
   </TileSheets>
@@ -75,9 +85,9 @@
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
-          <Static Index="32" BlendMode="Alpha" />
-          <Static Index="16" BlendMode="Alpha" />
-          <Static Index="30" BlendMode="Alpha" />
+          <Static Index="1" BlendMode="Alpha" />
+          <Static Index="1" BlendMode="Alpha" />
+          <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
           <Static Index="1" BlendMode="Alpha" />
@@ -1410,7 +1420,7 @@
           <Static Index="14" BlendMode="Alpha" />
         </Row>
         <Row>
-          <Static Index="32" BlendMode="Alpha" />
+          <Static Index="12" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="27" BlendMode="Alpha" />
           <Static Index="28" BlendMode="Alpha" />
@@ -1472,10 +1482,10 @@
           <Static Index="28" BlendMode="Alpha" />
           <Static Index="29" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
-          <Static Index="30" BlendMode="Alpha" />
+          <Static Index="14" BlendMode="Alpha" />
         </Row>
         <Row>
-          <Static Index="13" BlendMode="Alpha" />
+          <Static Index="12" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
@@ -1537,10 +1547,10 @@
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
-          <Static Index="16" BlendMode="Alpha" />
+          <Static Index="14" BlendMode="Alpha" />
         </Row>
         <Row>
-          <Static Index="8" BlendMode="Alpha" />
+          <Static Index="12" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="3" BlendMode="Alpha" />
           <Static Index="4" BlendMode="Alpha" />
@@ -1602,7 +1612,7 @@
           <Static Index="3" BlendMode="Alpha" />
           <Static Index="5" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
-          <Static Index="6" BlendMode="Alpha" />
+          <Static Index="14" BlendMode="Alpha" />
         </Row>
         <Row>
           <Static Index="12" BlendMode="Alpha" />
@@ -2935,9 +2945,9 @@
           <Static Index="25" BlendMode="Alpha" />
           <Static Index="25" BlendMode="Alpha" />
           <Static Index="25" BlendMode="Alpha" />
-          <Static Index="8" BlendMode="Alpha" />
-          <Static Index="16" BlendMode="Alpha" />
-          <Static Index="6" BlendMode="Alpha" />
+          <Static Index="25" BlendMode="Alpha" />
+          <Static Index="25" BlendMode="Alpha" />
+          <Static Index="25" BlendMode="Alpha" />
           <Static Index="25" BlendMode="Alpha" />
           <Static Index="25" BlendMode="Alpha" />
           <Static Index="25" BlendMode="Alpha" />

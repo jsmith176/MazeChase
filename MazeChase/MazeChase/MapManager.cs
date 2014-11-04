@@ -42,10 +42,11 @@ namespace MazeChase
             // Initialise xTile map resources
             map.LoadTileSheets(mapDisplayDevice);
 
-            // Initialise xTile rendering viewport at the center of the map
+            // Initialise xTile rendering viewport at the players location
+            // where 40 is the 40th 'x' tile and 22 is the 22nd 'y' tile
             viewport = new xTile.Dimensions.Rectangle(new Size(800, 480));
-            viewport.X = map.DisplaySize.Width / 2 - viewport.Width / 2;
-            viewport.Y = map.DisplaySize.Height / 2 - viewport.Height / 2;
+            viewport.X = (40 * 16 + 8) - viewport.Width / 2;
+            viewport.Y = (22 * 16 + 8) - viewport.Height / 2;
 
             // Initialise Map Layer
             layer = map.GetLayer("maze layer");
