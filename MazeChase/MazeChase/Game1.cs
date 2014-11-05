@@ -22,6 +22,9 @@ namespace MazeChase
         enum direction { STILL, UP, DOWN, LEFT, RIGHT};
         direction movementDirection;
 
+        SoundEffect playerNoise;
+        SoundEffectInstance playerNoiseInstance;
+
         // Player speed
         int speed = 2;
 
@@ -56,6 +59,9 @@ namespace MazeChase
 
             // Load textures
             playerTexture = Content.Load<Texture2D>(@"PacMan");
+            playerNoise = Content.Load<SoundEffect>(@"PlayerNoise");
+
+            playerNoiseInstance = playerNoise.CreateInstance();
 
             // Initialise Player
             origin = new Vector2(400, 240);
@@ -179,53 +185,73 @@ namespace MazeChase
                 case direction.UP:
                     if (!mapManager.isWall(tileAbovePlayer.X, tileAbovePlayer.Y))
                     {
+                        playerNoiseInstance.Play();
                         if (mapManager.getViewport().Y > 0 && player.getPosition().Y == origin.Y)
                         {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
                             mapManager.moveViewport(0, -speed);
                         }
                         else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
                     }
                     break;
                 case direction.DOWN:
                     if (!mapManager.isWall(tileBelowPlayer.X, tileBelowPlayer.Y))
                     {
+                        playerNoiseInstance.Play();
                         if (mapManager.getViewport().Y < mapManager.getMap().DisplayHeight - mapManager.getViewport().Height && player.getPosition().Y == origin.Y)
                         {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
                             mapManager.moveViewport(0, speed);
                         }
                         else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
                     }
                     break;
                 case direction.LEFT:
                     if (!mapManager.isWall(tileLeftOfPlayer.X, tileLeftOfPlayer.Y))
                     {
+                        playerNoiseInstance.Play();
                         if (mapManager.getViewport().X > 0 && player.getPosition().X == origin.X)
                         {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
                             mapManager.moveViewport(-speed, 0);
                         }
                         else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
                     }
                     break;
                 case direction.RIGHT:
                     if (!mapManager.isWall(tileRightOfPlayer.X, tileRightOfPlayer.Y))
                     {
+                        playerNoiseInstance.Play();
                         if (mapManager.getViewport().X < mapManager.getMap().DisplayWidth - mapManager.getViewport().Width && player.getPosition().X == origin.X)
                         {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
                             mapManager.moveViewport(speed, 0);
                         }
                         else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true);
+                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
                     }
                     break;
                 default:
-                    player.Move(0, 0, false);
+                    player.Move(0, 0, false, false);
                     break;
             }
 

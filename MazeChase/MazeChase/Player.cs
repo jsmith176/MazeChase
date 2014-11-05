@@ -15,6 +15,7 @@ namespace MazeChase
         Color color;
         float timeSinceLastFrame = 0;
         float millisecondsPerFrame = 64;
+        bool isMoving;
 
         public Player(Texture2D texture, Vector2 startingPosition)
         {
@@ -28,8 +29,10 @@ namespace MazeChase
 
         public virtual void Update(GameTime gameTime)
         {
-            if (speed.X != 0 || speed.Y != 0)
+            if (isMoving)
+            {
                 nextFrame(gameTime);
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -60,8 +63,12 @@ namespace MazeChase
             }
         }
 
-        public void Move(int x, int y, bool playerMove)
+        public void Move(int x, int y, bool playerMove, bool viewportMove)
         {
+            if (playerMove == true || viewportMove == true)
+            {
+                isMoving = true;
+            }
             speed = new Vector2(x, y);
 
             if (playerMove)
