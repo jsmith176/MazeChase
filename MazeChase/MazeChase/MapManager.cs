@@ -120,6 +120,11 @@ namespace MazeChase
                 tile.TileIndex = 13;
                 scoreManager.increaseScore(10);
             }
+            else if (tile.TileIndex == 19)
+            {
+                tile.TileIndex = 13;
+                scoreManager.increaseScore(100);
+            }
         }
 
         void defineIntersections()

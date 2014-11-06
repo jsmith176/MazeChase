@@ -41,6 +41,7 @@
         <Property Key="@TileIndex@84@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@86@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@85@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@11@Wall" Type="Int32"><![CDATA[1]]></Property>
       </Properties>
     </TileSheet>
   </TileSheets>
