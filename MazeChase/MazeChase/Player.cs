@@ -14,7 +14,7 @@ namespace MazeChase
         Rectangle sourceRectangle;
         Color color;
         float timeSinceLastFrame = 0;
-        float millisecondsPerFrame = 64;
+        float millisecondsPerFrame = 86;
         bool isMoving;
 
         public Player(Texture2D texture, Vector2 startingPosition)
@@ -58,7 +58,7 @@ namespace MazeChase
                 }
                 else
                 {
-                    spriteBatch.Draw(texture, position, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.FlipVertically, 0.1f);
+                    spriteBatch.Draw(texture, position, new Rectangle(0, 0, 24, 24), color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.FlipVertically, 0.1f);
                 }
             }
         }
@@ -69,6 +69,9 @@ namespace MazeChase
             {
                 isMoving = true;
             }
+            else
+                isMoving = false;
+
             speed = new Vector2(x, y);
 
             if (playerMove)

@@ -18,7 +18,7 @@ namespace MazeChase
     {
         ContentManager contentManager;
         GraphicsDevice graphicsDevice;
-        InputManager inputManager;
+        ScoreManager scoreManager;
         Layer layer;
         int[,] intersections;
 
@@ -27,28 +27,29 @@ namespace MazeChase
         IDisplayDevice mapDisplayDevice;
         xTile.Dimensions.Rectangle viewport;
         
-        public MapManager(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public MapManager(ContentManager contentManager, GraphicsDevice graphicsDevice, ScoreManager scoreManager)
         {
             this.contentManager = contentManager;
             this.graphicsDevice = graphicsDevice;
-            this.inputManager = inputManager;
+            this.scoreManager = scoreManager;
+
         }
 
         public virtual void Initialize()
         {
-            // Initialise xTile map display device
+            // Initialize xTile map display device
             mapDisplayDevice = new XnaDisplayDevice(contentManager, graphicsDevice);
 
-            // Initialise xTile map resources
+            // Initialize xTile map resources
             map.LoadTileSheets(mapDisplayDevice);
 
-            // Initialise xTile rendering viewport at the players location
+            // Initialize xTile rendering viewport at the players location
             // where 40 is the 40th 'x' tile and 22 is the 22nd 'y' tile
             viewport = new xTile.Dimensions.Rectangle(new Size(800, 480));
-            viewport.X = (40 * 16 + 8) - viewport.Width / 2;
+            viewport.X = (37 * 16 + 8) - viewport.Width / 2;
             viewport.Y = (22 * 16 + 8) - viewport.Height / 2;
 
-            // Initialise Map Layer
+            // Initialize Map Layer
             layer = map.GetLayer("maze layer");
             defineIntersections();
         }
@@ -108,6 +109,17 @@ namespace MazeChase
             if (intersections[(viewport.X + playerX) / 16, (viewport.Y + playerY) / 16] == 1)
                 return true;
             return false;
+        }
+
+        public void isFoodUnderPlayer(int playerX, int playerY)
+        {
+            Tile tile = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + playerX), (int)(viewport.Y + playerY)))];
+
+            if (tile.TileIndex == 22)
+            {
+                tile.TileIndex = 13;
+                scoreManager.increaseScore(10);
+            }
         }
 
         void defineIntersections()

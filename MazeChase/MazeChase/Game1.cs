@@ -17,6 +17,7 @@ namespace MazeChase
         SpriteBatch spriteBatch;
         InputManager inputManager;
         MapManager mapManager;
+        ScoreManager scoreManager;
         Player player;
         Vector2 origin, movement, tileUnderPlayer, tileAbovePlayer, tileBelowPlayer, tileLeftOfPlayer, tileRightOfPlayer;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT};
@@ -42,7 +43,7 @@ namespace MazeChase
             base.Initialize();
 
             // Initialize mapManager
-            mapManager = new MapManager(this.Content, this.GraphicsDevice);
+            mapManager = new MapManager(this.Content, this.GraphicsDevice, this.scoreManager);
 
             // Load map content
             mapManager.LoadContent();
@@ -59,11 +60,15 @@ namespace MazeChase
 
             // Load textures
             playerTexture = Content.Load<Texture2D>(@"PacMan");
-            playerNoise = Content.Load<SoundEffect>(@"PlayerNoise");
 
+            // Load sounds
+            playerNoise = Content.Load<SoundEffect>(@"PlayerNoise2");
             playerNoiseInstance = playerNoise.CreateInstance();
 
-            // Initialise Player
+            // Initialize ScoreManager
+            scoreManager = new ScoreManager(Content.Load<SpriteFont>("SpriteFont"));
+
+            // Initialize Player
             origin = new Vector2(400, 240);
 
             player = new Player(playerTexture, origin);
@@ -102,6 +107,7 @@ namespace MazeChase
             tileBelowPlayer = new Vector2(player.getPosition().X, player.getPosition().Y + 9);
             tileLeftOfPlayer = new Vector2(player.getPosition().X - 9, player.getPosition().Y);
             tileRightOfPlayer = new Vector2(player.getPosition().X + 9, player.getPosition().Y);
+            mapManager.isFoodUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y);
 
             // Check for input
 
@@ -197,6 +203,7 @@ namespace MazeChase
                     else
                     {
                         playerNoiseInstance.Stop();
+                        player.Move(0, 0, false, false);
                     }
                     break;
                 case direction.DOWN:
@@ -214,6 +221,7 @@ namespace MazeChase
                     else
                     {
                         playerNoiseInstance.Stop();
+                        player.Move(0, 0, false, false);
                     }
                     break;
                 case direction.LEFT:
@@ -231,6 +239,7 @@ namespace MazeChase
                     else
                     {
                         playerNoiseInstance.Stop();
+                        player.Move(0, 0, false, false);
                     }
                     break;
                 case direction.RIGHT:
@@ -248,6 +257,7 @@ namespace MazeChase
                     else
                     {
                         playerNoiseInstance.Stop();
+                        player.Move(0, 0, false, false);
                     }
                     break;
                 default:
@@ -272,6 +282,7 @@ namespace MazeChase
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
             player.Draw(spriteBatch);
+            scoreManager.Draw(spriteBatch);
 
             spriteBatch.End();
 
