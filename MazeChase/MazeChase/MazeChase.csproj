@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ghost.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="Player.cs" />
