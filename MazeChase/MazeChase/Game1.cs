@@ -19,6 +19,7 @@ namespace MazeChase
         MapManager mapManager;
         ScoreManager scoreManager;
         Player player;
+        Ghost blue;
         Vector2 origin, movement, tileUnderPlayer, tileAbovePlayer, tileBelowPlayer, tileLeftOfPlayer, tileRightOfPlayer;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT};
         direction movementDirection;
@@ -72,6 +73,9 @@ namespace MazeChase
             origin = new Vector2(400, 240);
 
             player = new Player(playerTexture, origin);
+
+            // Initialize Ghosts
+            blue = new Ghost(playerTexture, new Vector2(1, 1));
 
             movement = Vector2.Zero;
 
@@ -268,6 +272,10 @@ namespace MazeChase
             // Update player
             player.Update(gameTime);
 
+            // Update ghosts
+            blue.Update(gameTime);
+            blue.reposition(mapManager.getViewport().X, mapManager.getViewport().Y);
+
             base.Update(gameTime);
         }
 
@@ -282,6 +290,7 @@ namespace MazeChase
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
             player.Draw(spriteBatch);
+            blue.Draw(spriteBatch);
             scoreManager.Draw(spriteBatch);
 
             spriteBatch.End();
