@@ -20,15 +20,9 @@ namespace MazeChase
         ScoreManager scoreManager;
         Player player;
         Ghost blue;
-        Vector2 origin, movement, tileUnderPlayer, tileAbovePlayer, tileBelowPlayer, tileLeftOfPlayer, tileRightOfPlayer;
-        enum direction { STILL, UP, DOWN, LEFT, RIGHT};
-        direction movementDirection;
-
-        SoundEffect playerNoise;
-        SoundEffectInstance playerNoiseInstance;
-
-        // Player speed
-        int speed = 2;
+        Vector2 origin;
+        
+        bool inIntersection = false;
 
         // Textures
         Texture2D playerTexture;
@@ -52,6 +46,9 @@ namespace MazeChase
 
             // Initialize InputManager
             inputManager = new InputManager();
+
+            // Initialize Player
+            player = new Player(this.Content, inputManager, mapManager, origin);
         }
 
         protected override void LoadContent()
@@ -59,25 +56,15 @@ namespace MazeChase
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Load textures
-            playerTexture = Content.Load<Texture2D>(@"PacMan");
-
-            // Load sounds
-            playerNoise = Content.Load<SoundEffect>(@"PlayerNoise2");
-            playerNoiseInstance = playerNoise.CreateInstance();
-
             // Initialize ScoreManager
             scoreManager = new ScoreManager(Content.Load<SpriteFont>("SpriteFont"));
 
-            // Initialize Player
+            // Viewport Origin
             origin = new Vector2(400, 240);
 
-            player = new Player(playerTexture, origin);
-
             // Initialize Ghosts
+            playerTexture = Content.Load<Texture2D>(@"PacMan");
             blue = new Ghost(playerTexture, new Vector2(1, 1));
-
-            movement = Vector2.Zero;
 
         }
 
@@ -104,177 +91,25 @@ namespace MazeChase
 
             // Update map
             mapManager.Update(gameTime);
-
-            // Update tiles around player
-            tileUnderPlayer = new Vector2(player.getPosition().X, player.getPosition().Y);
-            tileAbovePlayer = new Vector2(player.getPosition().X, player.getPosition().Y - 9);
-            tileBelowPlayer = new Vector2(player.getPosition().X, player.getPosition().Y + 9);
-            tileLeftOfPlayer = new Vector2(player.getPosition().X - 9, player.getPosition().Y);
-            tileRightOfPlayer = new Vector2(player.getPosition().X + 9, player.getPosition().Y);
             mapManager.isFoodUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y);
-
-            // Check for input
-
-            if (movementDirection == direction.DOWN)
-            {
-                if (inputManager.getLastKeyPressed() == Keys.Up)
-                {
-                    movementDirection = direction.UP;
-                    movement.X = 0;
-                    movement.Y = -1;
-                }
-            }
-            else if (movementDirection == direction.UP)
-            {
-                if (inputManager.getLastKeyPressed() == Keys.Down)
-                {
-                    movementDirection = direction.DOWN;
-                    movement.X = 0;
-                    movement.Y = 1;
-                }
-            }
-            else if (movementDirection == direction.LEFT)
-            {
-                if (inputManager.getLastKeyPressed() == Keys.Right)
-                {
-                    movementDirection = direction.RIGHT;
-                    movement.X = 1;
-                    movement.Y = 0;
-                }
-            }
-            else if (movementDirection == direction.RIGHT)
-            {
-                if (inputManager.getLastKeyPressed() == Keys.Left)
-                {
-                    movementDirection = direction.LEFT;
-                    movement.X = -1;
-                    movement.Y = 0;
-                }
-            }
-            
-            if (inputManager.getLastKeyPressed() == Keys.Up && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileAbovePlayer.X, tileAbovePlayer.Y))
-            {
-                if ((player.getPosition().X + mapManager.getViewport().X) % 24 == 0)// where 24 is the tile width (or height) +  an offset of 1/2 tile width (or height)
-                {
-                    movementDirection = direction.UP;
-                    movement.X = 0;
-                    movement.Y = -1;
-                }
-            }
-            if (inputManager.getLastKeyPressed() == Keys.Right && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileRightOfPlayer.X, tileRightOfPlayer.Y))
-            {
-                if ((player.getPosition().Y + mapManager.getViewport().Y) % 24 == 0)
-                {
-                    movementDirection = direction.RIGHT;
-                    movement.X = 1;
-                    movement.Y = 0;
-                }
-            }
-            if (inputManager.getLastKeyPressed() == Keys.Down && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileBelowPlayer.X, tileBelowPlayer.Y))
-            {
-                if ((player.getPosition().X + mapManager.getViewport().X) % 24 == 0)
-                {
-                    movementDirection = direction.DOWN;
-                    movement.X = 0;
-                    movement.Y = 1;
-                }
-            }
-            if (inputManager.getLastKeyPressed() == Keys.Left && mapManager.isIntersectionUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) && !mapManager.isWall(tileLeftOfPlayer.X, tileLeftOfPlayer.Y))
-            {
-                if ((player.getPosition().Y + mapManager.getViewport().Y) % 24 == 0)
-                {
-                    movementDirection = direction.LEFT;
-                    movement.X = -1;
-                    movement.Y = 0;
-                }
-            }
-
-            // Check for walls
-            switch (movementDirection)
-            {
-                case direction.UP:
-                    if (!mapManager.isWall(tileAbovePlayer.X, tileAbovePlayer.Y))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().Y > 0 && player.getPosition().Y == origin.Y)
-                        {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
-                            mapManager.moveViewport(0, -speed);
-                        }
-                        else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        player.Move(0, 0, false, false);
-                    }
-                    break;
-                case direction.DOWN:
-                    if (!mapManager.isWall(tileBelowPlayer.X, tileBelowPlayer.Y))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().Y < mapManager.getMap().DisplayHeight - mapManager.getViewport().Height && player.getPosition().Y == origin.Y)
-                        {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
-                            mapManager.moveViewport(0, speed);
-                        }
-                        else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        player.Move(0, 0, false, false);
-                    }
-                    break;
-                case direction.LEFT:
-                    if (!mapManager.isWall(tileLeftOfPlayer.X, tileLeftOfPlayer.Y))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().X > 0 && player.getPosition().X == origin.X)
-                        {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
-                            mapManager.moveViewport(-speed, 0);
-                        }
-                        else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        player.Move(0, 0, false, false);
-                    }
-                    break;
-                case direction.RIGHT:
-                    if (!mapManager.isWall(tileRightOfPlayer.X, tileRightOfPlayer.Y))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().X < mapManager.getMap().DisplayWidth - mapManager.getViewport().Width && player.getPosition().X == origin.X)
-                        {
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, false, true);
-                            mapManager.moveViewport(speed, 0);
-                        }
-                        else
-                            player.Move(speed * (int)movement.X, speed * (int)movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        player.Move(0, 0, false, false);
-                    }
-                    break;
-                default:
-                    player.Move(0, 0, false, false);
-                    break;
-            }
 
             // Update player
             player.Update(gameTime);
 
             // Update ghosts
-            blue.Update(gameTime);
+            //blue.Update(gameTime);
             blue.reposition(mapManager.getViewport().X, mapManager.getViewport().Y);
+
+            if (mapManager.isIntersectionUnderLocation((int)blue.getPosition().X, (int)blue.getPosition().Y))
+            {
+                if (!inIntersection)
+                {
+                    blue.newDirection();
+                    inIntersection = true;
+                }
+            }
+            else
+                inIntersection = false;
 
             base.Update(gameTime);
         }

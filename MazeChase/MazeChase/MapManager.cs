@@ -83,15 +83,15 @@ namespace MazeChase
             return viewport;
         }
 
-        public void moveViewport(int x, int y)
+        public void moveViewport(float x, float y)
         {
-            viewport.X += x;
-            viewport.Y += y;
+            viewport.X += (int)x;
+            viewport.Y += (int)y;
         }
 
-        public bool isWall(float x, float y)
+        public bool isWall(Vector2 location)
         {
-            Tile tile = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + x), (int)(viewport.Y + y)))];
+            Tile tile = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + location.X), (int)(viewport.Y + location.Y)))];
 
             for (int i = 0; i < tile.TileIndexProperties.Count; ++i)
             {
@@ -104,9 +104,9 @@ namespace MazeChase
             return false;
         }
 
-        public bool isIntersectionUnderPlayer(int playerX, int playerY)
+        public bool isIntersectionUnderLocation(int x, int y)
         {
-            if (intersections[(viewport.X + playerX) / 16, (viewport.Y + playerY) / 16] == 1)
+            if (intersections[(viewport.X + x) / 16, (viewport.Y + y) / 16] == 1)
                 return true;
             return false;
         }
@@ -125,6 +125,31 @@ namespace MazeChase
                 tile.TileIndex = 13;
                 scoreManager.increaseScore(100);
             }
+        }
+
+        public Vector2 tileUnderLocation(float x, float y)
+        {
+            return new Vector2(x, y);
+        }
+
+        public Vector2 tileAboveLocation(float x, float y)
+        {
+            return new Vector2(x, y - 9);
+        }
+
+        public Vector2 tileRightOfLocation(float x, float y)
+        {
+            return new Vector2(x + 9, y);
+        }
+
+        public Vector2 tileBelowLocation(float x, float y)
+        {
+            return new Vector2(x, y + 9);
+        }
+
+        public Vector2 tileLeftOfLocation(float x, float y)
+        {
+            return new Vector2(x - 9, y);
         }
 
         void defineIntersections()

@@ -4,27 +4,47 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 
 namespace MazeChase
 {
     class Player
     {
+        ContentManager contentManager;
+        InputManager inputManager;
+        MapManager mapManager;
         Texture2D texture;
-        Vector2 position, currentFrame, sheetSize, frameSize, speed;
+        Vector2 position, currentFrame, sheetSize, frameSize, speed, movement, origin;
         Rectangle sourceRectangle;
         Color color;
         float timeSinceLastFrame = 0;
         float millisecondsPerFrame = 86;
+        int playerSpeed = 2;
         bool isMoving;
+        enum direction { STILL, UP, DOWN, LEFT, RIGHT };
+        direction movementDirection;
+        SoundEffect playerNoise;
+        SoundEffectInstance playerNoiseInstance;
 
-        public Player(Texture2D texture, Vector2 startingPosition)
+        public Player(ContentManager contentManager, InputManager inputManager, MapManager mapManager, Vector2 origin)
         {
-            this.texture = texture;
-            position = startingPosition;
+            this.contentManager = contentManager;
+            this.inputManager = inputManager;
+            this.mapManager = mapManager;
+            this.origin = origin;
+            position = origin;
             sourceRectangle = new Rectangle(0, 0, 24, 24);
             color = Color.White;
             sheetSize = new Vector2(3, 1);
             frameSize = new Vector2(24, 24);
+            movement = Vector2.Zero;
+            speed = new Vector2(2, 2);
+            playerSpeed = 2;
+            texture = contentManager.Load<Texture2D>(@"PacMan");
+            playerNoise = contentManager.Load<SoundEffect>(@"PlayerNoise2");
+            playerNoiseInstance = playerNoise.CreateInstance();
         }
 
         public virtual void Update(GameTime gameTime)
@@ -33,6 +53,8 @@ namespace MazeChase
             {
                 nextFrame(gameTime);
             }
+
+            updateDirection();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -63,7 +85,7 @@ namespace MazeChase
             }
         }
 
-        public void Move(int x, int y, bool playerMove, bool viewportMove)
+        public void Move(float x, float y, bool playerMove, bool viewportMove)
         {
             if (playerMove == true || viewportMove == true)
             {
@@ -78,6 +100,164 @@ namespace MazeChase
             {
                 position.X += speed.X;
                 position.Y += speed.Y;
+            }
+        }
+
+        public void updateDirection()
+        {
+            // Player may turn around
+            if (movementDirection == direction.DOWN)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Up)
+                {
+                    movementDirection = direction.UP;
+                    movement.X = 0;
+                    movement.Y = -1;
+                }
+            }
+            else if (movementDirection == direction.UP)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Down)
+                {
+                    movementDirection = direction.DOWN;
+                    movement.X = 0;
+                    movement.Y = 1;
+                }
+            }
+            else if (movementDirection == direction.LEFT)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Right)
+                {
+                    movementDirection = direction.RIGHT;
+                    movement.X = 1;
+                    movement.Y = 0;
+                }
+            }
+            else if (movementDirection == direction.RIGHT)
+            {
+                if (inputManager.getLastKeyPressed() == Keys.Left)
+                {
+                    movementDirection = direction.LEFT;
+                    movement.X = -1;
+                    movement.Y = 0;
+                }
+            }
+
+            // Check for walls
+            if (inputManager.getLastKeyPressed() == Keys.Up && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileAboveLocation(position.X, position.Y)))
+            {
+                if ((position.X + mapManager.getViewport().X) % 24 == 0)// where 24 is the tile width (or height) +  an offset of 1/2 tile width (or height)
+                {
+                    movementDirection = direction.UP;
+                    movement.X = 0;
+                    movement.Y = -1;
+                }
+            }
+            if (inputManager.getLastKeyPressed() == Keys.Right && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileRightOfLocation(position.X, position.Y)))
+            {
+                if ((position.Y + mapManager.getViewport().Y) % 24 == 0)
+                {
+                    movementDirection = direction.RIGHT;
+                    movement.X = 1;
+                    movement.Y = 0;
+                }
+            }
+            if (inputManager.getLastKeyPressed() == Keys.Down && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileBelowLocation(position.X, position.Y)))
+            {
+                if ((position.X + mapManager.getViewport().X) % 24 == 0)
+                {
+                    movementDirection = direction.DOWN;
+                    movement.X = 0;
+                    movement.Y = 1;
+                }
+            }
+            if (inputManager.getLastKeyPressed() == Keys.Left && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileLeftOfLocation(position.X, position.Y)))
+            {
+                if ((position.Y + mapManager.getViewport().Y) % 24 == 0)
+                {
+                    movementDirection = direction.LEFT;
+                    movement.X = -1;
+                    movement.Y = 0;
+                }
+            }
+
+            switch (movementDirection)
+            {
+                case direction.UP:
+                    if (!mapManager.isWall(mapManager.tileAboveLocation(position.X, position.Y)))
+                    {
+                        playerNoiseInstance.Play();
+                        if (mapManager.getViewport().Y > 0 && position.Y == origin.Y)
+                        {
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
+                            mapManager.moveViewport(0, -playerSpeed);
+                        }
+                        else
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
+                        Move(0, 0, false, false);
+                    }
+                    break;
+                case direction.DOWN:
+                    if (!mapManager.isWall(mapManager.tileBelowLocation(position.X, position.Y)))
+                    {
+                        playerNoiseInstance.Play();
+                        if (mapManager.getViewport().Y < mapManager.getMap().DisplayHeight - mapManager.getViewport().Height && position.Y == origin.Y)
+                        {
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
+                            mapManager.moveViewport(0, playerSpeed);
+                        }
+                        else
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
+                        Move(0, 0, false, false);
+                    }
+                    break;
+                case direction.LEFT:
+                    if (!mapManager.isWall(mapManager.tileLeftOfLocation(position.X, position.Y)))
+                    {
+                        playerNoiseInstance.Play();
+                        if (mapManager.getViewport().X > 0 && position.X == origin.X)
+                        {
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
+                            mapManager.moveViewport(-playerSpeed, 0);
+                        }
+                        else
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
+                        Move(0, 0, false, false);
+                    }
+                    break;
+                case direction.RIGHT:
+                    if (!mapManager.isWall(mapManager.tileRightOfLocation(position.X, position.Y)))
+                    {
+                        playerNoiseInstance.Play();
+                        if (mapManager.getViewport().X < mapManager.getMap().DisplayWidth - mapManager.getViewport().Width && position.X == origin.X)
+                        {
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
+                            mapManager.moveViewport(playerSpeed, 0);
+                        }
+                        else
+                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
+                    }
+                    else
+                    {
+                        playerNoiseInstance.Stop();
+                        Move(0, 0, false, false);
+                    }
+                    break;
+                default:
+                    Move(0, 0, false, false);
+                    break;
             }
         }
 
