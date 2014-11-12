@@ -23,6 +23,7 @@ namespace MazeChase
         float millisecondsPerFrame = 86;
         int playerSpeed = 2;
         bool isMoving;
+        public bool isDead;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT };
         direction movementDirection;
         SoundEffect playerNoise;
@@ -144,7 +145,7 @@ namespace MazeChase
             }
 
             // Check for walls
-            if (inputManager.getLastKeyPressed() == Keys.Up && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileAboveLocation(position.X, position.Y)))
+            if (inputManager.getLastKeyPressed() == Keys.Up && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileAboveLocation(position)))
             {
                 if ((position.X + mapManager.getViewport().X) % 24 == 0)// where 24 is the tile width (or height) +  an offset of 1/2 tile width (or height)
                 {
@@ -153,7 +154,7 @@ namespace MazeChase
                     movement.Y = -1;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Right && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileRightOfLocation(position.X, position.Y)))
+            if (inputManager.getLastKeyPressed() == Keys.Right && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileRightOfLocation(position)))
             {
                 if ((position.Y + mapManager.getViewport().Y) % 24 == 0)
                 {
@@ -162,7 +163,7 @@ namespace MazeChase
                     movement.Y = 0;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Down && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileBelowLocation(position.X, position.Y)))
+            if (inputManager.getLastKeyPressed() == Keys.Down && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileBelowLocation(position)))
             {
                 if ((position.X + mapManager.getViewport().X) % 24 == 0)
                 {
@@ -171,7 +172,7 @@ namespace MazeChase
                     movement.Y = 1;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Left && mapManager.isIntersectionUnderLocation((int)position.X, (int)position.Y) && !mapManager.isWall(mapManager.tileLeftOfLocation(position.X, position.Y)))
+            if (inputManager.getLastKeyPressed() == Keys.Left && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileLeftOfLocation(position)))
             {
                 if ((position.Y + mapManager.getViewport().Y) % 24 == 0)
                 {
@@ -184,7 +185,7 @@ namespace MazeChase
             switch (movementDirection)
             {
                 case direction.UP:
-                    if (!mapManager.isWall(mapManager.tileAboveLocation(position.X, position.Y)))
+                    if (!mapManager.isWall(mapManager.tileAboveLocation(position)))
                     {
                         playerNoiseInstance.Play();
                         if (mapManager.getViewport().Y > 0 && position.Y == origin.Y)
@@ -202,7 +203,7 @@ namespace MazeChase
                     }
                     break;
                 case direction.DOWN:
-                    if (!mapManager.isWall(mapManager.tileBelowLocation(position.X, position.Y)))
+                    if (!mapManager.isWall(mapManager.tileBelowLocation(position)))
                     {
                         playerNoiseInstance.Play();
                         if (mapManager.getViewport().Y < mapManager.getMap().DisplayHeight - mapManager.getViewport().Height && position.Y == origin.Y)
@@ -220,7 +221,7 @@ namespace MazeChase
                     }
                     break;
                 case direction.LEFT:
-                    if (!mapManager.isWall(mapManager.tileLeftOfLocation(position.X, position.Y)))
+                    if (!mapManager.isWall(mapManager.tileLeftOfLocation(position)))
                     {
                         playerNoiseInstance.Play();
                         if (mapManager.getViewport().X > 0 && position.X == origin.X)
@@ -238,7 +239,7 @@ namespace MazeChase
                     }
                     break;
                 case direction.RIGHT:
-                    if (!mapManager.isWall(mapManager.tileRightOfLocation(position.X, position.Y)))
+                    if (!mapManager.isWall(mapManager.tileRightOfLocation(position)))
                     {
                         playerNoiseInstance.Play();
                         if (mapManager.getViewport().X < mapManager.getMap().DisplayWidth - mapManager.getViewport().Width && position.X == origin.X)

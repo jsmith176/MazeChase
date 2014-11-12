@@ -104,9 +104,9 @@ namespace MazeChase
             return false;
         }
 
-        public bool isIntersectionUnderLocation(int x, int y)
+        public bool isIntersectionUnderLocation(Vector2 location)
         {
-            if (intersections[(viewport.X + x) / 16, (viewport.Y + y) / 16] == 1)
+            if (intersections[(int)(viewport.X + location.X) / 16, (int)(viewport.Y + location.Y) / 16] == 1)
                 return true;
             return false;
         }
@@ -127,29 +127,29 @@ namespace MazeChase
             }
         }
 
-        public Vector2 tileUnderLocation(float x, float y)
+        public Vector2 tileUnderLocation(Vector2 location)
         {
-            return new Vector2(x, y);
+            return new Vector2(location.X, location.Y);
         }
 
-        public Vector2 tileAboveLocation(float x, float y)
+        public Vector2 tileAboveLocation(Vector2 location)
         {
-            return new Vector2(x, y - 9);
+            return new Vector2(location.X, location.Y - 9);
         }
 
-        public Vector2 tileRightOfLocation(float x, float y)
+        public Vector2 tileRightOfLocation(Vector2 location)
         {
-            return new Vector2(x + 9, y);
+            return new Vector2(location.X + 9, location.Y);
         }
 
-        public Vector2 tileBelowLocation(float x, float y)
+        public Vector2 tileBelowLocation(Vector2 location)
         {
-            return new Vector2(x, y + 9);
+            return new Vector2(location.X, location.Y + 9);
         }
 
-        public Vector2 tileLeftOfLocation(float x, float y)
+        public Vector2 tileLeftOfLocation(Vector2 location)
         {
-            return new Vector2(x - 9, y);
+            return new Vector2(location.X - 9, location.Y);
         }
 
         void defineIntersections()

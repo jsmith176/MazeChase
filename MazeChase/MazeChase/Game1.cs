@@ -21,8 +21,8 @@ namespace MazeChase
         Player player;
         Ghost blue;
         Vector2 origin;
-        
-        bool inIntersection = false;
+
+        bool pause = false;
 
         // Textures
         Texture2D playerTexture;
@@ -49,6 +49,9 @@ namespace MazeChase
 
             // Initialize Player
             player = new Player(this.Content, inputManager, mapManager, origin);
+
+            // Initialize Ghost
+            blue = new Ghost(this.Content, mapManager, player);
         }
 
         protected override void LoadContent()
@@ -62,10 +65,6 @@ namespace MazeChase
             // Viewport Origin
             origin = new Vector2(400, 240);
 
-            // Initialize Ghosts
-            playerTexture = Content.Load<Texture2D>(@"PacMan");
-            blue = new Ghost(playerTexture, new Vector2(1, 1));
-
         }
 
         protected override void UnloadContent()
@@ -77,39 +76,32 @@ namespace MazeChase
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-            {
                 this.Exit();
-            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
                 this.Exit();
-            }
 
-            // Check for input
-            inputManager.Update(gameTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+                pause = true;
 
-            // Update map
-            mapManager.Update(gameTime);
-            mapManager.isFoodUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y);
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+                pause = false;
 
-            // Update player
-            player.Update(gameTime);
-
-            // Update ghosts
-            //blue.Update(gameTime);
-            blue.reposition(mapManager.getViewport().X, mapManager.getViewport().Y);
-
-            if (mapManager.isIntersectionUnderLocation((int)blue.getPosition().X, (int)blue.getPosition().Y))
+            if (!pause)
             {
-                if (!inIntersection)
-                {
-                    blue.newDirection();
-                    inIntersection = true;
-                }
+                // Check for input
+                inputManager.Update(gameTime);
+
+                // Update map
+                mapManager.Update(gameTime);
+                mapManager.isFoodUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y);
+
+                // Update player
+                player.Update(gameTime);
+
+                // Update ghosts
+                blue.Update(gameTime);
             }
-            else
-                inIntersection = false;
 
             base.Update(gameTime);
         }
