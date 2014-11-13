@@ -19,13 +19,13 @@ namespace MazeChase
         MapManager mapManager;
         ScoreManager scoreManager;
         Player player;
-        Ghost blue;
+        Ghost red, blue, pink, orange;
         Vector2 origin;
 
         bool pause = false;
 
         // Textures
-        Texture2D playerTexture;
+        Texture2D ghostTexture;
 
         public Game1()
         {
@@ -51,7 +51,10 @@ namespace MazeChase
             player = new Player(this.Content, inputManager, mapManager, origin);
 
             // Initialize Ghost
-            blue = new Ghost(this.Content, mapManager, player);
+            red = new Ghost(mapManager, player, ghostTexture, new Vector2((28 * 16) + 8, (19 * 16) + 8));
+            blue = new Ghost(mapManager, player, ghostTexture, new Vector2((37 * 16) + 8, (22 * 16) + 8));
+            pink = new Ghost(mapManager, player, ghostTexture, new Vector2((28 * 16) + 8, (25 * 16) + 8));
+            orange = new Ghost(mapManager, player, ghostTexture, new Vector2((37 * 16) + 8, (25 * 16) + 8));
         }
 
         protected override void LoadContent()
@@ -64,6 +67,9 @@ namespace MazeChase
 
             // Viewport Origin
             origin = new Vector2(400, 240);
+
+            // Load Textures
+            ghostTexture = Content.Load<Texture2D>(@"PacMan");
 
         }
 
@@ -87,7 +93,7 @@ namespace MazeChase
             if (Keyboard.GetState().IsKeyDown(Keys.R))
                 pause = false;
 
-            if (!pause)
+            if (!pause && !player.isDead)
             {
                 // Check for input
                 inputManager.Update(gameTime);
@@ -98,10 +104,15 @@ namespace MazeChase
 
                 // Update player
                 player.Update(gameTime);
-
                 // Update ghosts
-                blue.Update(gameTime);
+                red.Update(gameTime);
+                //blue.Update(gameTime);
+                pink.Update(gameTime);
+                orange.Update(gameTime);
+                //player.isDead = false;
             }
+            else if (player.isDead)
+                player.deathAnimation(gameTime);
 
             base.Update(gameTime);
         }
@@ -117,7 +128,14 @@ namespace MazeChase
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
             player.Draw(spriteBatch);
-            blue.Draw(spriteBatch);
+            if (!player.isDead)
+            {
+                red.Draw(spriteBatch);
+                blue.Draw(spriteBatch);
+                pink.Draw(spriteBatch);
+                orange.Draw(spriteBatch);
+            }
+
             scoreManager.Draw(spriteBatch);
 
             spriteBatch.End();

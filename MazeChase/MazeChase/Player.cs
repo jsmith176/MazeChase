@@ -40,7 +40,7 @@ namespace MazeChase
             position = origin;
             sourceRectangle = new Rectangle(0, 0, 24, 24);
             color = Color.White;
-            sheetSize = new Vector2(3, 1);
+            sheetSize = new Vector2(3, 4);
             frameSize = new Vector2(24, 24);
             movement = Vector2.Zero;
             speed = new Vector2(2, 2);
@@ -70,6 +70,8 @@ namespace MazeChase
                 playerNoiseInstance.Stop();
 
             if (mapManager.isIntersectionUnderLocation(position) && (position.X + mapManager.getViewport().X) % 24 == 0 && (position.Y + mapManager.getViewport().Y) % 24 == 0)
+                pickDirection();
+            else if (movementDirection == direction.STILL)
                 pickDirection();
 
             move();
@@ -122,7 +124,7 @@ namespace MazeChase
                     }
                     else
                         position.Y -= playerSpeed;
-                    rotation = -90;
+                    rotation = 270;
                     isMoving = true;
                 }
             }
@@ -189,8 +191,26 @@ namespace MazeChase
             return position;
         }
 
-        public void nextFrame(GameTime gameTime)
+        void nextFrame(GameTime gameTime)
         {
+            timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
+            if (timeSinceLastFrame > millisecondsPerFrame)
+            {
+                timeSinceLastFrame = 0;
+                ++currentFrame.X;
+                if (currentFrame.X >= sheetSize.X)
+                    currentFrame.X = 0;
+
+                sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                        (int)currentFrame.Y * (int)frameSize.Y,
+                        (int)frameSize.X, (int)frameSize.Y);
+            }
+        }
+
+        public void deathAnimation(GameTime gameTime)
+        {
+            //currentFrame.X = 0;
+            //currentFrame.Y = 2;
             timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
             if (timeSinceLastFrame > millisecondsPerFrame)
             {
@@ -208,6 +228,9 @@ namespace MazeChase
                         (int)currentFrame.Y * (int)frameSize.Y,
                         (int)frameSize.X, (int)frameSize.Y);
             }
+
+            if (currentFrame.Y == sheetSize.Y - 1)
+                isDead = false;
         }
     }
 }

@@ -120,9 +120,11 @@ namespace MazeChase
                 tile.TileIndex = 13;
                 scoreManager.increaseScore(10);
             }
-            else if (tile.TileIndex == 19)
+            else if (tile.TileIndex == 16 || tile.TileIndex == 19)
             {
-                tile.TileIndex = 13;
+                AnimatedTile aTile = (AnimatedTile)tile;
+                aTile.TileFrames.ElementAt(0).TileIndex = 13;
+                aTile.TileFrames.ElementAt(1).TileIndex = 13;
                 scoreManager.increaseScore(100);
             }
         }

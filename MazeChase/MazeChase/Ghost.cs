@@ -16,17 +16,17 @@ namespace MazeChase
         Rectangle sourceRectangle;
         Vector2 position, viewportPosition, previousTile;
         Color color;
-        int speed = 1;
+        int speed = 2;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT };
         direction movementDirection;
         Random rand;
 
-        public Ghost(ContentManager content, MapManager mapManager, Player player)
+        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 spawnPosition)
         {
             this.mapManager = mapManager;
             this.player = player;
-            texture = content.Load<Texture2D>(@"PacMan");
-            position = new Vector2(31 * 16 + 8, 19 * 16 + 8);
+            this.texture = texture;
+            position = spawnPosition;
             sourceRectangle = new Rectangle(0, 0, 24, 24);
             color = Color.White;
             movementDirection = direction.STILL;
@@ -39,6 +39,8 @@ namespace MazeChase
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
 
             if (mapManager.isIntersectionUnderLocation(viewportPosition) && (viewportPosition.X + mapManager.getViewport().X) % 24 == 0 && (viewportPosition.Y + mapManager.getViewport().Y) % 24 == 0)
+                pickDirection();
+            else if (movementDirection == direction.STILL)
                 pickDirection();
 
             move();
