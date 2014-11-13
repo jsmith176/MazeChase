@@ -21,10 +21,12 @@ namespace MazeChase
         Color color;
         float timeSinceLastFrame = 0;
         float millisecondsPerFrame = 86;
+        float rotation = 0;
         int playerSpeed = 2;
         bool isMoving;
         public bool isDead;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT };
+        int[] wall = { 0, 0, 0, 0 };
         direction movementDirection;
         SoundEffect playerNoise;
         SoundEffectInstance playerNoiseInstance;
@@ -50,216 +52,136 @@ namespace MazeChase
 
         public virtual void Update(GameTime gameTime)
         {
+            if (mapManager.isWall(mapManager.tileAboveLocation(position)))
+                wall[0] = 1;
+            if (mapManager.isWall(mapManager.tileRightOfLocation(position)))
+                wall[1] = 1;
+            if (mapManager.isWall(mapManager.tileBelowLocation(position)))
+                wall[2] = 1;
+            if (mapManager.isWall(mapManager.tileLeftOfLocation(position)))
+                wall[3] = 1;
+
             if (isMoving)
             {
                 nextFrame(gameTime);
+                playerNoiseInstance.Play();
             }
+            else
+                playerNoiseInstance.Stop();
 
-            updateDirection();
+            if (mapManager.isIntersectionUnderLocation(position) && (position.X + mapManager.getViewport().X) % 24 == 0 && (position.Y + mapManager.getViewport().Y) % 24 == 0)
+                pickDirection();
+
+            move();
+
+            for (int i = 0; i < wall.Count(); i++)
+                wall[i] = 0;
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            // spriteBatch.Draw(texture, currentPosition, sourceRectangle, color, rotation, origin, scale, SpriteEffects.None, layerDepth);
-            if (speed.X > 0)
+            spriteBatch.Draw(texture, position, sourceRectangle, color, MathHelper.ToRadians(rotation), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
+        }
+
+        void pickDirection()
+        {
+            switch(inputManager.getLastKeyPressed())
             {
-                spriteBatch.Draw(texture, position, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
-            }
-            else if (speed.X < 0)
-            {
-                spriteBatch.Draw(texture, position, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.FlipHorizontally, 0.1f);
-            }
-            else if (speed.X == 0)
-            {
-                if (speed.Y > 0)
-                {
-                    spriteBatch.Draw(texture, position, sourceRectangle, color, MathHelper.ToRadians(90.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
-                }
-                else if (speed.Y < 0)
-                {
-                    spriteBatch.Draw(texture, position, sourceRectangle, color, MathHelper.ToRadians(270.0f), new Vector2(12, 12), 1f, SpriteEffects.FlipVertically, 0.1f);
-                }
-                else
-                {
-                    spriteBatch.Draw(texture, position, new Rectangle(0, 0, 24, 24), color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.FlipVertically, 0.1f);
-                }
+                case Keys.Up:
+                    if (wall[0] == 0)
+                        movementDirection = direction.UP;
+                    break;
+                case Keys.Right:
+                    if (wall[1] == 0)
+                        movementDirection = direction.RIGHT;
+                    break;
+                case Keys.Down:
+                    if (wall[2] == 0)
+                        movementDirection = direction.DOWN;
+                    break;
+                case Keys.Left:
+                    if (wall[3] == 0)
+                        movementDirection = direction.LEFT;
+                    break;
             }
         }
 
-        public void Move(float x, float y, bool playerMove, bool viewportMove)
+        void move()
         {
-            if (playerMove == true || viewportMove == true)
-            {
-                isMoving = true;
-            }
-            else
-                isMoving = false;
-
-            speed = new Vector2(x, y);
-
-            if (playerMove)
-            {
-                position.X += speed.X;
-                position.Y += speed.Y;
-            }
-        }
-
-        public void updateDirection()
-        {
-            // Player may turn around
-            if (movementDirection == direction.DOWN)
-            {
-                if (inputManager.getLastKeyPressed() == Keys.Up)
-                {
-                    movementDirection = direction.UP;
-                    movement.X = 0;
-                    movement.Y = -1;
-                }
-            }
-            else if (movementDirection == direction.UP)
+            if (movementDirection == direction.UP && wall[0] == 0)
             {
                 if (inputManager.getLastKeyPressed() == Keys.Down)
                 {
                     movementDirection = direction.DOWN;
-                    movement.X = 0;
-                    movement.Y = 1;
                 }
-            }
-            else if (movementDirection == direction.LEFT)
-            {
-                if (inputManager.getLastKeyPressed() == Keys.Right)
+                else
                 {
-                    movementDirection = direction.RIGHT;
-                    movement.X = 1;
-                    movement.Y = 0;
+                    if (mapManager.getViewport().Y > 0 && position.Y == origin.Y)
+                    {
+                        mapManager.moveViewport(0, -playerSpeed);
+                    }
+                    else
+                        position.Y -= playerSpeed;
+                    rotation = -90;
+                    isMoving = true;
                 }
             }
-            else if (movementDirection == direction.RIGHT)
+            else if (movementDirection == direction.RIGHT && wall[1] == 0)
             {
                 if (inputManager.getLastKeyPressed() == Keys.Left)
                 {
                     movementDirection = direction.LEFT;
-                    movement.X = -1;
-                    movement.Y = 0;
+                }
+                else
+                {
+                    if (mapManager.getViewport().X < mapManager.getMap().DisplayWidth - mapManager.getViewport().Width && position.X == origin.X)
+                    {
+                        mapManager.moveViewport(playerSpeed, 0);
+                    }
+                    else
+                        position.X += playerSpeed;
+                    rotation = 0;
+                    isMoving = true;
                 }
             }
-
-            // Check for walls
-            if (inputManager.getLastKeyPressed() == Keys.Up && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileAboveLocation(position)))
+            else if (movementDirection == direction.DOWN && wall[2] == 0)
             {
-                if ((position.X + mapManager.getViewport().X) % 24 == 0)// where 24 is the tile width (or height) +  an offset of 1/2 tile width (or height)
+                if (inputManager.getLastKeyPressed() == Keys.Up)
                 {
                     movementDirection = direction.UP;
-                    movement.X = 0;
-                    movement.Y = -1;
+                }
+                else
+                {
+                    if (mapManager.getViewport().Y < mapManager.getMap().DisplayHeight - mapManager.getViewport().Height && position.Y == origin.Y)
+                    {
+                        mapManager.moveViewport(0, playerSpeed);
+                    }
+                    else
+                        position.Y += playerSpeed;
+                    rotation = 90;
+                    isMoving = true;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Right && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileRightOfLocation(position)))
+            else if (movementDirection == direction.LEFT && wall[3] == 0)
             {
-                if ((position.Y + mapManager.getViewport().Y) % 24 == 0)
+                if (inputManager.getLastKeyPressed() == Keys.Right)
                 {
                     movementDirection = direction.RIGHT;
-                    movement.X = 1;
-                    movement.Y = 0;
                 }
-            }
-            if (inputManager.getLastKeyPressed() == Keys.Down && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileBelowLocation(position)))
-            {
-                if ((position.X + mapManager.getViewport().X) % 24 == 0)
+                else
                 {
-                    movementDirection = direction.DOWN;
-                    movement.X = 0;
-                    movement.Y = 1;
+                    if (mapManager.getViewport().X > 0 && position.X == origin.X)
+                    {
+                        mapManager.moveViewport(-playerSpeed, 0);
+                    }
+                    else
+                        position.X -= playerSpeed;
+                    rotation = 180;
+                    isMoving = true;
                 }
             }
-            if (inputManager.getLastKeyPressed() == Keys.Left && mapManager.isIntersectionUnderLocation(position) && !mapManager.isWall(mapManager.tileLeftOfLocation(position)))
-            {
-                if ((position.Y + mapManager.getViewport().Y) % 24 == 0)
-                {
-                    movementDirection = direction.LEFT;
-                    movement.X = -1;
-                    movement.Y = 0;
-                }
-            }
-
-            switch (movementDirection)
-            {
-                case direction.UP:
-                    if (!mapManager.isWall(mapManager.tileAboveLocation(position)))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().Y > 0 && position.Y == origin.Y)
-                        {
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
-                            mapManager.moveViewport(0, -playerSpeed);
-                        }
-                        else
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        Move(0, 0, false, false);
-                    }
-                    break;
-                case direction.DOWN:
-                    if (!mapManager.isWall(mapManager.tileBelowLocation(position)))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().Y < mapManager.getMap().DisplayHeight - mapManager.getViewport().Height && position.Y == origin.Y)
-                        {
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
-                            mapManager.moveViewport(0, playerSpeed);
-                        }
-                        else
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        Move(0, 0, false, false);
-                    }
-                    break;
-                case direction.LEFT:
-                    if (!mapManager.isWall(mapManager.tileLeftOfLocation(position)))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().X > 0 && position.X == origin.X)
-                        {
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
-                            mapManager.moveViewport(-playerSpeed, 0);
-                        }
-                        else
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        Move(0, 0, false, false);
-                    }
-                    break;
-                case direction.RIGHT:
-                    if (!mapManager.isWall(mapManager.tileRightOfLocation(position)))
-                    {
-                        playerNoiseInstance.Play();
-                        if (mapManager.getViewport().X < mapManager.getMap().DisplayWidth - mapManager.getViewport().Width && position.X == origin.X)
-                        {
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, false, true);
-                            mapManager.moveViewport(playerSpeed, 0);
-                        }
-                        else
-                            Move(playerSpeed * movement.X, playerSpeed * movement.Y, true, false);
-                    }
-                    else
-                    {
-                        playerNoiseInstance.Stop();
-                        Move(0, 0, false, false);
-                    }
-                    break;
-                default:
-                    Move(0, 0, false, false);
-                    break;
-            }
+            else
+                isMoving = false;
         }
 
         public Vector2 getPosition()
