@@ -14,14 +14,16 @@ namespace MazeChase
         Player player;
         Texture2D texture;
         Rectangle sourceRectangle;
-        Vector2 position, viewportPosition, previousTile;
+        Vector2 position, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition;
         Color color;
         int speed = 2;
+        enum mode { SCATTER, ATTACK, FLEE, REGENERATE };
+        mode currentMode;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT };
         direction movementDirection;
         Random rand;
 
-        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 spawnPosition)
+        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 spawnPosition, Vector2 defensePosition)
         {
             this.mapManager = mapManager;
             this.player = player;
@@ -32,6 +34,8 @@ namespace MazeChase
             movementDirection = direction.STILL;
             rand = new Random();
             previousTile = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
+            targetPosition = scatterLocation = defensePosition;
+            cagePosition = spawnPosition;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -47,6 +51,25 @@ namespace MazeChase
 
             if (intersectsWithPlayer())
                 player.isDead = true;
+
+            if (currentMode == mode.ATTACK)
+            {
+                targetPosition = player.getPosition();
+            }
+            else if (currentMode == mode.REGENERATE)
+            {
+                targetPosition = cagePosition;
+            }
+            else if (currentMode == mode.SCATTER)
+            {
+                targetPosition = scatterLocation;
+            }
+            else
+            {
+                targetPosition = player.getPosition();
+            }
+
+            pathing();
         }
 
         void pickDirection()
@@ -85,6 +108,20 @@ namespace MazeChase
                     movementDirection = direction.LEFT;
                     break;
             }
+        }
+
+        void pathing()
+        {
+            // This function will implement the Floyd's algorithm to decide how the ghost should move
+            // If mode is attack, perform the Floyd algorithm and chase, depending on the behavior
+            // If mode is scatter, perform Floyd to go to scatter location. If player gets too close, then switch to flee
+            // If mode is flee, then perform Floyd and do the opposite move
+            // If mode is regenerate, perform Floyd to return to the cage and regenerate
+            //
+
+
+
+
         }
 
         void move()
