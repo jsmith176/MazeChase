@@ -119,8 +119,24 @@ namespace MazeChase
             // If mode is regenerate, perform Floyd to return to the cage and regenerate
             //
 
+            int[,] tempInt = mapManager.getIntersections();
+            int[,] results = new int[(int)Math.Sqrt(tempInt.Length), (int)Math.Sqrt(tempInt.Length)];
 
+            int n = (int)Math.Sqrt(tempInt.Length);
 
+            for (int k = 0; k < n; k++)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (tempInt[i, k] + tempInt[k, j] < tempInt[i, j])
+                        {
+                            results[i, j] = results[i, k] + results[k, j];
+                        }
+                    }
+                }
+            }
 
         }
 

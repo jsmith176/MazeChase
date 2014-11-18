@@ -78,6 +78,11 @@ namespace MazeChase
             return map;
         }
 
+        public int[,] getIntersections()
+        {
+            return intersections;
+        }
+
         public xTile.Dimensions.Rectangle getViewport()
         {
             return viewport;
