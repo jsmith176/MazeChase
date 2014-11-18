@@ -69,7 +69,7 @@ namespace MazeChase
             else
                 playerNoiseInstance.Stop();
 
-            if (mapManager.isIntersectionUnderLocation(position) && (position.X + mapManager.getViewport().X) % 24 == 0 && (position.Y + mapManager.getViewport().Y) % 24 == 0)
+            if (mapManager.isIntersectionUnderLocation(position) && (position.X + mapManager.getViewport().X + 8) % 16 == 0 && (position.Y + mapManager.getViewport().Y + 8) % 16 == 0)
                 pickDirection();
             else if (movementDirection == direction.STILL)
                 pickDirection();

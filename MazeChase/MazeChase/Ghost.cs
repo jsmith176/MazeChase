@@ -23,7 +23,10 @@ namespace MazeChase
         direction movementDirection;
         Random rand;
 
-        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 spawnPosition, Vector2 defensePosition)
+        SpriteFont font;
+        string up, down, left, right;
+
+        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 spawnPosition, Vector2 defensePosition, SpriteFont font)
         {
             this.mapManager = mapManager;
             this.player = player;
@@ -36,13 +39,19 @@ namespace MazeChase
             previousTile = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
             targetPosition = scatterLocation = defensePosition;
             cagePosition = spawnPosition;
+
+            this.font = font;
+            up = "0";
+            down = "0";
+            left = "0";
+            right = "0";
         }
 
         public virtual void Update(GameTime gameTime)
         {
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
 
-            if (mapManager.isIntersectionUnderLocation(viewportPosition) && (viewportPosition.X + mapManager.getViewport().X) % 24 == 0 && (viewportPosition.Y + mapManager.getViewport().Y) % 24 == 0)
+            if (mapManager.isIntersectionUnderLocation(viewportPosition) && (viewportPosition.X + mapManager.getViewport().X + 8) % 16 == 0 && (viewportPosition.Y + mapManager.getViewport().Y + 8) % 16 == 0)
                 pickDirection();
             else if (movementDirection == direction.STILL)
                 pickDirection();
@@ -69,7 +78,7 @@ namespace MazeChase
                 targetPosition = player.getPosition();
             }
 
-            pathing();
+            //pathing();
         }
 
         void pickDirection()
@@ -85,6 +94,20 @@ namespace MazeChase
                 wall[2] = 1;
             if (mapManager.isWall(mapManager.tileLeftOfLocation(viewportPosition)) || movementDirection == direction.RIGHT)
                 wall[3] = 1;
+
+            // If the ghost is near a gate set wall to 0;
+
+            //if (position == new Vector2((32 * 16) + 8, (21 * 16) + 8) ||
+            //    position == new Vector2((33 * 16) + 8, (21 * 16) + 8))
+            //    wall[0] = 0;
+            //else if ((position == new Vector2((32 * 16) + 8, (19 * 16) + 8) ||
+            //    position == new Vector2((33 * 16) + 8, (19 * 16) + 8)))
+            //    wall[2] = 0;
+
+            up = wall[0].ToString();
+            down = wall[2].ToString();
+            left = wall[3].ToString();
+            right = wall[1].ToString();
 
             while (d == 0)
             {
@@ -163,6 +186,10 @@ namespace MazeChase
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, viewportPosition, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
+            spriteBatch.DrawString(font, up, new Vector2(viewportPosition.X - 5, viewportPosition.Y - 15), Color.Green);
+            spriteBatch.DrawString(font, down, new Vector2(viewportPosition.X - 5, viewportPosition.Y + 5), Color.Green);
+            spriteBatch.DrawString(font, left, new Vector2(viewportPosition.X - 15, viewportPosition.Y - 5), Color.Green);
+            spriteBatch.DrawString(font, right, new Vector2(viewportPosition.X + 5, viewportPosition.Y - 5), Color.Green);
         }
 
         public void Wander()

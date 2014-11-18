@@ -51,10 +51,10 @@ namespace MazeChase
             player = new Player(this.Content, inputManager, mapManager, origin);
 
             // Initialize Ghost
-            red = new Ghost(mapManager, player, ghostTexture, new Vector2((28 * 16) + 8, (19 * 16) + 8));
-            blue = new Ghost(mapManager, player, ghostTexture, new Vector2((37 * 16) + 8, (22 * 16) + 8));
-            pink = new Ghost(mapManager, player, ghostTexture, new Vector2((28 * 16) + 8, (25 * 16) + 8));
-            orange = new Ghost(mapManager, player, ghostTexture, new Vector2((37 * 16) + 8, (25 * 16) + 8));
+            red = new Ghost(mapManager, player, ghostTexture, new Vector2((31 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// top right
+            blue = new Ghost(mapManager, player, ghostTexture, new Vector2((32 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (44 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// bottom right
+            pink = new Ghost(mapManager, player, ghostTexture, new Vector2((33 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (0 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// top left
+            orange = new Ghost(mapManager, player, ghostTexture, new Vector2((34 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (44 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// botttom left
         }
 
         protected override void LoadContent()
@@ -106,7 +106,7 @@ namespace MazeChase
                 player.Update(gameTime);
                 // Update ghosts
                 red.Update(gameTime);
-                //blue.Update(gameTime);
+                blue.Update(gameTime);
                 pink.Update(gameTime);
                 orange.Update(gameTime);
                 //player.isDead = false;
