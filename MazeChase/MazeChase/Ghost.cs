@@ -14,9 +14,11 @@ namespace MazeChase
         Player player;
         Texture2D texture;
         Rectangle sourceRectangle;
-        Vector2 position, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition;
+        Vector2 position, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition, currentFrame, firstFrame, lastFrame, frameSize;
         Color color;
         int speed = 2;
+        float timeSinceLastFrame = 0;
+        int millisecondsPerFrame = 100;
         enum mode { SCATTER, ATTACK, FLEE, REGENERATE };
         mode currentMode;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT };
@@ -26,11 +28,15 @@ namespace MazeChase
         SpriteFont font;
         string up, down, left, right;
 
-        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 spawnPosition, Vector2 defensePosition, SpriteFont font)
+        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition, SpriteFont font)
         {
             this.mapManager = mapManager;
             this.player = player;
             this.texture = texture;
+            this.firstFrame = firstFrame;
+            currentFrame = new Vector2(0, 0);
+            this.lastFrame = lastFrame;
+            frameSize = new Vector2(24, 24);
             position = spawnPosition;
             sourceRectangle = new Rectangle(0, 0, 24, 24);
             color = Color.White;
@@ -57,6 +63,7 @@ namespace MazeChase
                 pickDirection();
 
             move();
+            nextFrame(gameTime);
 
             if (intersectsWithPlayer())
                 player.isDead = true;
@@ -97,10 +104,10 @@ namespace MazeChase
 
             // If the ghost is near a gate set wall to 0;
 
-            //if (position == new Vector2((32 * 16) + 8, (21 * 16) + 8) ||
+            //if (mapManager.tileAboveLocation(position) == new Vector2((32 * 16) + 8, (21 * 16) + 8) ||
             //    position == new Vector2((33 * 16) + 8, (21 * 16) + 8))
             //    wall[0] = 0;
-            //else if ((position == new Vector2((32 * 16) + 8, (19 * 16) + 8) ||
+            //else if ((mapManager.tileBelowLocation(position) == new Vector2((32 * 16) + 8, (19 * 16) + 8) ||
             //    position == new Vector2((33 * 16) + 8, (19 * 16) + 8)))
             //    wall[2] = 0;
 
@@ -120,15 +127,27 @@ namespace MazeChase
             {
                 case 1:
                     movementDirection = direction.UP;
+                    firstFrame.X = 0;
+                    lastFrame.X = 1;
+                    currentFrame = firstFrame;
                     break;
                 case 2:
                     movementDirection = direction.RIGHT;
+                    firstFrame.X = 6;
+                    lastFrame.X = 7;
+                    currentFrame = firstFrame;
                     break;
                 case 3:
                     movementDirection = direction.DOWN;
+                    firstFrame.X = 2;
+                    lastFrame.X = 3;
+                    currentFrame = firstFrame;
                     break;
                 case 4:
                     movementDirection = direction.LEFT;
+                    firstFrame.X = 4;
+                    lastFrame.X = 5;
+                    currentFrame = firstFrame;
                     break;
             }
         }
@@ -209,6 +228,24 @@ namespace MazeChase
             // Move in the direction that decreases the distance the most from PacMan
             // assuming there is no obstacle in that direction
             // Floyds shortest path psuedocode in i drive
+        }
+
+        void nextFrame(GameTime gameTime)
+        {
+            timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
+            if (timeSinceLastFrame > millisecondsPerFrame)
+            {
+                timeSinceLastFrame = 0;
+                ++currentFrame.X;
+                if (currentFrame.X > lastFrame.X)
+                {
+                    currentFrame.X = firstFrame.X;
+                }
+            }
+
+            sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                    (int)currentFrame.Y * (int)frameSize.Y,
+                    (int)frameSize.X, (int)frameSize.Y);
         }
     }
 }
