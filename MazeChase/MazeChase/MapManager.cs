@@ -16,11 +16,30 @@ namespace MazeChase
 {
     class MapManager
     {
+        class intersection
+        {
+            public intersection(int x, int y)
+            {
+                xCoord = x;
+                yCoord = y;
+            }
+
+            int xCoord;
+            int yCoord;
+
+            Vector2 getCoords()
+            {
+                return new Vector2(xCoord, yCoord);
+            }
+        }
+
         ContentManager contentManager;
         GraphicsDevice graphicsDevice;
         ScoreManager scoreManager;
         Layer layer;
         int[,] intersections;
+        int[,] adjMatrix;
+        List<Vector2> intList = new List<Vector2>();
 
         // xTile map, display device reference, and rendering viewport
         Map map;
@@ -32,7 +51,6 @@ namespace MazeChase
             this.contentManager = contentManager;
             this.graphicsDevice = graphicsDevice;
             this.scoreManager = scoreManager;
-
         }
 
         public virtual void Initialize()
@@ -73,6 +91,13 @@ namespace MazeChase
             map.Draw(mapDisplayDevice, viewport);
         }
 
+        public direction floyd(int[,] adjMatrix)
+        {
+            
+
+            return direction.STILL;
+        }
+
         public Map getMap()
         {
             return map;
@@ -98,15 +123,14 @@ namespace MazeChase
         {
             Tile tile = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + location.X), (int)(viewport.Y + location.Y)))];
 
-            for (int i = 0; i < tile.TileIndexProperties.Count; ++i)
+            if (tile.TileIndexProperties.ContainsKey("Wall"))
             {
-                if (tile.TileIndexProperties.ElementAt(i).Key.Equals("Wall"))
-                {
-                    if (tile.TileIndexProperties.ElementAt(i).Value == 1)
-                        return true;
-                }
+                return true;
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         public bool isIntersectionUnderLocation(Vector2 location)
@@ -200,22 +224,134 @@ namespace MazeChase
                             if (above.TileIndexProperties.Count == 0 || below.TileIndexProperties.Count == 0)
                             {
                                 if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
+                                {
                                     intersections[i, j] = 1;
+                                    currentTile.Properties.Add("Intersection",1);
+                                }
                                 else
+                                {
                                     intersections[i, j] = 2;
+                                }
                             }
                             else if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
                             {
                                 if (above.TileIndexProperties.Count == 0 || below.TileIndexProperties.Count == 0)
+                                {
                                     intersections[i, j] = 1;
+                                    currentTile.Properties.Add("Intersection",1);
+                                }
                                 else
+                                {
                                     intersections[i, j] = 2;
+                                }
                             }
                         }
                         else
                             intersections[i, j] = 2;
                     }
                 }
+            }
+
+            // 0 is wall, 1 is intersection, 2 is pathway
+            defineAdjMatrix();
+
+        }
+
+        void defineAdjMatrix()
+        {
+            Tile currentTile;
+            int tempIndex = 0;
+            int tempDistance = 0;
+            bool hasWall = false;
+
+            for (int i = 0; i < layer.LayerHeight; i++)
+            {
+                for (int j = 0; j < layer.LayerWidth; j++)
+                {
+                    currentTile = layer.Tiles[j,i];
+                    if (currentTile.Properties.ContainsKey("Intersection"))
+                    {
+                        intList.Add(new Vector2(j,i));
+                    }
+                }
+            }
+
+            adjMatrix = new int[intList.Count, intList.Count];
+
+            for (int i = 0; i < intList.Count; i++)
+            {
+                for (int j = 0; j < intList.Count; j++)
+                {
+
+                    adjMatrix[i,j] = (i == j) ? 0 : -1;
+                }
+            }
+            
+            // Tested up to this point
+
+            for (int i = 0; i < intList.Count; i++)
+            {
+                hasWall = false;
+                tempDistance = 0;
+
+                if (i < intList.Count - 1)
+                {
+                    if (intList[i].Y == intList[i + 1].Y)
+                    {
+                        for (int k = (int)intList[i].X; k < (int)intList[i + 1].X; k++)
+                        {
+                            if (layer.Tiles[k,(int)intList[i].Y].TileIndexProperties.ContainsKey("Wall"))
+                            {
+                                hasWall = true;
+                            }
+                            else
+                            {
+                                tempDistance++;
+                            }
+                        }
+
+                        // Either assign 9999 if a wall between or the distance if not
+                        adjMatrix[i, i + 1] = adjMatrix[i + 1, i] = (hasWall == true) ? -1 : tempDistance;
+                    }
+                    else
+                    {
+                        // Different x levels
+                        adjMatrix[i, i + 1] = -1;
+                    }
+                }
+
+                hasWall = false;
+                tempDistance = 0;
+
+                if (i < intList.Count - 1)
+                {
+                    for (int j = i + 1; j < intList.Count; j++)
+                    {
+                        if (intList[i].X == intList[j].X)
+                        {
+                            for (int m = (int)intList[i].Y; m < (int)intList[j].Y; m++)
+                            {
+                                if (layer.Tiles[(int)intList[i].X, m].TileIndexProperties.ContainsKey("Wall"))
+                                {
+                                    hasWall = true;
+                                }
+                                else
+                                {
+                                    tempDistance++;
+                                }
+                            }
+
+                            adjMatrix[i, j] = adjMatrix[j, i] = (hasWall == true) ? -1 : tempDistance;
+                            break;
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+
+
             }
         }
     }
