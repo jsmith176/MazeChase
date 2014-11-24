@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Media;
 
 namespace MazeChase
 {
+    public enum direction { STILL, UP, DOWN, LEFT, RIGHT };
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
