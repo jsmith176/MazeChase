@@ -94,6 +94,12 @@ namespace MazeChase
             viewport.Y += (int)y;
         }
 
+        public void setViewportPosition(int x, int y)
+        {
+            viewport.X = x;
+            viewport.Y = y;
+        }
+
         public bool isWall(Vector2 location)
         {
             Tile tile = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + location.X), (int)(viewport.Y + location.Y)))];

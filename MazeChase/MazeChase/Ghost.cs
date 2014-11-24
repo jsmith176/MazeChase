@@ -16,7 +16,7 @@ namespace MazeChase
         Rectangle sourceRectangle;
         Vector2 position, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition, currentFrame, firstFrame, lastFrame, frameSize;
         Color color;
-        int speed = 2;
+        int speed = 1;
         float timeSinceLastFrame = 0;
         int millisecondsPerFrame = 100;
         enum mode { SCATTER, ATTACK, FLEE, REGENERATE };
@@ -66,7 +66,10 @@ namespace MazeChase
             nextFrame(gameTime);
 
             if (intersectsWithPlayer())
+            {
                 player.isDead = true;
+                position = cagePosition;
+            }
 
             if (currentMode == mode.ATTACK)
             {

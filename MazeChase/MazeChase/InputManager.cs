@@ -37,5 +37,10 @@ namespace MazeChase
         {
             return lastKeyPressed;
         }
+
+        public void setLastKeyPressed(Keys k)
+        {
+            lastKeyPressed = k;
+        }
     }
 }

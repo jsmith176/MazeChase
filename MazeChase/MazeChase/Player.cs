@@ -15,6 +15,7 @@ namespace MazeChase
         ContentManager contentManager;
         InputManager inputManager;
         MapManager mapManager;
+        ScoreManager scoreManager;
         Texture2D texture;
         Vector2 position, currentFrame, sheetSize, frameSize, speed, movement, origin;
         Rectangle sourceRectangle;
@@ -22,20 +23,21 @@ namespace MazeChase
         float timeSinceLastFrame = 0;
         float millisecondsPerFrame = 86;
         float rotation = 0;
+        int[] wall = { 0, 0, 0, 0 };
         int playerSpeed = 2;
         bool isMoving;
         public bool isDead;
         enum direction { STILL, UP, DOWN, LEFT, RIGHT };
-        int[] wall = { 0, 0, 0, 0 };
         direction movementDirection;
         SoundEffect playerNoise;
         SoundEffectInstance playerNoiseInstance;
 
-        public Player(ContentManager contentManager, InputManager inputManager, MapManager mapManager, Vector2 origin)
+        public Player(ContentManager contentManager, InputManager inputManager, MapManager mapManager, ScoreManager scoreManager, Vector2 origin)
         {
             this.contentManager = contentManager;
             this.inputManager = inputManager;
             this.mapManager = mapManager;
+            this.scoreManager = scoreManager;
             this.origin = origin;
             position = origin;
             sourceRectangle = new Rectangle(0, 0, 24, 24);
@@ -209,8 +211,6 @@ namespace MazeChase
 
         public void deathAnimation(GameTime gameTime)
         {
-            //currentFrame.X = 0;
-            //currentFrame.Y = 2;
             timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
             if (timeSinceLastFrame > millisecondsPerFrame)
             {
@@ -229,8 +229,19 @@ namespace MazeChase
                         (int)frameSize.X, (int)frameSize.Y);
             }
 
-            if (currentFrame.Y == sheetSize.Y - 1)
+            if (currentFrame == new Vector2(2, 3))
+            {
+                scoreManager.lives -= 1;
+                currentFrame *= 0;
+                sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                        (int)currentFrame.Y * (int)frameSize.Y,
+                        (int)frameSize.X, (int)frameSize.Y);
+                mapManager.setViewportPosition((6 * 16) + 8, (15 * 16));
+                movementDirection = direction.STILL;
+                inputManager.setLastKeyPressed(Keys.F1);
+                position = new Vector2(((31 * 16) + 8) - mapManager.getViewport().X, ((31 * 16) + 8) - mapManager.getViewport().Y);
                 isDead = false;
+            }
         }
     }
 }

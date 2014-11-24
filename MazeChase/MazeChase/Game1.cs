@@ -48,7 +48,7 @@ namespace MazeChase
             inputManager = new InputManager();
 
             // Initialize Player
-            player = new Player(this.Content, inputManager, mapManager, origin);
+            player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
 
             // Initialize Ghost
             red = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// top right
@@ -111,7 +111,9 @@ namespace MazeChase
                 orange.Update(gameTime);
             }
             else if (player.isDead)
+            {
                 player.deathAnimation(gameTime);
+            }
 
             base.Update(gameTime);
         }
