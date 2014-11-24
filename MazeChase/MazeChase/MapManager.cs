@@ -24,6 +24,7 @@ namespace MazeChase
         // 0 is wall, 1 is intersection, 2 is pathway
         int[,] intersections;
         int[,] adjMatrix;
+        direction[,] dirMatrix;
         List<Vector2> intList = new List<Vector2>();
 
         // xTile map, display device reference, and rendering viewport
@@ -75,11 +76,6 @@ namespace MazeChase
         {
             // Render xTile map
             map.Draw(mapDisplayDevice, viewport);
-        }
-
-        public direction floyd()
-        {
-            return direction.STILL;
         }
 
         public Map getMap()
@@ -272,11 +268,7 @@ namespace MazeChase
 
             for (int i = 0; i < intList.Count; i++)
             {
-                for (int j = 0; j < intList.Count; j++)
-                {
-
-                    adjMatrix[i,j] = (i == j) ? 0 : 9999;
-                }
+                adjMatrix[i, i] = 0;
             }
 
             for (int i = 0; i < intList.Count; i++)
@@ -341,6 +333,51 @@ namespace MazeChase
                     }
                 }
             }
+        }
+
+        public void floyd()
+        {
+            for (int i = 0; i < intList.Count; i++)
+            {
+                for (int j = 0; j < intList.Count; j++)
+                {
+                    switch (adjMatrix[i, j])
+                    {
+                        case 0:
+                        case 9999:
+                            dirMatrix[i, j] = direction.STILL;
+                            break;
+                        default:
+                            if (intList[i].X == intList[j].X)
+                            {
+                                dirMatrix[i, j] = (intList[i].Y > intList[j].Y) ? direction.UP : direction.DOWN;
+                            }
+                            else if (intList[i].Y == intList[j].Y)
+                            {
+                                dirMatrix[i, j] = (intList[i].X > intList[j].X) ? direction.LEFT : direction.RIGHT;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            for (int k = 0; k < intList.Count; k++)
+            {
+                for (int i = 0; i < intList.Count; i++)
+                {
+                    for (int j = 0; j < intList.Count; j++)
+                    {
+                        if (adjMatrix[i, j] > adjMatrix[i, k] + adjMatrix[k, j])
+                        {
+                            adjMatrix[i, j] = adjMatrix[i, j] + adjMatrix[k, j];
+                            dirMatrix[i, j] = dirMatrix[i, k];
+                        }
+                    }
+                }
+            }
+
+
+            
         }
     }
 }
