@@ -27,7 +27,6 @@ namespace MazeChase
         int playerSpeed = 2;
         bool isMoving;
         public bool isDead;
-        enum direction { STILL, UP, DOWN, LEFT, RIGHT };
         direction movementDirection;
         SoundEffect playerNoise;
         SoundEffectInstance playerNoiseInstance;

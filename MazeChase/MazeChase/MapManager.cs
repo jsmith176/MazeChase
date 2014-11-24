@@ -16,27 +16,12 @@ namespace MazeChase
 {
     class MapManager
     {
-        class intersection
-        {
-            public intersection(int x, int y)
-            {
-                xCoord = x;
-                yCoord = y;
-            }
-
-            int xCoord;
-            int yCoord;
-
-            Vector2 getCoords()
-            {
-                return new Vector2(xCoord, yCoord);
-            }
-        }
-
         ContentManager contentManager;
         GraphicsDevice graphicsDevice;
         ScoreManager scoreManager;
         Layer layer;
+
+        // 0 is wall, 1 is intersection, 2 is pathway
         int[,] intersections;
         int[,] adjMatrix;
         List<Vector2> intList = new List<Vector2>();
@@ -70,6 +55,7 @@ namespace MazeChase
             // Initialize Map Layer
             layer = map.GetLayer("maze layer");
             defineIntersections();
+            defineAdjMatrix();
         }
 
         public virtual void LoadContent()
@@ -91,10 +77,8 @@ namespace MazeChase
             map.Draw(mapDisplayDevice, viewport);
         }
 
-        public direction floyd(int[,] adjMatrix)
+        public direction floyd()
         {
-            
-
             return direction.STILL;
         }
 
@@ -106,6 +90,11 @@ namespace MazeChase
         public int[,] getIntersections()
         {
             return intersections;
+        }
+
+        public int[,] getAdjMatrix()
+        {
+            return adjMatrix;
         }
 
         public xTile.Dimensions.Rectangle getViewport()
@@ -218,7 +207,7 @@ namespace MazeChase
 
                     if (currentTile.TileIndexProperties.Count > 0)
                     {
-                        if (currentTile.TileIndexProperties.ElementAt(0).Key.Equals("Wall"))
+                        if (currentTile.TileIndexProperties.ContainsKey("Wall"))
                         {
                             intersections[i, j] = 0;
                         }
@@ -253,20 +242,17 @@ namespace MazeChase
                             }
                         }
                         else
+                        {
                             intersections[i, j] = 2;
+                        }
                     }
                 }
             }
-
-            // 0 is wall, 1 is intersection, 2 is pathway
-            defineAdjMatrix();
-
         }
 
         void defineAdjMatrix()
         {
             Tile currentTile;
-            int tempIndex = 0;
             int tempDistance = 0;
             bool hasWall = false;
 
@@ -289,11 +275,9 @@ namespace MazeChase
                 for (int j = 0; j < intList.Count; j++)
                 {
 
-                    adjMatrix[i,j] = (i == j) ? 0 : -1;
+                    adjMatrix[i,j] = (i == j) ? 0 : 9999;
                 }
             }
-            
-            // Tested up to this point
 
             for (int i = 0; i < intList.Count; i++)
             {
@@ -317,12 +301,12 @@ namespace MazeChase
                         }
 
                         // Either assign 9999 if a wall between or the distance if not
-                        adjMatrix[i, i + 1] = adjMatrix[i + 1, i] = (hasWall == true) ? -1 : tempDistance;
+                        adjMatrix[i, i + 1] = adjMatrix[i + 1, i] = (hasWall == true) ? 9999 : tempDistance;
                     }
                     else
                     {
                         // Different x levels
-                        adjMatrix[i, i + 1] = -1;
+                        adjMatrix[i, i + 1] = 9999;
                     }
                 }
 
@@ -347,7 +331,7 @@ namespace MazeChase
                                 }
                             }
 
-                            adjMatrix[i, j] = adjMatrix[j, i] = (hasWall == true) ? -1 : tempDistance;
+                            adjMatrix[i, j] = adjMatrix[j, i] = (hasWall == true) ? 9999 : tempDistance;
                             break;
                         }
                         else
@@ -356,8 +340,6 @@ namespace MazeChase
                         }
                     }
                 }
-
-
             }
         }
     }
