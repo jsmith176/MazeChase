@@ -57,6 +57,7 @@ namespace MazeChase
             layer = map.GetLayer("maze layer");
             defineIntersections();
             defineAdjMatrix();
+            floyd();
         }
 
         public virtual void LoadContent()
@@ -337,6 +338,8 @@ namespace MazeChase
 
         public void floyd()
         {
+            dirMatrix = new direction[intList.Count, intList.Count];
+
             for (int i = 0; i < intList.Count; i++)
             {
                 for (int j = 0; j < intList.Count; j++)
