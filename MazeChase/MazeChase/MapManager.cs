@@ -22,9 +22,9 @@ namespace MazeChase
         Layer layer;
 
         // 0 is wall, 1 is intersection, 2 is pathway
-        int[,] intersections;
+        //int[,] intersections;
         int[,] adjMatrix;
-        direction[,] dirMatrix;
+        int[,] next;
         List<Vector2> intList = new List<Vector2>();
 
         // xTile map, display device reference, and rendering viewport
@@ -84,10 +84,10 @@ namespace MazeChase
             return map;
         }
 
-        public int[,] getIntersections()
-        {
-            return intersections;
-        }
+        //public int[,] getIntersections()
+        //{
+        //    return intersections;
+        //}
 
         public int[,] getAdjMatrix()
         {
@@ -127,7 +127,7 @@ namespace MazeChase
 
         public bool isIntersectionUnderLocation(Vector2 location)
         {
-            if (intersections[(int)(viewport.X + location.X) / 16, (int)(viewport.Y + location.Y) / 16] == 1)
+            if (layer.Tiles[(int)(viewport.X + location.X) / 16, (int)(viewport.Y + location.Y) / 16].Properties.ContainsKey("Intersection"))
                 return true;
             return false;
         }
@@ -155,6 +155,14 @@ namespace MazeChase
             return new Vector2(location.X, location.Y);
         }
 
+        public Vector2 getTileMapUnderLocation(Vector2 location)
+        {
+            int x = layer.GetTileLocation(new Location((int)(viewport.X + location.X), (int)(viewport.Y + location.Y))).X;
+            int y = layer.GetTileLocation(new Location((int)(viewport.X + location.X), (int)(viewport.Y + location.Y))).Y;
+
+            return new Vector2(x, y);
+        }
+
         public Vector2 tileAboveLocation(Vector2 location)
         {
             return new Vector2(location.X, location.Y - 9);
@@ -175,13 +183,72 @@ namespace MazeChase
             return new Vector2(location.X - 9, location.Y);
         }
 
+        public int getClosestIntersection(Vector2 location)
+        {
+            Vector2 smallest = Vector2.Zero;
+            float smallestDist = 100000.0f;
+
+            for (int i = 0; i < intList.Count; i++)
+            {
+                if (getTileMapUnderLocation(location).X == intList[i].X && getTileMapUnderLocation(location).Y == intList[i].Y)
+                {
+                    // already there
+                    smallest = intList[i];
+                    break;
+                }
+                else if (getTileMapUnderLocation(location).X == intList[i].X)
+                {
+                    if (Math.Abs(intList[i].Y - getTileMapUnderLocation(location).Y) < smallestDist)
+                    {
+                        smallestDist = Math.Abs(intList[i].Y - getTileMapUnderLocation(location).Y);
+                        smallest = intList[i];
+                    }
+                }
+                else /*(getTileMapUnderLocation(location).Y == intList[i].Y)*/
+                {
+                    if (Math.Abs(intList[i].X - getTileMapUnderLocation(location).X) < smallestDist)
+                    {
+                        smallestDist = Math.Abs(intList[i].X - getTileMapUnderLocation(location).X);
+                        smallest = intList[i];
+                    }
+                }
+            }
+
+            return intList.IndexOf(smallest);
+        }
+
+        public direction getFloydDirection(int from, int to)
+        {
+            Console.WriteLine(from + " " + to);
+
+            if (from == to)
+            {
+                return direction.STILL;
+            }
+            else
+            {
+                if (intList[from].X == intList[next[from, to]].X)
+                {
+                    return (intList[from].Y > intList[next[from, to]].Y) ? direction.UP : direction.DOWN;
+                }
+                else if (intList[from].Y == intList[next[from, to]].Y)
+                {
+                    return (intList[from].X > intList[next[from, to]].X) ? direction.LEFT : direction.RIGHT;
+                }
+                else
+                {
+                    return direction.STILL;
+                }
+            }
+        }
+
         void defineIntersections()
         {
-            intersections = new int[layer.LayerWidth, layer.LayerHeight];
+            int[,] intersections = new int[layer.LayerWidth, layer.LayerHeight];
             Tile currentTile, above, right, below, left;
-            for (int i = 0; i < layer.LayerWidth; i++)
+            for (int j = 0; j < layer.LayerHeight; j++)
             {
-                for (int j = 0; j < layer.LayerHeight; j++)
+                for (int i = 0; i < layer.LayerWidth; i++)
                 {
                     currentTile = layer.Tiles[i, j];
 
@@ -189,61 +256,43 @@ namespace MazeChase
                         above = layer.Tiles[i, j - 1];
                     else
                         above = null;
+
                     if (i < layer.LayerWidth - 1)
                         right = layer.Tiles[i + 1, j];
                     else
                         right = null;
+
                     if (j < layer.LayerHeight - 1)
                         below = layer.Tiles[i, j + 1];
                     else
                         below = null;
+
                     if (i > 0)
                         left = layer.Tiles[i - 1, j];
                     else
                         left = null;
 
-                    if (currentTile.TileIndexProperties.Count > 0)
+
+                    if (!currentTile.TileIndexProperties.ContainsKey("Wall"))
                     {
-                        if (currentTile.TileIndexProperties.ContainsKey("Wall"))
+                        if ((!above.TileIndexProperties.ContainsKey("Wall")) || (!below.TileIndexProperties.ContainsKey("Wall")))
                         {
-                            intersections[i, j] = 0;
-                        }
-                    }
-                    else
-                    {
-                        if (above != null && right != null && below != null && left != null)
-                        {
-                            if (above.TileIndexProperties.Count == 0 || below.TileIndexProperties.Count == 0)
+                            if ((!left.TileIndexProperties.ContainsKey("Wall")) || (!right.TileIndexProperties.ContainsKey("Wall")))
                             {
-                                if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
+                                if (!currentTile.Properties.ContainsKey("Cage"))
                                 {
-                                    intersections[i, j] = 1;
-                                    currentTile.Properties.Add("Intersection",1);
-                                }
-                                else
-                                {
-                                    intersections[i, j] = 2;
+                                    currentTile.Properties.Add("Intersection", 1);
+                                    intList.Add(new Vector2(i, j));
                                 }
                             }
-                            else if (left.TileIndexProperties.Count == 0 || right.TileIndexProperties.Count == 0)
-                            {
-                                if (above.TileIndexProperties.Count == 0 || below.TileIndexProperties.Count == 0)
-                                {
-                                    intersections[i, j] = 1;
-                                    currentTile.Properties.Add("Intersection",1);
-                                }
-                                else
-                                {
-                                    intersections[i, j] = 2;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            intersections[i, j] = 2;
                         }
                     }
                 }
+            }
+
+            if (true)
+            {
+                
             }
         }
 
@@ -253,23 +302,14 @@ namespace MazeChase
             int tempDistance = 0;
             bool hasWall = false;
 
-            for (int i = 0; i < layer.LayerHeight; i++)
-            {
-                for (int j = 0; j < layer.LayerWidth; j++)
-                {
-                    currentTile = layer.Tiles[j,i];
-                    if (currentTile.Properties.ContainsKey("Intersection"))
-                    {
-                        intList.Add(new Vector2(j,i));
-                    }
-                }
-            }
-
             adjMatrix = new int[intList.Count, intList.Count];
 
             for (int i = 0; i < intList.Count; i++)
             {
-                adjMatrix[i, i] = 0;
+                for (int j = 0; j < intList.Count; j++)
+                {
+                    adjMatrix[i, j] = (i == j) ? 0 : 9999;
+                }
             }
 
             for (int i = 0; i < intList.Count; i++)
@@ -324,7 +364,7 @@ namespace MazeChase
                                 }
                             }
 
-                            adjMatrix[i, j] = adjMatrix[j, i] = (hasWall == true) ? 9999 : tempDistance;
+                            adjMatrix[i, j] = adjMatrix[j,i] = (hasWall == true) ? 9999 : tempDistance;
                             break;
                         }
                         else
@@ -334,34 +374,28 @@ namespace MazeChase
                     }
                 }
             }
+
+            if (true)
+            {
+
+            }
         }
 
         public void floyd()
         {
-            dirMatrix = new direction[intList.Count, intList.Count];
+            next = new int[intList.Count, intList.Count];
 
             for (int i = 0; i < intList.Count; i++)
             {
                 for (int j = 0; j < intList.Count; j++)
                 {
-                    switch (adjMatrix[i, j])
-                    {
-                        case 0:
-                        case 9999:
-                            dirMatrix[i, j] = direction.STILL;
-                            break;
-                        default:
-                            if (intList[i].X == intList[j].X)
-                            {
-                                dirMatrix[i, j] = (intList[i].Y > intList[j].Y) ? direction.UP : direction.DOWN;
-                            }
-                            else if (intList[i].Y == intList[j].Y)
-                            {
-                                dirMatrix[i, j] = (intList[i].X > intList[j].X) ? direction.LEFT : direction.RIGHT;
-                            }
-                            break;
-                    }
+                    next[i, j] = j;
                 }
+            }
+
+            if (true)
+            {
+
             }
 
             for (int k = 0; k < intList.Count; k++)
@@ -370,16 +404,30 @@ namespace MazeChase
                 {
                     for (int j = 0; j < intList.Count; j++)
                     {
-                        if (adjMatrix[i, j] > adjMatrix[i, k] + adjMatrix[k, j])
+                        if (adjMatrix[i,k] + adjMatrix[k,j] < adjMatrix[i,j])
                         {
-                            adjMatrix[i, j] = adjMatrix[i, j] + adjMatrix[k, j];
-                            dirMatrix[i, j] = dirMatrix[i, k];
+                            adjMatrix[i, j] = adjMatrix[i, k] + adjMatrix[k, j];
+                            next[i, j] = next[i, k];
                         }
                     }
                 }
             }
 
+            for (int i = 0; i < intList.Count; i++)
+            {
+                for (int j = 0; j < intList.Count; j++)
+                {
+                    if (adjMatrix[i, j] == 9999)
+                    {
+                        Console.WriteLine(intList[j].X + " " + intList[j].Y);
+                    }
+                }
+            }
 
+                if (true)
+                {
+
+                }
             
         }
     }
