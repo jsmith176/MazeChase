@@ -86,102 +86,73 @@ namespace MazeChase
             {
                 targetPosition = player.getPosition();
             }
+        }
 
-            //pathing();
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, viewportPosition, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
+            spriteBatch.DrawString(font, up, new Vector2(viewportPosition.X - 5, viewportPosition.Y - 15), Color.Green);
+            spriteBatch.DrawString(font, down, new Vector2(viewportPosition.X - 5, viewportPosition.Y + 5), Color.Green);
+            spriteBatch.DrawString(font, left, new Vector2(viewportPosition.X - 15, viewportPosition.Y - 5), Color.Green);
+            spriteBatch.DrawString(font, right, new Vector2(viewportPosition.X + 5, viewportPosition.Y - 5), Color.Green);
+        }
+
+        void nextFrame(GameTime gameTime)
+        {
+            timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
+            if (timeSinceLastFrame > millisecondsPerFrame)
+            {
+                timeSinceLastFrame = 0;
+                ++currentFrame.X;
+                if (currentFrame.X > lastFrame.X)
+                {
+                    currentFrame.X = firstFrame.X;
+                }
+            }
+
+            sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                    (int)currentFrame.Y * (int)frameSize.Y,
+                    (int)frameSize.X, (int)frameSize.Y);
         }
 
         void pickDirection()
         {
-            int d = 0, r = 0;
-            int[] wall = { 0, 0, 0, 0 };
-
-            if (mapManager.isWall(mapManager.tileAboveLocation(viewportPosition)) || movementDirection == direction.DOWN)
-                wall[0] = 1;
-            if (mapManager.isWall(mapManager.tileRightOfLocation(viewportPosition)) || movementDirection == direction.LEFT)
-                wall[1] = 1;
-            if (mapManager.isWall(mapManager.tileBelowLocation(viewportPosition)) || movementDirection == direction.UP)
-                wall[2] = 1;
-            if (mapManager.isWall(mapManager.tileLeftOfLocation(viewportPosition)) || movementDirection == direction.RIGHT)
-                wall[3] = 1;
-
-            // If the ghost is near a gate set wall to 0;
-
-            //if (mapManager.tileAboveLocation(position) == new Vector2((32 * 16) + 8, (21 * 16) + 8) ||
-            //    position == new Vector2((33 * 16) + 8, (21 * 16) + 8))
-            //    wall[0] = 0;
-            //else if ((mapManager.tileBelowLocation(position) == new Vector2((32 * 16) + 8, (19 * 16) + 8) ||
-            //    position == new Vector2((33 * 16) + 8, (19 * 16) + 8)))
-            //    wall[2] = 0;
-
-            up = wall[0].ToString();
-            down = wall[2].ToString();
-            left = wall[3].ToString();
-            right = wall[1].ToString();
-
-            while (d == 0)
+            currentMode = mode.ATTACK;
+            switch (currentMode)
             {
-                r = rand.Next(0, 4);
-                if (wall[r] == 0)
-                    d = r + 1;
-            }
-
-            switch(d)
-            {
-                case 1:
-                    movementDirection = direction.UP;
-                    firstFrame.X = 0;
-                    lastFrame.X = 1;
-                    currentFrame = firstFrame;
+                case mode.ATTACK:
+                    targetPosition = player.getPosition();
+                    movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(viewportPosition), mapManager.getClosestIntersection(targetPosition));
+                    Console.WriteLine(movementDirection);
                     break;
-                case 2:
-                    movementDirection = direction.RIGHT;
-                    firstFrame.X = 6;
-                    lastFrame.X = 7;
-                    currentFrame = firstFrame;
+                case mode.FLEE:
+                    //targetPosition = player.getPosition();
+                    //movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(position), mapManager.getClosestIntersection(targetPosition));
+                    //switch (movementDirection)
+                    //{
+                    //    case direction.UP:
+                    //        movementDirection = direction.DOWN;
+                    //        break;
+                    //    case direction.DOWN:
+                    //        movementDirection = direction.UP;
+                    //        break;
+                    //    case direction.LEFT:
+                    //        movementDirection = direction.RIGHT;
+                    //        break;
+                    //    case direction.RIGHT:
+                    //        movementDirection = direction.LEFT;
+                    //        break;
+                    //}
                     break;
-                case 3:
-                    movementDirection = direction.DOWN;
-                    firstFrame.X = 2;
-                    lastFrame.X = 3;
-                    currentFrame = firstFrame;
+                case mode.REGENERATE:
+                    targetPosition = cagePosition;
+                    movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(position), mapManager.getClosestIntersection(targetPosition));
                     break;
-                case 4:
-                    movementDirection = direction.LEFT;
-                    firstFrame.X = 4;
-                    lastFrame.X = 5;
-                    currentFrame = firstFrame;
+                case mode.SCATTER:
+                    targetPosition = scatterLocation;
+                    movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(position), mapManager.getClosestIntersection(targetPosition));
                     break;
             }
-        }
-
-        void pathing()
-        {
-            // This function will implement the Floyd's algorithm to decide how the ghost should move
-            // If mode is attack, perform the Floyd algorithm and chase, depending on the behavior
-            // If mode is scatter, perform Floyd to go to scatter location. If player gets too close, then switch to flee
-            // If mode is flee, then perform Floyd and do the opposite move
-            // If mode is regenerate, perform Floyd to return to the cage and regenerate
-            //
-
-            int[,] tempInt = mapManager.getIntersections();
-            int[,] results = new int[(int)Math.Sqrt(tempInt.Length), (int)Math.Sqrt(tempInt.Length)];
-
-            int n = (int)Math.Sqrt(tempInt.Length);
-
-            for (int k = 0; k < n; k++)
-            {
-                for (int i = 0; i < n; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        if (tempInt[i, k] + tempInt[k, j] < tempInt[i, j])
-                        {
-                            results[i, j] = results[i, k] + results[k, j];
-                        }
-                    }
-                }
-            }
-
         }
 
         void move()
@@ -202,52 +173,6 @@ namespace MazeChase
                 Math.Abs(viewportPosition.Y - player.getPosition().Y) < 8)
                 return true;
             return false;
-        }
-
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(texture, viewportPosition, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
-            spriteBatch.DrawString(font, up, new Vector2(viewportPosition.X - 5, viewportPosition.Y - 15), Color.Green);
-            spriteBatch.DrawString(font, down, new Vector2(viewportPosition.X - 5, viewportPosition.Y + 5), Color.Green);
-            spriteBatch.DrawString(font, left, new Vector2(viewportPosition.X - 15, viewportPosition.Y - 5), Color.Green);
-            spriteBatch.DrawString(font, right, new Vector2(viewportPosition.X + 5, viewportPosition.Y - 5), Color.Green);
-        }
-
-        public void Wander()
-        {
-            // Move randomly at intersections
-            
-        }
-
-        public void Flee()
-        {
-            // Move in the direction that increases the distance the most from PacMan
-            // assuming there is no obstacle in that direction
-        }
-
-        public void Chase()
-        {
-            // Move in the direction that decreases the distance the most from PacMan
-            // assuming there is no obstacle in that direction
-            // Floyds shortest path psuedocode in i drive
-        }
-
-        void nextFrame(GameTime gameTime)
-        {
-            timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
-            if (timeSinceLastFrame > millisecondsPerFrame)
-            {
-                timeSinceLastFrame = 0;
-                ++currentFrame.X;
-                if (currentFrame.X > lastFrame.X)
-                {
-                    currentFrame.X = firstFrame.X;
-                }
-            }
-
-            sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
-                    (int)currentFrame.Y * (int)frameSize.Y,
-                    (int)frameSize.X, (int)frameSize.Y);
         }
     }
 }
