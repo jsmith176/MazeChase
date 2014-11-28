@@ -17,7 +17,7 @@ namespace MazeChase
         MapManager mapManager;
         ScoreManager scoreManager;
         Texture2D texture;
-        Vector2 position, currentFrame, sheetSize, frameSize, speed, movement, origin;
+        Vector2 position, lastInt, currentFrame, sheetSize, frameSize, speed, movement, origin;
         Rectangle sourceRectangle;
         Color color;
         float timeSinceLastFrame = 0;
@@ -70,8 +70,16 @@ namespace MazeChase
             else
                 playerNoiseInstance.Stop();
 
-            if (mapManager.isIntersectionUnderLocation(position) && (position.X + mapManager.getViewport().X + 8) % 16 == 0 && (position.Y + mapManager.getViewport().Y + 8) % 16 == 0)
-                pickDirection();
+            if (mapManager.isIntersectionUnderLocation(position))
+            {
+                lastInt = mapManager.getTileMapUnderLocation(position);
+
+                if ((position.X + mapManager.getViewport().X + 8) % 16 == 0 && (position.Y + mapManager.getViewport().Y + 8) % 16 == 0)
+                {
+                    pickDirection();
+                }
+                
+            }
             else if (movementDirection == direction.STILL)
                 pickDirection();
 
@@ -190,6 +198,16 @@ namespace MazeChase
         public Vector2 getPosition()
         {
             return position;
+        }
+
+        public direction getDirection()
+        {
+            return movementDirection;
+        }
+
+        public Vector2 getLastInt()
+        {
+            return lastInt;
         }
 
         void nextFrame(GameTime gameTime)

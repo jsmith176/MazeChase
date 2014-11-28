@@ -14,9 +14,9 @@ namespace MazeChase
         Player player;
         Texture2D texture;
         Rectangle sourceRectangle;
-        Vector2 position, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition, currentFrame, firstFrame, lastFrame, frameSize;
+        Vector2 position, lastInt, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition, currentFrame, firstFrame, lastFrame, frameSize;
         Color color;
-        int speed = 1;
+        int speed = 2;
         float timeSinceLastFrame = 0;
         int millisecondsPerFrame = 100;
         enum mode { SCATTER, ATTACK, FLEE, REGENERATE };
@@ -24,10 +24,7 @@ namespace MazeChase
         direction movementDirection;
         Random rand;
 
-        SpriteFont font;
-        string up, down, left, right;
-
-        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition, SpriteFont font)
+        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition)
         {
             this.mapManager = mapManager;
             this.player = player;
@@ -44,20 +41,20 @@ namespace MazeChase
             previousTile = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
             targetPosition = scatterLocation = defensePosition;
             cagePosition = spawnPosition;
-
-            this.font = font;
-            up = "0";
-            down = "0";
-            left = "0";
-            right = "0";
         }
 
         public virtual void Update(GameTime gameTime)
         {
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
 
-            if (mapManager.isIntersectionUnderLocation(viewportPosition) && (viewportPosition.X + mapManager.getViewport().X + 8) % 16 == 0 && (viewportPosition.Y + mapManager.getViewport().Y + 8) % 16 == 0)
-                pickDirection();
+            if (mapManager.isIntersectionUnderLocation(viewportPosition))
+            {
+                lastInt = mapManager.getTileMapUnderLocation(viewportPosition);
+                if ((viewportPosition.X + mapManager.getViewport().X + 8) % 16 == 0 && (viewportPosition.Y + mapManager.getViewport().Y + 8) % 16 == 0)
+                {
+                    pickDirection();
+                }
+            }
             else if (movementDirection == direction.STILL)
                 pickDirection();
 
@@ -91,10 +88,6 @@ namespace MazeChase
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, viewportPosition, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
-            spriteBatch.DrawString(font, up, new Vector2(viewportPosition.X - 5, viewportPosition.Y - 15), Color.Green);
-            spriteBatch.DrawString(font, down, new Vector2(viewportPosition.X - 5, viewportPosition.Y + 5), Color.Green);
-            spriteBatch.DrawString(font, left, new Vector2(viewportPosition.X - 15, viewportPosition.Y - 5), Color.Green);
-            spriteBatch.DrawString(font, right, new Vector2(viewportPosition.X + 5, viewportPosition.Y - 5), Color.Green);
         }
 
         void nextFrame(GameTime gameTime)
@@ -122,35 +115,35 @@ namespace MazeChase
             {
                 case mode.ATTACK:
                     targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(viewportPosition), mapManager.getClosestIntersection(targetPosition));
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
                     Console.WriteLine(movementDirection);
                     break;
                 case mode.FLEE:
-                    //targetPosition = player.getPosition();
-                    //movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(position), mapManager.getClosestIntersection(targetPosition));
-                    //switch (movementDirection)
-                    //{
-                    //    case direction.UP:
-                    //        movementDirection = direction.DOWN;
-                    //        break;
-                    //    case direction.DOWN:
-                    //        movementDirection = direction.UP;
-                    //        break;
-                    //    case direction.LEFT:
-                    //        movementDirection = direction.RIGHT;
-                    //        break;
-                    //    case direction.RIGHT:
-                    //        movementDirection = direction.LEFT;
-                    //        break;
-                    //}
+                    targetPosition = player.getPosition();
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
+                    switch (movementDirection)
+                    {
+                        case direction.UP:
+                            movementDirection = direction.DOWN;
+                            break;
+                        case direction.DOWN:
+                            movementDirection = direction.UP;
+                            break;
+                        case direction.LEFT:
+                            movementDirection = direction.RIGHT;
+                            break;
+                        case direction.RIGHT:
+                            movementDirection = direction.LEFT;
+                            break;
+                    }
                     break;
                 case mode.REGENERATE:
                     targetPosition = cagePosition;
-                    movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(position), mapManager.getClosestIntersection(targetPosition));
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
                     break;
                 case mode.SCATTER:
                     targetPosition = scatterLocation;
-                    movementDirection = mapManager.getFloydDirection(mapManager.getClosestIntersection(position), mapManager.getClosestIntersection(targetPosition));
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
                     break;
             }
         }
