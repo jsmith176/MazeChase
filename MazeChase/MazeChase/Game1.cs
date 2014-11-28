@@ -53,10 +53,10 @@ namespace MazeChase
             player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
 
             // Initialize Ghost
-            red = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// top right
-            //blue = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((32 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (44 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// bottom right
-            //pink = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((33 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (0 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// top left
-            //orange = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((34 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (44 * 16) + 8), Content.Load<SpriteFont>("SpriteFont"));// botttom left
+            red = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8));// top right
+            //blue = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((32 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (44 * 16) + 8));// bottom right
+            //pink = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((33 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (0 * 16) + 8));// top left
+            //orange = new Ghost(mapManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((34 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (44 * 16) + 8));// botttom left
         }
 
         protected override void LoadContent()
@@ -83,17 +83,20 @@ namespace MazeChase
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 this.Exit();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                this.Exit();
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
                 pause = true;
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
                 pause = false;
+            }
 
             if (!pause && !player.isDead)
             {
@@ -106,6 +109,7 @@ namespace MazeChase
 
                 // Update player
                 player.Update(gameTime);
+
                 // Update ghosts
                 red.Update(gameTime);
                 //blue.Update(gameTime);
