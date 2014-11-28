@@ -21,8 +21,6 @@ namespace MazeChase
         ScoreManager scoreManager;
         Layer layer;
 
-        // 0 is wall, 1 is intersection, 2 is pathway
-        //int[,] intersections;
         int[,] adjMatrix;
         int[,] next;
         List<Vector2> intList = new List<Vector2>();
@@ -55,6 +53,8 @@ namespace MazeChase
 
             // Initialize Map Layer
             layer = map.GetLayer("maze layer");
+
+            // Initialize intersections, adjacencies, distances, and Floyd's algorithm stuff
             defineIntersections();
             defineAdjMatrix();
             floyd();
@@ -77,26 +77,6 @@ namespace MazeChase
         {
             // Render xTile map
             map.Draw(mapDisplayDevice, viewport);
-        }
-
-        public Map getMap()
-        {
-            return map;
-        }
-
-        //public int[,] getIntersections()
-        //{
-        //    return intersections;
-        //}
-
-        public int[,] getAdjMatrix()
-        {
-            return adjMatrix;
-        }
-
-        public xTile.Dimensions.Rectangle getViewport()
-        {
-            return viewport;
         }
 
         public void moveViewport(float x, float y)
@@ -183,47 +163,62 @@ namespace MazeChase
             return new Vector2(location.X - 9, location.Y);
         }
 
-        public int getClosestIntersection(Vector2 location)
+        public int calculate2TileDistance(Vector2 a, Vector2 b)
         {
-            Vector2 smallest = Vector2.Zero;
-            float smallestDist = 100000.0f;
-
-            for (int i = 0; i < intList.Count; i++)
+            if (a.X == b.X && a.Y == b.Y)
             {
-                if (getTileMapUnderLocation(location).X == intList[i].X && getTileMapUnderLocation(location).Y == intList[i].Y)
-                {
-                    // already there
-                    smallest = intList[i];
-                    break;
-                }
-                else if (getTileMapUnderLocation(location).X == intList[i].X)
-                {
-                    if (Math.Abs(intList[i].Y - getTileMapUnderLocation(location).Y) < smallestDist)
-                    {
-                        smallestDist = Math.Abs(intList[i].Y - getTileMapUnderLocation(location).Y);
-                        smallest = intList[i];
-                    }
-                }
-                else /*(getTileMapUnderLocation(location).Y == intList[i].Y)*/
-                {
-                    if (Math.Abs(intList[i].X - getTileMapUnderLocation(location).X) < smallestDist)
-                    {
-                        smallestDist = Math.Abs(intList[i].X - getTileMapUnderLocation(location).X);
-                        smallest = intList[i];
-                    }
-                }
+                return 0;
             }
+            else if (a.X == b.X)
+            {
+                for (int i = (int)a.Y; i < b.Y; i++)
+                {
+                    if (layer.Tiles[(int)a.X, i].TileIndexProperties.ContainsKey("Wall"))
+                    {
+                        return 9999;
+                    }
+                    else
+                    {
 
-            return intList.IndexOf(smallest);
+                    }
+                }
+
+                return (int)Math.Abs(a.Y - b.Y);
+            }
+            else if (a.Y == b.Y)
+            {
+                for (int i = (int)a.X; i < b.X; i++)
+                {
+                    if (layer.Tiles[i,(int)a.Y].TileIndexProperties.ContainsKey("Wall"))
+                    {
+                        return 9999;
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                return (int)Math.Abs(a.X - b.X);
+            }
+            else
+            {
+                return 9999;
+            }
         }
 
-        public direction getFloydDirection(int from, int to)
+        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction playerDir)
         {
-            Console.WriteLine(from + " " + to);
+            int from = intList.IndexOf(fromVector);
+            int to = intList.IndexOf(toVector);
+
+            //Console.WriteLine(fromVector.X + " " + fromVector.Y);
+            //Console.WriteLine(toVector.X + " " + toVector.Y);
+            //Console.WriteLine(from + " " + to);
 
             if (from == to)
             {
-                return direction.STILL;
+                return playerDir;
             }
             else
             {
@@ -237,7 +232,7 @@ namespace MazeChase
                 }
                 else
                 {
-                    return direction.STILL;
+                    return playerDir;
                 }
             }
         }
@@ -252,52 +247,41 @@ namespace MazeChase
                 {
                     currentTile = layer.Tiles[i, j];
 
-                    if (j > 0)
-                        above = layer.Tiles[i, j - 1];
-                    else
-                        above = null;
+                    above = (j > 0) ? layer.Tiles[i, j - 1] : null;
 
-                    if (i < layer.LayerWidth - 1)
-                        right = layer.Tiles[i + 1, j];
-                    else
-                        right = null;
+                    below = (j < layer.LayerHeight - 1) ? layer.Tiles[i, j + 1] : null;
 
-                    if (j < layer.LayerHeight - 1)
-                        below = layer.Tiles[i, j + 1];
-                    else
-                        below = null;
+                    right = (i < layer.LayerWidth - 1) ? layer.Tiles[i + 1, j] : null;
 
-                    if (i > 0)
-                        left = layer.Tiles[i - 1, j];
-                    else
-                        left = null;
+                    left = (i > 0) ? layer.Tiles[i - 1, j] : null;
 
-
-                    if (!currentTile.TileIndexProperties.ContainsKey("Wall"))
+                    if (!currentTile.TileIndexProperties.ContainsKey("Wall") && !currentTile.Properties.ContainsKey("Cage"))
                     {
                         if ((!above.TileIndexProperties.ContainsKey("Wall")) || (!below.TileIndexProperties.ContainsKey("Wall")))
                         {
                             if ((!left.TileIndexProperties.ContainsKey("Wall")) || (!right.TileIndexProperties.ContainsKey("Wall")))
                             {
-                                if (!currentTile.Properties.ContainsKey("Cage"))
-                                {
-                                    currentTile.Properties.Add("Intersection", 1);
-                                    intList.Add(new Vector2(i, j));
-                                }
+                                currentTile.Properties.Add("Intersection", 1);
+                                intList.Add(new Vector2(i, j));
                             }
                         }
                     }
                 }
             }
-
-            if (true)
-            {
-                
-            }
         }
 
         void defineAdjMatrix()
         {
+            //adjMatrix = new int[intList.Count, intList.Count];
+
+            //for (int i = 0; i < intList.Count; i++)
+            //{
+            //    for (int j = 0; j < intList.Count; j++)
+            //    {
+            //        adjMatrix[i, j] = calculate2TileDistance(intList[i], intList[j]);
+            //    }
+            //}
+
             Tile currentTile;
             int tempDistance = 0;
             bool hasWall = false;
@@ -319,28 +303,7 @@ namespace MazeChase
 
                 if (i < intList.Count - 1)
                 {
-                    if (intList[i].Y == intList[i + 1].Y)
-                    {
-                        for (int k = (int)intList[i].X; k < (int)intList[i + 1].X; k++)
-                        {
-                            if (layer.Tiles[k,(int)intList[i].Y].TileIndexProperties.ContainsKey("Wall"))
-                            {
-                                hasWall = true;
-                            }
-                            else
-                            {
-                                tempDistance++;
-                            }
-                        }
-
-                        // Either assign 9999 if a wall between or the distance if not
-                        adjMatrix[i, i + 1] = adjMatrix[i + 1, i] = (hasWall == true) ? 9999 : tempDistance;
-                    }
-                    else
-                    {
-                        // Different x levels
-                        adjMatrix[i, i + 1] = 9999;
-                    }
+                    adjMatrix[i, i + 1] = adjMatrix[i + 1, i] = calculate2TileDistance(intList[i], intList[i + 1]);
                 }
 
                 hasWall = false;
@@ -352,32 +315,11 @@ namespace MazeChase
                     {
                         if (intList[i].X == intList[j].X)
                         {
-                            for (int m = (int)intList[i].Y; m < (int)intList[j].Y; m++)
-                            {
-                                if (layer.Tiles[(int)intList[i].X, m].TileIndexProperties.ContainsKey("Wall"))
-                                {
-                                    hasWall = true;
-                                }
-                                else
-                                {
-                                    tempDistance++;
-                                }
-                            }
-
-                            adjMatrix[i, j] = adjMatrix[j,i] = (hasWall == true) ? 9999 : tempDistance;
+                            adjMatrix[i, j] = adjMatrix[j, i] = calculate2TileDistance(intList[i], intList[j]);
                             break;
-                        }
-                        else
-                        {
-
                         }
                     }
                 }
-            }
-
-            if (true)
-            {
-
             }
         }
 
@@ -391,11 +333,6 @@ namespace MazeChase
                 {
                     next[i, j] = j;
                 }
-            }
-
-            if (true)
-            {
-
             }
 
             for (int k = 0; k < intList.Count; k++)
@@ -412,23 +349,21 @@ namespace MazeChase
                     }
                 }
             }
+        }
+        
+        public Map getMap()
+        {
+            return map;
+        }
 
-            for (int i = 0; i < intList.Count; i++)
-            {
-                for (int j = 0; j < intList.Count; j++)
-                {
-                    if (adjMatrix[i, j] == 9999)
-                    {
-                        Console.WriteLine(intList[j].X + " " + intList[j].Y);
-                    }
-                }
-            }
+        public int[,] getAdjMatrix()
+        {
+            return adjMatrix;
+        }
 
-                if (true)
-                {
-
-                }
-            
+        public xTile.Dimensions.Rectangle getViewport()
+        {
+            return viewport;
         }
     }
 }
