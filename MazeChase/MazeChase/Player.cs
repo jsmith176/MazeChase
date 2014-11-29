@@ -26,6 +26,8 @@ namespace MazeChase
         int[] wall = { 0, 0, 0, 0 };
         int playerSpeed = 2;
         bool isMoving;
+        int ghostEatTime;
+        public bool canEatGhosts;
         public bool isDead;
         direction movementDirection;
         SoundEffect playerNoise;
@@ -49,10 +51,22 @@ namespace MazeChase
             texture = contentManager.Load<Texture2D>(@"PacMan");
             playerNoise = contentManager.Load<SoundEffect>(@"PlayerNoise2");
             playerNoiseInstance = playerNoise.CreateInstance();
+            canEatGhosts = false;
         }
 
         public virtual void Update(GameTime gameTime)
         {
+            ghostEatTime--;
+
+            if (ghostEatTime > 0)
+            {
+                canEatGhosts = true;
+            }
+            else
+            {
+                canEatGhosts = false;
+            }
+
             if (mapManager.isWall(mapManager.tileAboveLocation(position)))
                 wall[0] = 1;
             if (mapManager.isWall(mapManager.tileRightOfLocation(position)))
@@ -193,6 +207,11 @@ namespace MazeChase
             }
             else
                 isMoving = false;
+        }
+
+        public void modeSwap(int adjuster)
+        {
+            ghostEatTime = adjuster;
         }
 
         public Vector2 getPosition()

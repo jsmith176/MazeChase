@@ -112,7 +112,7 @@ namespace MazeChase
             return false;
         }
 
-        public void isFoodUnderPlayer(int playerX, int playerY)
+        public int isFoodUnderPlayer(int playerX, int playerY)
         {
             Tile tile = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + playerX), (int)(viewport.Y + playerY)))];
 
@@ -120,6 +120,7 @@ namespace MazeChase
             {
                 tile.TileIndex = 13;
                 scoreManager.increaseScore(10);
+                return 1;
             }
             else if (tile.TileIndex == 16 || tile.TileIndex == 19)
             {
@@ -127,6 +128,11 @@ namespace MazeChase
                 aTile.TileFrames.ElementAt(0).TileIndex = 13;
                 aTile.TileFrames.ElementAt(1).TileIndex = 13;
                 scoreManager.increaseScore(100);
+                return 20;
+            }
+            else
+            {
+                return 0;
             }
         }
 

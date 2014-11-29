@@ -47,6 +47,15 @@ namespace MazeChase
         {
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
 
+            if (player.canEatGhosts == true)
+            {
+                currentMode = mode.FLEE;
+            }
+            else
+            {
+                currentMode = mode.ATTACK;
+            }
+
             if (mapManager.isIntersectionUnderLocation(viewportPosition))
             {
                 lastInt = mapManager.getTileMapUnderLocation(viewportPosition);
@@ -87,30 +96,58 @@ namespace MazeChase
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, viewportPosition, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
+            if (currentMode == mode.FLEE)
+            {
+                spriteBatch.Draw(texture, viewportPosition, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
+            }
+            else
+            {
+                spriteBatch.Draw(texture, viewportPosition, sourceRectangle, color, MathHelper.ToRadians(0.0f), new Vector2(12, 12), 1f, SpriteEffects.None, 0.1f);
+            }
         }
 
         void nextFrame(GameTime gameTime)
         {
-            timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
-            if (timeSinceLastFrame > millisecondsPerFrame)
+            if (currentMode == mode.FLEE)
             {
-                timeSinceLastFrame = 0;
-                ++currentFrame.X;
-                if (currentFrame.X > lastFrame.X)
+                currentFrame = new Vector2(0, 5);
+                timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
+                if (timeSinceLastFrame > millisecondsPerFrame)
                 {
-                    currentFrame.X = firstFrame.X;
+                    timeSinceLastFrame = 0;
+                    ++currentFrame.X;
+                    if (currentFrame.X > 1.0f)
+                    {
+                        currentFrame.X = 0.0f;
+                    }
                 }
-            }
 
-            sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
-                    (int)currentFrame.Y * (int)frameSize.Y,
-                    (int)frameSize.X, (int)frameSize.Y);
+                sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                        (int)currentFrame.Y * (int)frameSize.Y,
+                        (int)frameSize.X, (int)frameSize.Y);
+            }
+            else
+            {
+                currentFrame = firstFrame;
+                timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
+                if (timeSinceLastFrame > millisecondsPerFrame)
+                {
+                    timeSinceLastFrame = 0;
+                    ++currentFrame.X;
+                    if (currentFrame.X > lastFrame.X)
+                    {
+                        currentFrame.X = firstFrame.X;
+                    }
+                }
+
+                sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                        (int)currentFrame.Y * (int)frameSize.Y,
+                        (int)frameSize.X, (int)frameSize.Y);
+            }
         }
 
         void pickDirection()
         {
-            currentMode = mode.ATTACK;
             switch (currentMode)
             {
                 case mode.ATTACK:
@@ -121,21 +158,7 @@ namespace MazeChase
                 case mode.FLEE:
                     targetPosition = player.getPosition();
                     movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
-                    switch (movementDirection)
-                    {
-                        case direction.UP:
-                            movementDirection = direction.DOWN;
-                            break;
-                        case direction.DOWN:
-                            movementDirection = direction.UP;
-                            break;
-                        case direction.LEFT:
-                            movementDirection = direction.RIGHT;
-                            break;
-                        case direction.RIGHT:
-                            movementDirection = direction.LEFT;
-                            break;
-                    }
+                    pickFleeDirection();
                     break;
                 case mode.REGENERATE:
                     targetPosition = cagePosition;
@@ -158,6 +181,81 @@ namespace MazeChase
                 position.Y += speed;
             if (movementDirection == direction.LEFT)
                 position.X -= speed;
+        }
+
+        public void pickFleeDirection()
+        {
+            switch (movementDirection)
+            {
+                case direction.UP:
+                    if (mapManager.isWall(mapManager.tileBelowLocation(viewportPosition)))
+                    {
+                        if (mapManager.isWall(mapManager.tileLeftOfLocation(viewportPosition)))
+                        {
+                            movementDirection = direction.RIGHT;
+                        }
+                        else
+                        {
+                            movementDirection = direction.LEFT;
+                        }
+                    }
+                    else
+                    {
+                        movementDirection = direction.DOWN;
+                    }
+                    break;
+                case direction.DOWN:
+                    if (mapManager.isWall(mapManager.tileAboveLocation(viewportPosition)))
+                    {
+                        if (mapManager.isWall(mapManager.tileRightOfLocation(viewportPosition)))
+                        {
+                            movementDirection = direction.LEFT;
+                        }
+                        else
+                        {
+                            movementDirection = direction.RIGHT;
+                        }
+                    }
+                    else
+                    {
+                        movementDirection = direction.UP;
+                    }
+                    break;
+                case direction.LEFT:
+                    if (mapManager.isWall(mapManager.tileRightOfLocation(viewportPosition)))
+                    {
+                        if (mapManager.isWall(mapManager.tileBelowLocation(viewportPosition)))
+                        {
+                            movementDirection = direction.UP;
+                        }
+                        else
+                        {
+                            movementDirection = direction.DOWN;
+                        }
+                    }
+                    else
+                    {
+                        movementDirection = direction.RIGHT;
+                    }
+                    break;
+                case direction.RIGHT:
+                    if (mapManager.isWall(mapManager.tileLeftOfLocation(viewportPosition)))
+                    {
+                        if (mapManager.isWall(mapManager.tileAboveLocation(viewportPosition)))
+                        {
+                            movementDirection = direction.DOWN;
+                        }
+                        else
+                        {
+                            movementDirection = direction.UP;
+                        }
+                    }
+                    else
+                    {
+                        movementDirection = direction.LEFT;
+                    }
+                    break;
+            }
         }
 
         bool intersectsWithPlayer()
