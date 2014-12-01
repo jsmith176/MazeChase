@@ -53,7 +53,7 @@ namespace MazeChase
 
         public virtual void Update(GameTime gameTime)
         {
-            Console.WriteLine(currentMode);
+            //Console.WriteLine(currentMode);
 
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
             
@@ -65,6 +65,17 @@ namespace MazeChase
             else
             {
                 currentMode = mode.ATTACK;
+
+                if (viewportPosition.X % 0 != 0)
+                {
+                    viewportPosition.X++;
+                }
+
+                if (viewportPosition.Y % 0 != 0)
+                {
+                    viewportPosition.Y++;
+                }
+
                 speed = 2;
             }
 
@@ -179,7 +190,7 @@ namespace MazeChase
                 case mode.ATTACK:
                     targetPosition = player.getPosition();
                     movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
-                    Console.WriteLine(movementDirection);
+                    //Console.WriteLine(movementDirection);
                     break;
                 case mode.FLEE:
                     targetPosition = player.getPosition();
