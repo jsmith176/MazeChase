@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MazeChase
 {
@@ -14,13 +15,23 @@ namespace MazeChase
         string text;
         int score;
         public int lives;
+        SoundEffectInstance newLifeNoise;
 
-        public ScoreManager(SpriteFont font)
+        public ScoreManager(SpriteFont font, SoundEffectInstance newLifeInstance)
         {
             spriteFont = font;
             position = new Vector2(10, 10);
             score = 0;
             lives = 3;
+            newLifeNoise = newLifeInstance;
+        }
+
+        public virtual void Update()
+        {
+            if (score > 0 && score % 10000 == 0)
+            {
+                addLive();
+            }
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -33,6 +44,17 @@ namespace MazeChase
         public void increaseScore(int s)
         {
             score += s;
+        }
+
+        public int getRemainingLives()
+        {
+            return lives;
+        }
+
+        public void addLive()
+        {
+            lives++;
+            newLifeNoise.Play();            
         }
     }
 }

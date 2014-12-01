@@ -73,8 +73,9 @@ namespace MazeChase
         Player player;
         Ghost red, blue, pink, orange;
         Vector2 origin;
-        SoundEffect deathSound;
-        SoundEffectInstance deathSoundInstance;
+
+        SoundEffect deathSound, newLifeSound, eatSound, beginningMusic;
+        SoundEffectInstance deathSoundInstance, newLifeInstance, eatInstance, musicInstance;
 
         bool pause = true;
 
@@ -102,9 +103,7 @@ namespace MazeChase
             inputManager = new InputManager();
 
             // Initialize Player
-            player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
-            deathSound = Content.Load<SoundEffect>(@"pacman_death");
-            deathSoundInstance = deathSound.CreateInstance();
+            player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);          
 
             // Initialize Ghost
             red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8));// top right
@@ -115,11 +114,17 @@ namespace MazeChase
 
         protected override void LoadContent()
         {
+            deathSound = Content.Load<SoundEffect>(@"pacman_death");
+            deathSoundInstance = deathSound.CreateInstance();
+
+            newLifeSound = Content.Load<SoundEffect>(@"pacman_extrapac");
+            newLifeInstance = newLifeSound.CreateInstance();  
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // Initialize ScoreManager
-            scoreManager = new ScoreManager(Content.Load<SpriteFont>("SpriteFont"));
+            scoreManager = new ScoreManager(Content.Load<SpriteFont>("SpriteFont"), newLifeInstance);
 
             // Viewport Origin
             origin = new Vector2(400, 336);
@@ -136,6 +141,8 @@ namespace MazeChase
 
         protected override void Update(GameTime gameTime)
         {
+            scoreManager.Update();
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
