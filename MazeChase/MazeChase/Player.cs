@@ -275,10 +275,14 @@ namespace MazeChase
                 sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
                         (int)currentFrame.Y * (int)frameSize.Y,
                         (int)frameSize.X, (int)frameSize.Y);
-                mapManager.setViewportPosition((6 * 16) + 8, (15 * 16));
+                //mapManager.setViewportPosition((6 * 16) + 8, (15 * 16));
                 movementDirection = direction.STILL;
                 inputManager.setLastKeyPressed(Keys.F1);
-                position = new Vector2(((31 * 16) + 8) - mapManager.getViewport().X, ((31 * 16) + 8) - mapManager.getViewport().Y);
+                //position = new Vector2(((31 * 16) + 8) - mapManager.getViewport().X, ((31 * 16) + 8) - mapManager.getViewport().Y);
+                mapManager.setViewportPosition(((34 * 16 + 8) - mapManager.getViewport().Width / 2), (31 * 16 + 8) - mapManager.getViewport().Height / 2 - (1 * 16 + 8));
+
+                position = new Vector2(origin.X, origin.Y + (1 * 16 + 8)); ;
+
                 isDead = false;
             }
         }
