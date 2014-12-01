@@ -5,27 +5,32 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MazeChase
 {
     class Ghost
     {
         MapManager mapManager;
+        ScoreManager scoreManager;
         Player player;
         Texture2D texture;
         Rectangle sourceRectangle;
         Vector2 position, lastInt, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition, currentFrame, firstFrame, lastFrame, frameSize;
         Color color;
-        int speed = 2;
+        SoundEffect playerDeathSound, ghostDeathSound;
+        SoundEffectInstance playerDeathSoundInstance, ghostDeathSoundInstance;
+        int speed = 1;
         float timeSinceLastFrame = 0;
         int millisecondsPerFrame = 100;
         mode currentMode;
         direction movementDirection;
         Random rand;
 
-        public Ghost(MapManager mapManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition)
+        public Ghost(ContentManager content, MapManager mapManager, ScoreManager scoreManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition)
         {
             this.mapManager = mapManager;
+            this.scoreManager = scoreManager;
             this.player = player;
             this.texture = texture;
             this.firstFrame = firstFrame;
@@ -40,19 +45,27 @@ namespace MazeChase
             previousTile = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
             targetPosition = scatterLocation = defensePosition;
             cagePosition = spawnPosition;
+            playerDeathSound = content.Load<SoundEffect>(@"pacman_death");
+            ghostDeathSound = content.Load<SoundEffect>(@"pacman_eatghost");
+            playerDeathSoundInstance = playerDeathSound.CreateInstance();
+            ghostDeathSoundInstance = ghostDeathSound.CreateInstance();
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
+            Console.WriteLine(currentMode);
 
+            viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
+            
             if (player.canEatGhosts == true)
             {
                 currentMode = mode.FLEE;
+                speed = 1;
             }
             else
             {
                 currentMode = mode.ATTACK;
+                speed = 2;
             }
 
             if (mapManager.isIntersectionUnderLocation(viewportPosition))
@@ -71,20 +84,34 @@ namespace MazeChase
 
             if (intersectsWithPlayer())
             {
-                player.isDead = true;
+                if (currentMode != mode.FLEE)
+                {
+                    playerDeathSoundInstance.Play();
+                    player.isDead = true;
+                }
+                else
+                {
+                    scoreManager.increaseScore(100);
+                    ghostDeathSoundInstance.Play();
+                    currentMode = mode.REGENERATE;
+                }
+
                 position = cagePosition;
             }
 
             if (currentMode == mode.ATTACK)
             {
+                speed = 2;
                 targetPosition = player.getPosition();
             }
             else if (currentMode == mode.REGENERATE)
             {
+                speed = 4;
                 targetPosition = cagePosition;
             }
             else if (currentMode == mode.SCATTER)
             {
+                speed = 2;
                 targetPosition = scatterLocation;
             }
             else

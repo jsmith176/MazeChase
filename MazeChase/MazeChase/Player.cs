@@ -24,14 +24,16 @@ namespace MazeChase
         float millisecondsPerFrame = 86;
         float rotation = 0;
         int[] wall = { 0, 0, 0, 0 };
-        int playerSpeed = 2;
+        float playerSpeed = 2;
         bool isMoving;
         int ghostEatTime;
         public bool canEatGhosts;
         public bool isDead;
         direction movementDirection;
         SoundEffect playerNoise;
+        SoundEffect deathNoise;
         SoundEffectInstance playerNoiseInstance;
+        SoundEffectInstance deathNoiseInstance;
 
         public Player(ContentManager contentManager, InputManager inputManager, MapManager mapManager, ScoreManager scoreManager, Vector2 origin)
         {
@@ -40,7 +42,7 @@ namespace MazeChase
             this.mapManager = mapManager;
             this.scoreManager = scoreManager;
             this.origin = origin;
-            position = origin;
+            position = new Vector2(origin.X, origin.Y + (1 * 16 + 8));
             sourceRectangle = new Rectangle(0, 0, 24, 24);
             color = Color.White;
             sheetSize = new Vector2(3, 4);
@@ -57,6 +59,7 @@ namespace MazeChase
         public virtual void Update(GameTime gameTime)
         {
             ghostEatTime--;
+            Console.WriteLine(ghostEatTime);
 
             if (ghostEatTime > 0)
             {
