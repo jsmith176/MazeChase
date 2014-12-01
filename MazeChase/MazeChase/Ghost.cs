@@ -66,12 +66,12 @@ namespace MazeChase
             {
                 currentMode = mode.ATTACK;
 
-                if (viewportPosition.X % 0 != 0)
+                if (viewportPosition.X % 2 != 0)
                 {
                     viewportPosition.X++;
                 }
 
-                if (viewportPosition.Y % 0 != 0)
+                if (viewportPosition.Y % 2 != 0)
                 {
                     viewportPosition.Y++;
                 }
