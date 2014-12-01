@@ -61,6 +61,8 @@ namespace MazeChase
 {
     public enum direction { STILL, UP, DOWN, LEFT, RIGHT };
 
+    enum mode { SCATTER, ATTACK, FLEE, REGENERATE };
+
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;

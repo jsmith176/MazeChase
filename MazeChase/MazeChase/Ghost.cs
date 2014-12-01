@@ -19,7 +19,6 @@ namespace MazeChase
         int speed = 2;
         float timeSinceLastFrame = 0;
         int millisecondsPerFrame = 100;
-        enum mode { SCATTER, ATTACK, FLEE, REGENERATE };
         mode currentMode;
         direction movementDirection;
         Random rand;
