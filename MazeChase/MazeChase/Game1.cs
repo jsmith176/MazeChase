@@ -76,7 +76,7 @@ namespace MazeChase
         SoundEffect deathSound;
         SoundEffectInstance deathSoundInstance;
 
-        bool pause = false;
+        bool pause = true;
 
         // Textures
         Texture2D ghostTexture;
@@ -122,7 +122,7 @@ namespace MazeChase
             scoreManager = new ScoreManager(Content.Load<SpriteFont>("SpriteFont"));
 
             // Viewport Origin
-            origin = new Vector2(400, 240);
+            origin = new Vector2(400, 336);
 
             // Load Textures
             ghostTexture = Content.Load<Texture2D>(@"Ghosts2");
