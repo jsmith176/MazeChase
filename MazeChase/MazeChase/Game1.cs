@@ -122,7 +122,12 @@ namespace MazeChase
             // Initialize InputManager
             inputManager = new InputManager();
 
-            
+
+            // Initialize Ghost
+            red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8));// top right
+            blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((62 * 16) + 8, (44 * 16) + 8));// bottom right
+            pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((0 * 16) + 8, (0 * 16) + 8));// top left
+            orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (44 * 16) + 8));// botttom left
         }
 
         protected override void LoadContent()
@@ -131,7 +136,7 @@ namespace MazeChase
             deathSoundInstance = deathSound.CreateInstance();
 
             newLifeSound = Content.Load<SoundEffect>(@"pacman_extrapac");
-            newLifeInstance = newLifeSound.CreateInstance();
+            newLifeInstance = newLifeSound.CreateInstance();  
 
             congrats = Content.Load<SoundEffect>(@"fanfare");
             congratsInstance = congrats.CreateInstance();
@@ -350,47 +355,47 @@ namespace MazeChase
                 {
                     scoreManager.Update();
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.P))
-                    {
-                        pause = true;
-                    }
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                pause = true;
+            }
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.R))
-                    {
-                        pause = false;
-                    }
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                pause = false;
+            }
 
-                    if (!pause && !player.isDead)
-                    {
-                        // Check for input
-                        inputManager.Update(gameTime);
+            if (!pause && !player.isDead)
+            {
+                // Check for input
+                inputManager.Update(gameTime);
 
-                        // Update map
-                        mapManager.Update(gameTime);
-                        if (mapManager.isFoodUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) == 20)
-                        {
-                            player.modeSwap(500);
-                        }
+                // Update map
+                mapManager.Update(gameTime);
+                if (mapManager.isFoodUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) == 20)
+                {
+                    player.modeSwap(500);
+                }
 
-                        // Update player
-                        player.Update(gameTime);
+                // Update player
+                player.Update(gameTime);
 
-                        // Update ghosts
-                        red.Update(gameTime);
-                        blue.Update(gameTime);
-                        pink.Update(gameTime);
-                        orange.Update(gameTime);
-                    }
-                    else if (player.isDead)
-                    {
-                        player.deathAnimation(gameTime);
+                // Update ghosts
+                red.Update(gameTime);
+                blue.Update(gameTime);
+                pink.Update(gameTime);
+                orange.Update(gameTime);
+            }
+            else if (player.isDead)
+            {
+                player.deathAnimation(gameTime);
                         red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
                         blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
                         pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
                         orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
                     }
-                }
-                
+            }
+
             }
             else if (gameMode == 3)
             {
@@ -423,19 +428,19 @@ namespace MazeChase
             }
             else if (gameMode == 2)
             {
-                // Draw map
-                mapManager.Draw();
+            // Draw map
+            mapManager.Draw();
 
-                player.Draw(spriteBatch);
-                if (!player.isDead)
-                {
-                    red.Draw(spriteBatch);
-                    blue.Draw(spriteBatch);
-                    pink.Draw(spriteBatch);
-                    orange.Draw(spriteBatch);
-                }
+            player.Draw(spriteBatch);
+            if (!player.isDead)
+            {
+                red.Draw(spriteBatch);
+                blue.Draw(spriteBatch);
+                pink.Draw(spriteBatch);
+                orange.Draw(spriteBatch);
+            }
 
-                scoreManager.Draw(spriteBatch);
+            scoreManager.Draw(spriteBatch);
             }
             else if (gameMode == 3)
             {
