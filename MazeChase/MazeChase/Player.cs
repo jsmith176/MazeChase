@@ -59,7 +59,6 @@ namespace MazeChase
         public virtual void Update(GameTime gameTime)
         {
             ghostEatTime--;
-            Console.WriteLine(ghostEatTime);
 
             if (ghostEatTime > 0)
             {
@@ -270,7 +269,6 @@ namespace MazeChase
 
             if (currentFrame == new Vector2(2, 3))
             {
-                scoreManager.removeLive();
                 currentFrame *= 0;
                 sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
                         (int)currentFrame.Y * (int)frameSize.Y,
@@ -280,9 +278,9 @@ namespace MazeChase
                 inputManager.setLastKeyPressed(Keys.F1);
                 //position = new Vector2(((31 * 16) + 8) - mapManager.getViewport().X, ((31 * 16) + 8) - mapManager.getViewport().Y);
                 mapManager.setViewportPosition(((34 * 16 + 8) - mapManager.getViewport().Width / 2), (31 * 16 + 8) - mapManager.getViewport().Height / 2 - (1 * 16 + 8));
-
-                position = new Vector2(origin.X, origin.Y + (1 * 16 + 8)); ;
-
+                scoreManager.removeLive();
+                position = new Vector2(origin.X, origin.Y + (1 * 16 + 8));
+                
                 isDead = false;
             }
         }

@@ -22,7 +22,7 @@ namespace MazeChase
             spriteFont = font;
             position = new Vector2(10, 10);
             score = 0;
-            lives = 3;
+            lives = 0;
             newLifeNoise = newLifeInstance;
         }
 
@@ -51,10 +51,26 @@ namespace MazeChase
             return lives;
         }
 
+        public void setLives(int setTo)
+        {
+            lives = setTo;
+        }
+
+        public int getScore()
+        {
+            return score;
+        }
+
         public void addLive()
         {
             lives++;
             newLifeNoise.Play();            
+        }
+
+        public void reset()
+        {
+            lives = 3;
+            score = 0;
         }
 
         public void removeLive()

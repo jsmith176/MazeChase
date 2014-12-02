@@ -21,6 +21,8 @@ namespace MazeChase
         ScoreManager scoreManager;
         Layer layer;
 
+        Random rand = new Random((int)DateTime.Now.Ticks);
+
         int[,] adjMatrix;
         int[,] next;
         List<Vector2> intList = new List<Vector2>();
@@ -226,18 +228,25 @@ namespace MazeChase
             }
         }
 
-        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction playerDir)
+        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector)
         {
             int from = intList.IndexOf(fromVector);
             int to = intList.IndexOf(toVector);
 
             //Console.WriteLine(fromVector.X + " " + fromVector.Y);
             //Console.WriteLine(toVector.X + " " + toVector.Y);
-            Console.WriteLine(from + " " + to);
+            //Console.WriteLine(from + " " + to);
 
             if (from == to)
             {
-                return playerDir;
+                if (rand.Next() % 2 == 0)
+                {
+                    return (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
+                }
+                else
+                {
+                    return (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
+                }
             }
             else
             {
@@ -251,7 +260,14 @@ namespace MazeChase
                 }
                 else
                 {
-                    return playerDir;
+                    if (rand.Next() % 2 == 0)
+                    {
+                        return (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
+                    }
+                    else
+                    {
+                        return (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
+                    }
                 }
             }
         }
@@ -299,19 +315,6 @@ namespace MazeChase
 
         void defineAdjMatrix()
         {
-            //adjMatrix = new int[intList.Count, intList.Count];
-
-            //for (int i = 0; i < intList.Count; i++)
-            //{
-            //    for (int j = 0; j < intList.Count; j++)
-            //    {
-            //        adjMatrix[i, j] = calculate2TileDistance(intList[i], intList[j]);
-            //    }
-            //}
-
-            Tile currentTile;
-            int tempDistance = 0;
-            bool hasWall = false;
 
             adjMatrix = new int[intList.Count, intList.Count];
 
@@ -325,16 +328,11 @@ namespace MazeChase
 
             for (int i = 0; i < intList.Count; i++)
             {
-                hasWall = false;
-                tempDistance = 0;
 
                 if (i < intList.Count - 1)
                 {
                     adjMatrix[i, i + 1] = adjMatrix[i + 1, i] = calculate2TileDistance(intList[i], intList[i + 1]);
                 }
-
-                hasWall = false;
-                tempDistance = 0;
 
                 if (i < intList.Count - 1)
                 {

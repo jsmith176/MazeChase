@@ -73,7 +73,7 @@ namespace MazeChase
 
                 speed = 2;
 
-                Console.WriteLine(viewportPosition.X + " " + viewportPosition.Y);
+                //Console.WriteLine(viewportPosition.X + " " + viewportPosition.Y);
             }
 
             if (player.canEatGhosts == true)
@@ -84,17 +84,34 @@ namespace MazeChase
                 }
                 else
                 {
+                    if (viewportPosition.X % 2 != 0)
+                    {
+                        viewportPosition.X++;
+                    }
+
+                    if (viewportPosition.Y % 2 != 0)
+                    {
+                        viewportPosition.Y++;
+                    }
+
                     currentMode = mode.FLEE;
                     speed = 1;
                 }
             }
             else
             {
-                if (previouslyEaten)
+                previouslyEaten = false;
+
+                if (currentMode == mode.REGENERATE)
+                {
+
+                }
+                else
                 {
                     currentMode = mode.SCATTER;
                 }
-                else if(currentMode != mode.REGENERATE)
+
+                if(currentMode != mode.REGENERATE)
                 {
                     currentMode = mode.ATTACK;
                 }
@@ -123,7 +140,7 @@ namespace MazeChase
                 {
                     if (currentMode == mode.REGENERATE)
                     {
-                        Console.Write("");
+
                     }
                 }
             }
@@ -133,7 +150,7 @@ namespace MazeChase
             {
                 if (currentMode == mode.REGENERATE)
                 {
-                    Console.Write("");
+
                 }
             }
 
@@ -257,17 +274,17 @@ namespace MazeChase
             {
                 case mode.ATTACK:
                     //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt());
                     //Console.WriteLine(movementDirection);
                     break;
                 case mode.FLEE:
                     //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt());
                     pickFleeDirection();
                     break;
                 case mode.REGENERATE:
                     //targetPosition = cagePosition;
-                    movementDirection = mapManager.getFloydDirection(lastInt, cagePosition, player.getDirection());
+                    movementDirection = mapManager.getFloydDirection(lastInt, cagePosition);
                     if (mapManager.isCageUnderLocation(viewportPosition))
                     {
                         currentMode = mode.ATTACK;
@@ -279,13 +296,11 @@ namespace MazeChase
                         {
                             viewportPosition.Y++;
                         }
-
-                        Console.Write("");
                     }
                     break;
                 case mode.SCATTER:
                     //targetPosition = scatterLocation;
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt());
                     break;
             }
         }
