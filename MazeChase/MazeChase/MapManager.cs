@@ -24,6 +24,7 @@ namespace MazeChase
         int[,] adjMatrix;
         int[,] next;
         List<Vector2> intList = new List<Vector2>();
+        List<Vector2> cageList = new List<Vector2>();
 
         // xTile map, display device reference, and rendering viewport
         Map map;
@@ -110,6 +111,18 @@ namespace MazeChase
             if (layer.Tiles[(int)(viewport.X + location.X) / 16, (int)(viewport.Y + location.Y) / 16].Properties.ContainsKey("Intersection"))
                 return true;
             return false;
+        }
+
+        public bool isCageUnderLocation(Vector2 location)
+        {
+            if (layer.Tiles[(int)(viewport.X + location.X) / 16, (int)(viewport.Y + location.Y) / 16].Properties.ContainsKey("Cage"))
+                return true;
+            return false;
+        }
+
+        public Vector2 getCagePosition()
+        {
+            return cageList[3];
         }
 
         public int isFoodUnderPlayer(int playerX, int playerY)
@@ -220,7 +233,7 @@ namespace MazeChase
 
             //Console.WriteLine(fromVector.X + " " + fromVector.Y);
             //Console.WriteLine(toVector.X + " " + toVector.Y);
-            //Console.WriteLine(from + " " + to);
+            Console.WriteLine(from + " " + to);
 
             if (from == to)
             {
@@ -261,12 +274,20 @@ namespace MazeChase
 
                     left = (i > 0) ? layer.Tiles[i - 1, j] : null;
 
-                    if (!currentTile.TileIndexProperties.ContainsKey("Wall") && !currentTile.Properties.ContainsKey("Cage"))
+                    if (!currentTile.TileIndexProperties.ContainsKey("Wall"))
                     {
+                        if (currentTile.Properties.ContainsKey("Cage"))
+                        {
+                            cageList.Add(new Vector2(i, j));
+                            currentTile.Properties.Add("Intersection", 1);
+                            intList.Add(new Vector2(i, j));
+                        }
+                        
                         if ((!above.TileIndexProperties.ContainsKey("Wall")) || (!below.TileIndexProperties.ContainsKey("Wall")))
                         {
                             if ((!left.TileIndexProperties.ContainsKey("Wall")) || (!right.TileIndexProperties.ContainsKey("Wall")))
                             {
+                                
                                 currentTile.Properties.Add("Intersection", 1);
                                 intList.Add(new Vector2(i, j));
                             }

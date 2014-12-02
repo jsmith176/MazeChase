@@ -26,6 +26,7 @@ namespace MazeChase
         mode currentMode;
         direction movementDirection;
         Random rand;
+        bool previouslyEaten;
 
         public Ghost(ContentManager content, MapManager mapManager, ScoreManager scoreManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition)
         {
@@ -44,11 +45,12 @@ namespace MazeChase
             rand = new Random();
             previousTile = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
             targetPosition = scatterLocation = defensePosition;
-            cagePosition = spawnPosition;
+            cagePosition = mapManager.getCagePosition();
             playerDeathSound = content.Load<SoundEffect>(@"pacman_death");
             ghostDeathSound = content.Load<SoundEffect>(@"pacman_eatghost");
             playerDeathSoundInstance = playerDeathSound.CreateInstance();
             ghostDeathSoundInstance = ghostDeathSound.CreateInstance();
+            previouslyEaten = false;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -56,15 +58,46 @@ namespace MazeChase
             //Console.WriteLine(currentMode);
 
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
-            
+
+            if (currentMode == mode.REGENERATE)
+            {
+                if (viewportPosition.X % 2 != 0)
+                {
+                    viewportPosition.X++;
+                }
+
+                if (viewportPosition.Y % 2 != 0)
+                {
+                    viewportPosition.Y++;
+                }
+
+                speed = 2;
+
+                Console.WriteLine(viewportPosition.X + " " + viewportPosition.Y);
+            }
+
             if (player.canEatGhosts == true)
             {
-                currentMode = mode.FLEE;
-                speed = 1;
+                if (previouslyEaten)
+                {
+                    
+                }
+                else
+                {
+                    currentMode = mode.FLEE;
+                    speed = 1;
+                }
             }
             else
             {
-                currentMode = mode.ATTACK;
+                if (previouslyEaten)
+                {
+                    currentMode = mode.SCATTER;
+                }
+                else if(currentMode != mode.REGENERATE)
+                {
+                    currentMode = mode.ATTACK;
+                }
 
                 if (viewportPosition.X % 2 != 0)
                 {
@@ -86,28 +119,45 @@ namespace MazeChase
                 {
                     pickDirection();
                 }
+                else
+                {
+                    if (currentMode == mode.REGENERATE)
+                    {
+                        Console.Write("");
+                    }
+                }
             }
             else if (movementDirection == direction.STILL)
                 pickDirection();
+            else
+            {
+                if (currentMode == mode.REGENERATE)
+                {
+                    Console.Write("");
+                }
+            }
 
             move();
             nextFrame(gameTime);
 
             if (intersectsWithPlayer())
             {
-                if (currentMode != mode.FLEE)
+                if (currentMode == mode.ATTACK || currentMode == mode.SCATTER)
                 {
                     playerDeathSoundInstance.Play();
                     player.isDead = true;
                 }
-                else
+                else if(currentMode == mode.FLEE)
                 {
                     scoreManager.increaseScore(100);
                     ghostDeathSoundInstance.Play();
                     currentMode = mode.REGENERATE;
+                    previouslyEaten = true;
                 }
+                else if (currentMode == mode.REGENERATE)
+                {
 
-                position = cagePosition;
+                }
             }
 
             if (currentMode == mode.ATTACK)
@@ -163,6 +213,24 @@ namespace MazeChase
                         (int)currentFrame.Y * (int)frameSize.Y,
                         (int)frameSize.X, (int)frameSize.Y);
             }
+            else if (currentMode == mode.REGENERATE)
+            {
+                currentFrame = new Vector2(0, 4);
+                timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
+                if (timeSinceLastFrame > millisecondsPerFrame)
+                {
+                    timeSinceLastFrame = 0;
+                    ++currentFrame.X;
+                    if (currentFrame.X > 1.0f)
+                    {
+                        currentFrame.X = 0.0f;
+                    }
+                }
+
+                sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                        (int)currentFrame.Y * (int)frameSize.Y,
+                        (int)frameSize.X, (int)frameSize.Y);
+            }
             else
             {
                 currentFrame = firstFrame;
@@ -188,21 +256,35 @@ namespace MazeChase
             switch (currentMode)
             {
                 case mode.ATTACK:
-                    targetPosition = player.getPosition();
+                    //targetPosition = player.getPosition();
                     movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
                     //Console.WriteLine(movementDirection);
                     break;
                 case mode.FLEE:
-                    targetPosition = player.getPosition();
+                    //targetPosition = player.getPosition();
                     movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
                     pickFleeDirection();
                     break;
                 case mode.REGENERATE:
-                    targetPosition = cagePosition;
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
+                    //targetPosition = cagePosition;
+                    movementDirection = mapManager.getFloydDirection(lastInt, cagePosition, player.getDirection());
+                    if (mapManager.isCageUnderLocation(viewportPosition))
+                    {
+                        currentMode = mode.ATTACK;
+                        while (viewportPosition.X % 2 != 0)
+                        {
+                            viewportPosition.X++;
+                        }
+                        while (viewportPosition.Y % 2 != 0)
+                        {
+                            viewportPosition.Y++;
+                        }
+
+                        Console.Write("");
+                    }
                     break;
                 case mode.SCATTER:
-                    targetPosition = scatterLocation;
+                    //targetPosition = scatterLocation;
                     movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), player.getDirection());
                     break;
             }

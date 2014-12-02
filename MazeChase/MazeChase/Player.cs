@@ -270,7 +270,7 @@ namespace MazeChase
 
             if (currentFrame == new Vector2(2, 3))
             {
-                scoreManager.lives -= 1;
+                scoreManager.removeLive();
                 currentFrame *= 0;
                 sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
                         (int)currentFrame.Y * (int)frameSize.Y,
