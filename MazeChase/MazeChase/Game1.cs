@@ -168,7 +168,7 @@ namespace MazeChase
                 mapManager.Update(gameTime);
                 if (mapManager.isFoodUnderPlayer((int)player.getPosition().X, (int)player.getPosition().Y) == 20)
                 {
-                    player.modeSwap(1000);
+                    player.modeSwap(500);
                 }
 
                 // Update player
