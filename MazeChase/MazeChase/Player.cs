@@ -232,6 +232,13 @@ namespace MazeChase
             return lastInt;
         }
 
+        public bool lowEatTime()
+        {
+            if (ghostEatTime <= 150)
+                return true;
+            return false;
+        }
+
         void nextFrame(GameTime gameTime)
         {
             timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;

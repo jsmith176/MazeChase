@@ -106,10 +106,10 @@ namespace MazeChase
             player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);          
 
             // Initialize Ghost
-            red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8));// top right
-            blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((62 * 16) + 8, (44 * 16) + 8));// bottom right
-            pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((0 * 16) + 8, (0 * 16) + 8));// top left
-            orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (44 * 16) + 8));// botttom left
+            red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
+            blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
+            pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
+            orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
         }
 
         protected override void LoadContent()
