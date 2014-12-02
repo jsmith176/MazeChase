@@ -16,13 +16,13 @@ namespace MazeChase
         Player player;
         Texture2D texture;
         Rectangle sourceRectangle;
-        Vector2 position, lastInt, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition, currentFrame, firstFrame, lastFrame, frameSize;
+        Vector2 position, lastInt, viewportPosition, previousTile, targetPosition, scatterLocation, cagePosition, currentFrame, firstFrame, lastFrame, scaredFrame, frameSize;
         Color color;
         SoundEffect playerDeathSound, ghostDeathSound;
         SoundEffectInstance playerDeathSoundInstance, ghostDeathSoundInstance;
         int speed = 1;
         float timeSinceLastFrame = 0;
-        int millisecondsPerFrame = 100;
+        int millisecondsPerFrame = 250;
         mode currentMode;
         direction movementDirection;
         Random rand;
@@ -35,6 +35,7 @@ namespace MazeChase
             this.player = player;
             this.texture = texture;
             this.firstFrame = firstFrame;
+            scaredFrame = new Vector2(0, 5);
             currentFrame = new Vector2(0, 0);
             this.lastFrame = lastFrame;
             frameSize = new Vector2(24, 24);
@@ -163,6 +164,7 @@ namespace MazeChase
                 {
                     playerDeathSoundInstance.Play();
                     player.isDead = true;
+                    //previouslyEaten = false;
                 }
                 else if(currentMode == mode.FLEE)
                 {
@@ -214,15 +216,33 @@ namespace MazeChase
         {
             if (currentMode == mode.FLEE)
             {
-                currentFrame = new Vector2(0, 5);
+                if (currentFrame.Y != 5)
+                {
+                    currentFrame = scaredFrame;
+                }
+
                 timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
                 if (timeSinceLastFrame > millisecondsPerFrame)
                 {
                     timeSinceLastFrame = 0;
-                    ++currentFrame.X;
-                    if (currentFrame.X > 1.0f)
+                    if (player.lowEatTime())
                     {
-                        currentFrame.X = 0.0f;
+                        currentFrame.X++;
+                        if (currentFrame.X > 3.0f)
+                        {
+                            currentFrame.X = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (currentFrame.X == 0.0f)
+                        {
+                            currentFrame.X = 1.0f;
+                        }
+                        else if (currentFrame.X == 1.0f)
+                        {
+                            currentFrame.X = 0.0f;
+                        }
                     }
                 }
 
@@ -232,16 +252,21 @@ namespace MazeChase
             }
             else if (currentMode == mode.REGENERATE)
             {
-                currentFrame = new Vector2(0, 4);
-                timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
-                if (timeSinceLastFrame > millisecondsPerFrame)
+                if (movementDirection == direction.UP)
                 {
-                    timeSinceLastFrame = 0;
-                    ++currentFrame.X;
-                    if (currentFrame.X > 1.0f)
-                    {
-                        currentFrame.X = 0.0f;
-                    }
+                    currentFrame = new Vector2(0, 4);
+                }
+                else if (movementDirection == direction.DOWN)
+                {
+                    currentFrame = new Vector2(2, 4);
+                }
+                else if (movementDirection == direction.LEFT)
+                {
+                    currentFrame = new Vector2(4, 4);
+                }
+                else if (movementDirection == direction.RIGHT)
+                {
+                    currentFrame = new Vector2(6, 4);
                 }
 
                 sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
@@ -250,16 +275,20 @@ namespace MazeChase
             }
             else
             {
-                currentFrame = firstFrame;
+                currentFrame.Y = firstFrame.Y;
                 timeSinceLastFrame += (float)gameTime.ElapsedGameTime.Milliseconds;
                 if (timeSinceLastFrame > millisecondsPerFrame)
                 {
                     timeSinceLastFrame = 0;
-                    ++currentFrame.X;
-                    if (currentFrame.X > lastFrame.X)
+                    if (currentFrame.X % 2 == 0)
                     {
-                        currentFrame.X = firstFrame.X;
+                        currentFrame.X++;
                     }
+                    else
+                    {
+                        currentFrame.X--;
+                    }
+                    
                 }
 
                 sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
@@ -308,13 +337,25 @@ namespace MazeChase
         void move()
         {
             if (movementDirection == direction.UP)
+            {
                 position.Y -= speed;
-            if (movementDirection == direction.RIGHT)
+                firstFrame.X = 0;
+            }
+            else if (movementDirection == direction.RIGHT)
+            {
                 position.X += speed;
-            if (movementDirection == direction.DOWN)
+                firstFrame.X = 6;
+            }
+            else if (movementDirection == direction.DOWN)
+            {
                 position.Y += speed;
-            if (movementDirection == direction.LEFT)
+                firstFrame.X = 2;
+            }
+            else if (movementDirection == direction.LEFT)
+            {
                 position.X -= speed;
+                firstFrame.X = 4;
+            }
         }
 
         public void pickFleeDirection()
