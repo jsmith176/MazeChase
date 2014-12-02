@@ -46,6 +46,11 @@
         <Property Key="@TileIndex@41@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@40@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@52@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@87@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@88@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@89@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@90@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@91@Wall" Type="Int32"><![CDATA[1]]></Property>
       </Properties>
     </TileSheet>
   </TileSheets>
@@ -1403,10 +1408,10 @@
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="9" BlendMode="Alpha" />
           <Static Index="10" BlendMode="Alpha" />
-          <Static Index="84" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
-          <Static Index="86" BlendMode="Alpha" />
+          <Static Index="10" BlendMode="Alpha" />
+          <Static Index="10" BlendMode="Alpha" />
+          <Static Index="10" BlendMode="Alpha" />
+          <Static Index="10" BlendMode="Alpha" />
           <Static Index="10" BlendMode="Alpha" />
           <Static Index="11" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
@@ -1466,38 +1471,14 @@
           <Static Index="27" BlendMode="Alpha" />
           <Static Index="29" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="21" BlendMode="Alpha" />
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="23" BlendMode="Alpha" />
+          <Static Index="88" BlendMode="Alpha" />
+          <Static Index="91" BlendMode="Alpha" />
+          <Static Index="91" BlendMode="Alpha" />
+          <Static Index="91" BlendMode="Alpha" />
+          <Static Index="91" BlendMode="Alpha" />
+          <Static Index="91" BlendMode="Alpha" />
+          <Static Index="91" BlendMode="Alpha" />
+          <Static Index="87" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="27" BlendMode="Alpha" />
           <Static Index="29" BlendMode="Alpha" />
@@ -1555,7 +1536,7 @@
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="21" BlendMode="Alpha" />
+          <Static Index="13" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha">
             <Properties>
               <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
@@ -1576,7 +1557,7 @@
               <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
             </Properties>
           </Static>
-          <Static Index="89" BlendMode="Alpha">
+          <Static Index="13" BlendMode="Alpha">
             <Properties>
               <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
             </Properties>
@@ -1586,7 +1567,7 @@
               <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
             </Properties>
           </Static>
-          <Static Index="23" BlendMode="Alpha" />
+          <Static Index="13" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
@@ -1644,38 +1625,14 @@
           <Static Index="3" BlendMode="Alpha" />
           <Static Index="5" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="21" BlendMode="Alpha" />
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="13" BlendMode="Alpha">
-            <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
-            </Properties>
-          </Static>
-          <Static Index="23" BlendMode="Alpha" />
+          <Static Index="90" BlendMode="Alpha" />
+          <Static Index="85" BlendMode="Alpha" />
+          <Static Index="85" BlendMode="Alpha" />
+          <Static Index="85" BlendMode="Alpha" />
+          <Static Index="85" BlendMode="Alpha" />
+          <Static Index="85" BlendMode="Alpha" />
+          <Static Index="85" BlendMode="Alpha" />
+          <Static Index="89" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="3" BlendMode="Alpha" />
           <Static Index="5" BlendMode="Alpha" />

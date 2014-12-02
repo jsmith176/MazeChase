@@ -14,7 +14,7 @@ namespace MazeChase
         Vector2 position;
         string text;
         int score;
-        public int lives;
+        int lives;
         SoundEffectInstance newLifeNoise;
 
         public ScoreManager(SpriteFont font, SoundEffectInstance newLifeInstance)
@@ -55,6 +55,11 @@ namespace MazeChase
         {
             lives++;
             newLifeNoise.Play();            
+        }
+
+        public void removeLive()
+        {
+            lives--;
         }
     }
 }
