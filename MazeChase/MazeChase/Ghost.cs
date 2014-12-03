@@ -460,9 +460,20 @@ namespace MazeChase
                         {
                             movementDirection = direction.RIGHT;
                         }
-                        else
+                        else if (mapManager.isWall(mapManager.tileRightOfLocation(viewportPosition)))
                         {
                             movementDirection = direction.LEFT;
+                        }
+                        else
+                        {
+                            if (rand.Next() % 2 == 0)
+                            {
+                                movementDirection = direction.RIGHT;
+                            }
+                            else
+                            {
+                                movementDirection = direction.LEFT;
+                            }
                         }
                     }
                     else
@@ -477,9 +488,20 @@ namespace MazeChase
                         {
                             movementDirection = direction.LEFT;
                         }
-                        else
+                        else if(mapManager.isWall(mapManager.tileLeftOfLocation(viewportPosition)))
                         {
                             movementDirection = direction.RIGHT;
+                        }
+                        else
+                        {
+                            if (rand.Next() % 2 == 0)
+                            {
+                                movementDirection = direction.RIGHT;
+                            }
+                            else
+                            {
+                                movementDirection = direction.LEFT;
+                            }
                         }
                     }
                     else
@@ -494,9 +516,20 @@ namespace MazeChase
                         {
                             movementDirection = direction.UP;
                         }
+                        else if(mapManager.isWall(mapManager.tileAboveLocation(viewportPosition)))
+                        {
+                            movementDirection = direction.UP;
+                        }
                         else
                         {
-                            movementDirection = direction.DOWN;
+                            if (rand.Next() % 2 == 0)
+                            {
+                                movementDirection = direction.DOWN;
+                            }
+                            else
+                            {
+                                movementDirection = direction.UP;
+                            }
                         }
                     }
                     else
@@ -511,9 +544,20 @@ namespace MazeChase
                         {
                             movementDirection = direction.DOWN;
                         }
-                        else
+                        else if(mapManager.isWall(mapManager.tileBelowLocation(viewportPosition)))
                         {
                             movementDirection = direction.UP;
+                        }
+                        else
+                        {
+                            if (rand.Next() % 2 == 0)
+                            {
+                                movementDirection = direction.DOWN;
+                            }
+                            else
+                            {
+                                movementDirection = direction.UP;
+                            }
                         }
                     }
                     else
