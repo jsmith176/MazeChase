@@ -344,10 +344,10 @@ namespace MazeChase
                 player.Update(gameTime);
 
                 // Update ghosts
-                //red.Update(gameTime);
-                //blue.Update(gameTime);
+                red.Update(gameTime);
+                blue.Update(gameTime);
                 pink.Update(gameTime);
-                //orange.Update(gameTime);
+                orange.Update(gameTime);
             }
             else if (player.isDead)
             {

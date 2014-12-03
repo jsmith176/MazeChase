@@ -265,11 +265,11 @@ namespace MazeChase
                 break;
 
                 case direction.LEFT:
-                    if (toVector.Y == intList[intList.IndexOf(toVector) - 2].Y)
+                    if (intList.IndexOf(toVector) - 2 > 0 && toVector.Y == intList[intList.IndexOf(toVector) - 2].Y)
                     {
                         returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) - 2], previousDir, targetMovement, playerMovement);
                     }
-                    else if (toVector.Y == intList[intList.IndexOf(toVector) - 1].Y)
+                    else if (intList.IndexOf(toVector) - 1 > 0 && toVector.Y == intList[intList.IndexOf(toVector) - 1].Y)
                     {
                         returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) - 1], previousDir, targetMovement, playerMovement);
                     }
@@ -281,11 +281,11 @@ namespace MazeChase
                 break;
 
                 case direction.RIGHT:
-                    if (toVector.Y == intList[intList.IndexOf(toVector) + 2].Y)
+                    if (intList.IndexOf(toVector) < intList.Count - 2 && toVector.Y == intList[intList.IndexOf(toVector) + 2].Y)
                     {
                         returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) + 2], previousDir, targetMovement, playerMovement);
                     }
-                    else if (toVector.Y == intList[intList.IndexOf(toVector) + 1].Y)
+                    else if (intList.IndexOf(toVector) < intList.Count - 1 && toVector.Y == intList[intList.IndexOf(toVector) + 1].Y)
                     {
                         returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) + 1], previousDir, targetMovement, playerMovement);
                     }
@@ -310,11 +310,6 @@ namespace MazeChase
             int from = intList.IndexOf(fromVector);
             int to = intList.IndexOf(toVector);
 
-            //Console.WriteLine(fromVector.X + " " + fromVector.Y);
-            //Console.WriteLine(toVector.X + " " + toVector.Y);
-            //Console.WriteLine(from + " " + to);
-
-            Console.WriteLine(from + " " + to);
             direction returner;
 
             if (from == to)
@@ -337,8 +332,7 @@ namespace MazeChase
                 }
                 else
                 {
-                    //returner = (targetMovement == direction.STILL) ? getWanderDirection(previousDir, from) : targetMovement;
-                    returner = direction.STILL;
+                    returner = getWanderDirection(previousDir, from);
                 }
             }
 

@@ -31,10 +31,6 @@ namespace MazeChase
             {
                 lastKeyPressed = Keys.Left;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
-            {
-                lastKeyPressed = Keys.S;
-            }
         }
 
         public Keys getLastKeyPressed()
