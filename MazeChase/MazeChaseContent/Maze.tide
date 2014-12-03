@@ -51,6 +51,7 @@
         <Property Key="@TileIndex@89@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@90@Wall" Type="Int32"><![CDATA[1]]></Property>
         <Property Key="@TileIndex@91@Wall" Type="Int32"><![CDATA[1]]></Property>
+        <Property Key="@TileIndex@95@Wall" Type="Int32"><![CDATA[1]]></Property>
       </Properties>
     </TileSheet>
   </TileSheets>
@@ -677,9 +678,45 @@
           <Static Index="29" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="0" BlendMode="Alpha" />
-          <Static Index="1" BlendMode="Alpha" />
-          <Static Index="2" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
@@ -707,9 +744,45 @@
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="0" BlendMode="Alpha" />
-          <Static Index="1" BlendMode="Alpha" />
-          <Static Index="2" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="27" BlendMode="Alpha" />
@@ -742,9 +815,33 @@
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="12" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="14" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
@@ -772,9 +869,33 @@
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="12" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="14" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="21" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
@@ -807,9 +928,45 @@
           <Static Index="5" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="24" BlendMode="Alpha" />
-          <Static Index="25" BlendMode="Alpha" />
-          <Static Index="26" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
@@ -837,9 +994,45 @@
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="24" BlendMode="Alpha" />
-          <Static Index="25" BlendMode="Alpha" />
-          <Static Index="26" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="3" BlendMode="Alpha" />
@@ -1472,12 +1665,72 @@
           <Static Index="29" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="88" BlendMode="Alpha" />
-          <Static Index="91" BlendMode="Alpha" />
-          <Static Index="91" BlendMode="Alpha" />
-          <Static Index="91" BlendMode="Alpha" />
-          <Static Index="91" BlendMode="Alpha" />
-          <Static Index="91" BlendMode="Alpha" />
-          <Static Index="91" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="91" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="91" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="91" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="91" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="91" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="91" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="87" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="27" BlendMode="Alpha" />
@@ -1634,12 +1887,72 @@
           <Static Index="5" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="90" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
-          <Static Index="85" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="85" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="85" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="85" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="85" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="85" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="85" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+              <Static Index="95" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="89" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="3" BlendMode="Alpha" />
@@ -1723,9 +2036,45 @@
           <Static Index="29" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="0" BlendMode="Alpha" />
-          <Static Index="1" BlendMode="Alpha" />
-          <Static Index="2" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
@@ -1788,9 +2137,33 @@
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="12" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="14" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
@@ -1853,9 +2226,45 @@
           <Static Index="5" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="24" BlendMode="Alpha" />
-          <Static Index="25" BlendMode="Alpha" />
-          <Static Index="26" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
@@ -2278,9 +2687,45 @@
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="0" BlendMode="Alpha" />
-          <Static Index="1" BlendMode="Alpha" />
-          <Static Index="2" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+              <Static Index="0" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+              <Static Index="1" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="2" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="27" BlendMode="Alpha" />
@@ -2343,9 +2788,33 @@
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="12" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+              <Static Index="12" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="14" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="14" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="21" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
@@ -2408,9 +2877,45 @@
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="15" BlendMode="Alpha" />
-          <Static Index="24" BlendMode="Alpha" />
-          <Static Index="25" BlendMode="Alpha" />
-          <Static Index="26" BlendMode="Alpha" />
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+              <Static Index="24" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+              <Static Index="25" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
+          <Animated Interval="250">
+            <Frames>
+              <TileSheet Ref="tile sheet" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+              <Static Index="26" BlendMode="Alpha" />
+            </Frames>
+          </Animated>
           <Static Index="17" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="3" BlendMode="Alpha" />
