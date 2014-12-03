@@ -27,6 +27,7 @@ namespace MazeChase
         int[,] next;
         List<Vector2> intList = new List<Vector2>();
         List<Vector2> cageList = new List<Vector2>();
+        List<Vector2> cageEnter = new List<Vector2>();
 
         // xTile map, display device reference, and rendering viewport
         Map map;
@@ -228,7 +229,7 @@ namespace MazeChase
             }
         }
 
-        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector)
+        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction previousDir)
         {
             int from = intList.IndexOf(fromVector);
             int to = intList.IndexOf(toVector);
@@ -237,38 +238,100 @@ namespace MazeChase
             //Console.WriteLine(toVector.X + " " + toVector.Y);
             //Console.WriteLine(from + " " + to);
 
+            direction returner;
+            
+
             if (from == to)
             {
                 if (rand.Next() % 2 == 0)
                 {
-                    return (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
+                    returner = (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
                 }
                 else
                 {
-                    return (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
+                    returner = (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
                 }
+            }
+            else if (cageList.Contains(fromVector))
+            {
+                return previousDir;
             }
             else
             {
                 if (intList[from].X == intList[next[from, to]].X)
                 {
-                    return (intList[from].Y > intList[next[from, to]].Y) ? direction.UP : direction.DOWN;
+                    returner = (intList[from].Y > intList[next[from, to]].Y) ? direction.UP : direction.DOWN;
                 }
                 else if (intList[from].Y == intList[next[from, to]].Y)
                 {
-                    return (intList[from].X > intList[next[from, to]].X) ? direction.LEFT : direction.RIGHT;
+                    returner = (intList[from].X > intList[next[from, to]].X) ? direction.LEFT : direction.RIGHT;
                 }
                 else
                 {
                     if (rand.Next() % 2 == 0)
                     {
-                        return (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
+                        returner = (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
                     }
                     else
                     {
-                        return (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
+                        returner = (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
                     }
                 }
+            }
+
+            //if (from > 120 && from < 128)
+            //{
+            //    Console.Write("");
+                
+            //    Console.WriteLine(returner);
+            //    Game1.pause = true;
+            //}
+            
+            if(previousDir != returner)
+            {
+                switch (previousDir)
+                {
+                    case direction.LEFT:
+                        if (returner == direction.RIGHT)
+                        {
+                            returner = getWanderDirection(returner, from);
+                        }
+                        break;
+                    case direction.RIGHT:
+                        if (returner == direction.LEFT)
+                        {
+                            returner = getWanderDirection(returner, from);
+                        }
+                        break;
+                    case direction.UP:
+                        if (returner == direction.DOWN)
+                        {
+                            returner = getWanderDirection(returner, from);
+                        }
+                        break;
+                    case direction.DOWN:
+                        if (returner == direction.UP)
+                        {
+                            returner =  getWanderDirection(returner, from);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return returner;
+        }
+
+        direction getWanderDirection(direction currentDirection, int currentInt)
+        {
+            if (currentDirection == direction.UP || currentDirection == direction.DOWN)
+            {
+                return (layer.Tiles[(int)intList[currentInt].X + 1, (int)intList[currentInt].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
+            }
+            else
+            {
+                return (layer.Tiles[(int)intList[currentInt].X,(int)intList[currentInt].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
             }
         }
 
@@ -296,6 +359,12 @@ namespace MazeChase
                         {
                             cageList.Add(new Vector2(i, j));
                             currentTile.Properties.Add("Intersection", 1);
+                            intList.Add(new Vector2(i, j));
+                        }
+                        else if(currentTile.Properties.ContainsKey("CageEntrance"))
+                        {
+                            currentTile.Properties.Add("Intersection", 1);
+                            cageList.Add(new Vector2(i, j));
                             intList.Add(new Vector2(i, j));
                         }
                         

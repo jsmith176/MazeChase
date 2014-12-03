@@ -60,14 +60,14 @@ namespace MazeChase
 
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
 
-            if (currentMode == mode.REGENERATE)
+            if (currentMode == mode.REGENERATE || currentMode == mode.SCATTER)
             {
-                if (viewportPosition.X % 2 != 0)
+                while (viewportPosition.X % 2 != 0)
                 {
                     viewportPosition.X++;
                 }
 
-                if (viewportPosition.Y % 2 != 0)
+                while (viewportPosition.Y % 2 != 0)
                 {
                     viewportPosition.Y++;
                 }
@@ -85,12 +85,12 @@ namespace MazeChase
                 }
                 else
                 {
-                    if (viewportPosition.X % 2 != 0)
+                    while (viewportPosition.X % 2 != 0)
                     {
                         viewportPosition.X++;
                     }
 
-                    if (viewportPosition.Y % 2 != 0)
+                    while (viewportPosition.Y % 2 != 0)
                     {
                         viewportPosition.Y++;
                     }
@@ -117,12 +117,12 @@ namespace MazeChase
                     currentMode = mode.ATTACK;
                 }
 
-                if (viewportPosition.X % 2 != 0)
+                while (viewportPosition.X % 2 != 0)
                 {
                     viewportPosition.X++;
                 }
 
-                if (viewportPosition.Y % 2 != 0)
+                while (viewportPosition.Y % 2 != 0)
                 {
                     viewportPosition.Y++;
                 }
@@ -303,33 +303,33 @@ namespace MazeChase
             {
                 case mode.ATTACK:
                     //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt());
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection);
                     //Console.WriteLine(movementDirection);
                     break;
                 case mode.FLEE:
                     //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt());
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection);
                     pickFleeDirection();
                     break;
                 case mode.REGENERATE:
-                    //targetPosition = cagePosition;
-                    movementDirection = mapManager.getFloydDirection(lastInt, cagePosition);
-                    if (mapManager.isCageUnderLocation(viewportPosition))
-                    {
-                        currentMode = mode.ATTACK;
-                        while (viewportPosition.X % 2 != 0)
+                    targetPosition = cagePosition;
+                    movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection);
+                    while (viewportPosition.X % 2 != 0)
                         {
                             viewportPosition.X++;
                         }
-                        while (viewportPosition.Y % 2 != 0)
-                        {
-                            viewportPosition.Y++;
-                        }
+                    while (viewportPosition.Y % 2 != 0)
+                    {
+                        viewportPosition.Y++;
+                    }
+                    if (mapManager.isCageUnderLocation(viewportPosition))
+                    {
+                        currentMode = mode.ATTACK;
                     }
                     break;
                 case mode.SCATTER:
                     //targetPosition = scatterLocation;
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt());
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection);
                     break;
             }
         }

@@ -97,7 +97,7 @@ namespace MazeChase
 
         SpriteFont bigFont, hugeFont;
 
-        bool pause = true;
+        public static bool pause = true;
 
         // Textures
         Texture2D ghostTexture;
@@ -174,8 +174,8 @@ namespace MazeChase
                 this.Exit();
             }
 
-            Console.WriteLine(gameMode);
-            Console.WriteLine(scoreManager.getRemainingLives());
+            //Console.WriteLine(gameMode);
+            //Console.WriteLine(scoreManager.getRemainingLives());
 
             keyPresses = Keyboard.GetState();
 
