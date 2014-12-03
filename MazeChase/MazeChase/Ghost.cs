@@ -317,7 +317,6 @@ namespace MazeChase
                 case 1:
                 case 2:
                 case 3:
-                case 4:
                 switch (currentMode)
                 {
                     case mode.ATTACK:
@@ -350,6 +349,16 @@ namespace MazeChase
                         //targetPosition = scatterLocation;
                         movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, direction.STILL);
                         break;
+                }
+                break;
+                case 4:
+                if (Math.Sqrt(Math.Pow(player.getPosition().X - viewportPosition.X, 2.0) + Math.Pow(player.getPosition().Y - viewportPosition.Y, 2.0)) < 150)
+                {
+                    movementDirection = mapManager.getWanderDirection(movementDirection, lastInt);
+                }
+                else
+                {
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
                 }
                 break;
             }

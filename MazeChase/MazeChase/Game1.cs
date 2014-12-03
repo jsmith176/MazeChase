@@ -17,12 +17,7 @@ General:
 •	The game will have appropriate sound.
 
 Chase Bots:
-•	The chase bots (obviously) chase the player.  However, they need to do so in a manner that both intelligent and flawed.  
-•	Intelligent refers to the method (e.g., sensor) for estimating the player’s position and/or direction.  Flawed implies that the method should not be perfect—the player should be able to employ some strategy or countermeasure to evade a given bot.
 •	There need to be at least four (4) different flavors of chase bot.  Each type of chase bot must employ a different chase strategy.  Chase bots may also cooperate with each other (share information) to a limited degree.
-
-Algorithms:
-•	Each type of chase bot must use a different algorithm (based on its unique capabilities) to estimate the position and direction of the player.
 
 Extra Credit:
 •	Implementation of levels

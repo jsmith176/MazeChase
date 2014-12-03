@@ -310,7 +310,12 @@ namespace MazeChase
             return returner;
         }
 
-        direction getWanderDirection(direction currentDirection, int currentInt)
+        public direction getWanderDirection(direction currentDir, Vector2 lastInt)
+        {
+            return getWanderDirection(currentDir, intList.IndexOf(lastInt));
+        }
+
+        public direction getWanderDirection(direction currentDirection, int currentInt)
         {
             if (currentDirection == direction.UP || currentDirection == direction.DOWN)
             {
