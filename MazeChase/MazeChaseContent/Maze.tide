@@ -135,7 +135,7 @@
             <Frames>
               <TileSheet Ref="tile sheet" />
               <Static Index="19" BlendMode="Alpha" />
-              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="22" BlendMode="Alpha" />
             </Frames>
           </Animated>
           <Static Index="22" BlendMode="Alpha" />
@@ -201,7 +201,7 @@
             <Frames>
               <TileSheet Ref="tile sheet" />
               <Static Index="19" BlendMode="Alpha" />
-              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="22" BlendMode="Alpha" />
             </Frames>
           </Animated>
           <Static Index="14" BlendMode="Alpha" />
@@ -2909,7 +2909,7 @@
             <Frames>
               <TileSheet Ref="tile sheet" />
               <Static Index="19" BlendMode="Alpha" />
-              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="22" BlendMode="Alpha" />
             </Frames>
           </Animated>
           <Static Index="22" BlendMode="Alpha" />
@@ -2975,7 +2975,7 @@
             <Frames>
               <TileSheet Ref="tile sheet" />
               <Static Index="19" BlendMode="Alpha" />
-              <Static Index="16" BlendMode="Alpha" />
+              <Static Index="22" BlendMode="Alpha" />
             </Frames>
           </Animated>
           <Static Index="14" BlendMode="Alpha" />
