@@ -132,13 +132,13 @@ namespace MazeChase
         {
             Tile tile = layer.Tiles[layer.GetTileLocation(new Location((int)(viewport.X + playerX), (int)(viewport.Y + playerY)))];
 
-            if (tile.TileIndex == 22)
+            if (tile.TileIndex == 22 && !tile.Properties.ContainsKey("Food"))
             {
                 tile.TileIndex = 13;
                 scoreManager.increaseScore(10);
                 return 1;
             }
-            else if (tile.TileIndex == 16 || tile.TileIndex == 19)
+            else if (tile.Properties.ContainsKey("Food"))
             {
                 AnimatedTile aTile = (AnimatedTile)tile;
                 aTile.TileFrames.ElementAt(0).TileIndex = 13;

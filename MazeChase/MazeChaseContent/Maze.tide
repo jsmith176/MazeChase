@@ -138,6 +138,9 @@
               <Static Index="19" BlendMode="Alpha" />
               <Static Index="22" BlendMode="Alpha" />
             </Frames>
+            <Properties>
+              <Property Key="Food" Type="Int32"><![CDATA[1]]></Property>
+            </Properties>
           </Animated>
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
@@ -204,6 +207,9 @@
               <Static Index="19" BlendMode="Alpha" />
               <Static Index="22" BlendMode="Alpha" />
             </Frames>
+            <Properties>
+              <Property Key="Food" Type="Int32"><![CDATA[1]]></Property>
+            </Properties>
           </Animated>
           <Static Index="14" BlendMode="Alpha" />
         </Row>
@@ -3416,6 +3422,9 @@
               <Static Index="19" BlendMode="Alpha" />
               <Static Index="22" BlendMode="Alpha" />
             </Frames>
+            <Properties>
+              <Property Key="Food" Type="Int32"><![CDATA[1]]></Property>
+            </Properties>
           </Animated>
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
@@ -3482,6 +3491,9 @@
               <Static Index="19" BlendMode="Alpha" />
               <Static Index="22" BlendMode="Alpha" />
             </Frames>
+            <Properties>
+              <Property Key="Food" Type="Int32"><![CDATA[1]]></Property>
+            </Properties>
           </Animated>
           <Static Index="14" BlendMode="Alpha" />
         </Row>
