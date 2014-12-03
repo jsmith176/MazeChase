@@ -56,7 +56,7 @@ namespace MazeChase
 
         public virtual void Update(GameTime gameTime)
         {
-            //Console.WriteLine(currentMode);
+            Console.WriteLine(currentMode);
 
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
 
@@ -81,7 +81,15 @@ namespace MazeChase
             {
                 if (previouslyEaten)
                 {
-                    
+                    while (viewportPosition.X % 2 != 0)
+                    {
+                        viewportPosition.X++;
+                    }
+
+                    while (viewportPosition.Y % 2 != 0)
+                    {
+                        viewportPosition.Y++;
+                    }
                 }
                 else
                 {
@@ -303,17 +311,17 @@ namespace MazeChase
             {
                 case mode.ATTACK:
                     //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection);
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
                     //Console.WriteLine(movementDirection);
                     break;
                 case mode.FLEE:
                     //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection);
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
                     pickFleeDirection();
                     break;
                 case mode.REGENERATE:
                     targetPosition = cagePosition;
-                    movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection);
+                    movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection, direction.STILL);
                     while (viewportPosition.X % 2 != 0)
                         {
                             viewportPosition.X++;
@@ -329,7 +337,7 @@ namespace MazeChase
                     break;
                 case mode.SCATTER:
                     //targetPosition = scatterLocation;
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection);
+                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, direction.STILL);
                     break;
             }
         }

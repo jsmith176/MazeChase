@@ -29,7 +29,7 @@ namespace MazeChase
         int ghostEatTime;
         public bool canEatGhosts;
         public bool isDead;
-        direction movementDirection;
+        direction movementDirection, lastMovement;
         SoundEffect playerNoise;
         SoundEffect deathNoise;
         SoundEffectInstance playerNoiseInstance;
@@ -58,6 +58,8 @@ namespace MazeChase
 
         public virtual void Update(GameTime gameTime)
         {
+            Console.WriteLine(ghostEatTime);
+
             ghostEatTime--;
 
             if (ghostEatTime > 0)
@@ -100,6 +102,8 @@ namespace MazeChase
                 pickDirection();
 
             move();
+
+            lastMovement = movementDirection;
 
             for (int i = 0; i < wall.Count(); i++)
                 wall[i] = 0;
@@ -231,6 +235,11 @@ namespace MazeChase
             return lastInt;
         }
 
+        public direction getLastMove()
+        {
+            return lastMovement;
+        }
+
         public bool lowEatTime()
         {
             if (ghostEatTime <= 150)
@@ -287,7 +296,7 @@ namespace MazeChase
                 mapManager.setViewportPosition(((34 * 16 + 8) - mapManager.getViewport().Width / 2), (31 * 16 + 8) - mapManager.getViewport().Height / 2 - (1 * 16 + 8));
                 scoreManager.removeLive();
                 position = new Vector2(origin.X, origin.Y + (1 * 16 + 8));
-                
+                ghostEatTime = 0;
                 isDead = false;
             }
         }

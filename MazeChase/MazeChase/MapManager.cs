@@ -229,7 +229,7 @@ namespace MazeChase
             }
         }
 
-        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction previousDir)
+        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction previousDir, direction targetMovement)
         {
             int from = intList.IndexOf(fromVector);
             int to = intList.IndexOf(toVector);
@@ -243,14 +243,7 @@ namespace MazeChase
 
             if (from == to)
             {
-                if (rand.Next() % 2 == 0)
-                {
-                    returner = (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
-                }
-                else
-                {
-                    returner = (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
-                }
+                returner = (targetMovement == direction.STILL) ? getWanderDirection(previousDir, from) : targetMovement;
             }
             else if (cageList.Contains(fromVector))
             {
@@ -268,14 +261,8 @@ namespace MazeChase
                 }
                 else
                 {
-                    if (rand.Next() % 2 == 0)
-                    {
-                        returner = (layer.Tiles[(int)intList[from].X + 1, (int)intList[from].Y].TileIndexProperties.ContainsKey("Wall")) ? direction.LEFT : direction.RIGHT;
-                    }
-                    else
-                    {
-                        returner = (layer.Tiles[(int)intList[from].X, (int)intList[from].Y + 1].TileIndexProperties.ContainsKey("Wall")) ? direction.UP : direction.DOWN;
-                    }
+                    //returner = (targetMovement == direction.STILL) ? getWanderDirection(previousDir, from) : targetMovement;
+                    returner = direction.STILL;
                 }
             }
 
