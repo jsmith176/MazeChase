@@ -61,11 +61,11 @@ namespace MazeChase
 
         public virtual void Update(GameTime gameTime)
         {
-            Console.WriteLine(currentMode);
+            //Console.WriteLine(currentMode);
 
             viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
 
-            if (currentMode == mode.REGENERATE || currentMode == mode.SCATTER)
+            if (currentMode == mode.REGENERATE)
             {
                 while (viewportPosition.X % 2 != 0)
                 {
@@ -122,7 +122,7 @@ namespace MazeChase
                 }
                 else
                 {
-                    currentMode = mode.SCATTER;
+                    currentMode = mode.ATTACK;
                 }
 
                 if(currentMode != mode.REGENERATE)
@@ -173,7 +173,7 @@ namespace MazeChase
 
             if (intersectsWithPlayer())
             {
-                if (currentMode == mode.ATTACK || currentMode == mode.SCATTER)
+                if (currentMode == mode.ATTACK)
                 {
                     playerDeathSoundInstance.Play();
                     player.isDead = true;
@@ -201,11 +201,6 @@ namespace MazeChase
             {
                 speed = 4;
                 targetPosition = cagePosition;
-            }
-            else if (currentMode == mode.SCATTER)
-            {
-                speed = 2;
-                targetPosition = scatterLocation;
             }
             else
             {
@@ -316,26 +311,54 @@ namespace MazeChase
             {
                 case 1:
                 case 2:
+                    switch (currentMode)
+                    {
+                        case mode.ATTACK:
+                            //targetPosition = player.getPosition();
+                            movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving());
+                            //Console.WriteLine(movementDirection);
+                            break;
+                        case mode.FLEE:
+                            //targetPosition = player.getPosition();
+                            movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving());
+                            pickFleeDirection();
+                            break;
+                        case mode.REGENERATE:
+                            targetPosition = cagePosition;
+                            movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection, direction.STILL, player.isPlayerMoving());
+                            while (viewportPosition.X % 2 != 0)
+                                {
+                                    viewportPosition.X++;
+                                }
+                            while (viewportPosition.Y % 2 != 0)
+                            {
+                                viewportPosition.Y++;
+                            }
+                            if (mapManager.isCageUnderLocation(viewportPosition))
+                            {
+                                currentMode = mode.ATTACK;
+                            }
+                            break;
+                    }
+                break;
                 case 3:
                 switch (currentMode)
                 {
                     case mode.ATTACK:
-                        //targetPosition = player.getPosition();
-                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
-                        //Console.WriteLine(movementDirection);
+                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving(), true);
                         break;
                     case mode.FLEE:
                         //targetPosition = player.getPosition();
-                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
+                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving());
                         pickFleeDirection();
                         break;
                     case mode.REGENERATE:
                         targetPosition = cagePosition;
-                        movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection, direction.STILL);
+                        movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection, direction.STILL, player.isPlayerMoving());
                         while (viewportPosition.X % 2 != 0)
-                            {
-                                viewportPosition.X++;
-                            }
+                        {
+                            viewportPosition.X++;
+                        }
                         while (viewportPosition.Y % 2 != 0)
                         {
                             viewportPosition.Y++;
@@ -345,21 +368,43 @@ namespace MazeChase
                             currentMode = mode.ATTACK;
                         }
                         break;
-                    case mode.SCATTER:
-                        //targetPosition = scatterLocation;
-                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, direction.STILL);
-                        break;
                 }
                 break;
                 case 4:
-                if (Math.Sqrt(Math.Pow(player.getPosition().X - viewportPosition.X, 2.0) + Math.Pow(player.getPosition().Y - viewportPosition.Y, 2.0)) < 150)
-                {
-                    movementDirection = mapManager.getWanderDirection(movementDirection, lastInt);
-                }
-                else
-                {
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
-                }
+                    switch(currentMode)
+                    {
+                        case mode.ATTACK:
+                            if (Math.Sqrt(Math.Pow(player.getPosition().X - viewportPosition.X, 2.0) + Math.Pow(player.getPosition().Y - viewportPosition.Y, 2.0)) < 150)
+                            {
+                                movementDirection = mapManager.getWanderDirection(movementDirection, lastInt);
+                            }
+                            else
+                            {
+                                movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving());
+                            }
+                        break;
+                        case mode.FLEE:
+                            //targetPosition = player.getPosition();
+                            movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving());
+                            pickFleeDirection();
+                        break;
+                        case mode.REGENERATE:
+                            targetPosition = cagePosition;
+                            movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection, direction.STILL, player.isPlayerMoving());
+                            while (viewportPosition.X % 2 != 0)
+                                {
+                                    viewportPosition.X++;
+                                }
+                            while (viewportPosition.Y % 2 != 0)
+                            {
+                                viewportPosition.Y++;
+                            }
+                            if (mapManager.isCageUnderLocation(viewportPosition))
+                            {
+                                currentMode = mode.ATTACK;
+                            }
+                        break;
+                    }
                 break;
             }
         }

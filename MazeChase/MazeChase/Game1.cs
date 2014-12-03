@@ -30,7 +30,7 @@ namespace MazeChase
 {
     public enum direction { STILL, UP, DOWN, LEFT, RIGHT };
 
-    enum mode { SCATTER, ATTACK, FLEE, REGENERATE };
+    enum mode { ATTACK, FLEE, REGENERATE };
 
     public class Game1 : Microsoft.Xna.Framework.Game
     {
@@ -344,10 +344,10 @@ namespace MazeChase
                 player.Update(gameTime);
 
                 // Update ghosts
-                red.Update(gameTime);
-                blue.Update(gameTime);
+                //red.Update(gameTime);
+                //blue.Update(gameTime);
                 pink.Update(gameTime);
-                orange.Update(gameTime);
+                //orange.Update(gameTime);
             }
             else if (player.isDead)
             {

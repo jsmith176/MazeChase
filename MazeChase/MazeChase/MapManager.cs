@@ -143,6 +143,7 @@ namespace MazeChase
                 AnimatedTile aTile = (AnimatedTile)tile;
                 aTile.TileFrames.ElementAt(0).TileIndex = 13;
                 aTile.TileFrames.ElementAt(1).TileIndex = 13;
+                tile.Properties.Remove("Food");
                 scoreManager.increaseScore(100);
                 return 20;
             }
@@ -229,7 +230,82 @@ namespace MazeChase
             }
         }
 
-        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction previousDir, direction targetMovement)
+        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction previousDir, direction targetMovement, bool playerMovement, bool thingy)
+        {
+            Vector2 closest = toVector;
+            int skipper = 0;
+            direction returner;
+
+            switch (targetMovement)
+            {
+                case direction.UP:
+                    for (int i = intList.IndexOf(toVector) - 1; i >= 0; i--)
+                    {
+                        if (intList[i].X == toVector.X && skipper < 2)
+                        {
+                            closest = intList[i];
+                            skipper++;
+                            break;
+                        }
+                    }
+                    returner =  getFloydDirection(fromVector, closest, previousDir, targetMovement, playerMovement);
+                break;
+
+                case direction.DOWN:
+                    for (int i = intList.IndexOf(toVector) + 1; i < intList.Count; i++)
+                    {
+                        if (intList[i].Y == toVector.Y && skipper < 2)
+                        {
+                            closest = intList[i];
+                            skipper++;
+                            break;
+                        }
+                    }
+                    returner = getFloydDirection(fromVector, closest, previousDir, targetMovement, playerMovement);
+                break;
+
+                case direction.LEFT:
+                    if (toVector.Y == intList[intList.IndexOf(toVector) - 2].Y)
+                    {
+                        returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) - 2], previousDir, targetMovement, playerMovement);
+                    }
+                    else if (toVector.Y == intList[intList.IndexOf(toVector) - 1].Y)
+                    {
+                        returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) - 1], previousDir, targetMovement, playerMovement);
+                    }
+                    else
+                    {
+                        returner = getFloydDirection(fromVector, toVector, previousDir, targetMovement, playerMovement);
+                    }
+                
+                break;
+
+                case direction.RIGHT:
+                    if (toVector.Y == intList[intList.IndexOf(toVector) + 2].Y)
+                    {
+                        returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) + 2], previousDir, targetMovement, playerMovement);
+                    }
+                    else if (toVector.Y == intList[intList.IndexOf(toVector) + 1].Y)
+                    {
+                        returner = getFloydDirection(fromVector, intList[intList.IndexOf(toVector) + 1], previousDir, targetMovement, playerMovement);
+                    }
+                    else
+                    {
+                        returner = getFloydDirection(fromVector, toVector, previousDir, targetMovement, playerMovement);
+                    }
+
+                break;
+
+                default:
+                    returner = getFloydDirection(fromVector, toVector, previousDir, targetMovement, playerMovement);
+                break;
+            }
+
+            Console.WriteLine(returner);
+            return returner;
+        }
+
+        public direction getFloydDirection(Vector2 fromVector, Vector2 toVector, direction previousDir, direction targetMovement, bool playerMovement)
         {
             int from = intList.IndexOf(fromVector);
             int to = intList.IndexOf(toVector);
@@ -238,12 +314,12 @@ namespace MazeChase
             //Console.WriteLine(toVector.X + " " + toVector.Y);
             //Console.WriteLine(from + " " + to);
 
+            Console.WriteLine(from + " " + to);
             direction returner;
-            
 
             if (from == to)
             {
-                returner = (targetMovement == direction.STILL) ? getWanderDirection(previousDir, from) : targetMovement;
+                returner = (targetMovement == direction.STILL) ? getWanderDirection(previousDir, from) : (playerMovement) ? targetMovement : getWanderDirection(previousDir, from);
             }
             else if (cageList.Contains(fromVector))
             {

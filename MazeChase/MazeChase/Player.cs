@@ -58,7 +58,6 @@ namespace MazeChase
 
         public virtual void Update(GameTime gameTime)
         {
-            Console.WriteLine(ghostEatTime);
 
             ghostEatTime--;
 
@@ -212,7 +211,9 @@ namespace MazeChase
                 }
             }
             else
+            {
                 isMoving = false;
+            }
         }
 
         public void modeSwap(int adjuster)
@@ -245,6 +246,11 @@ namespace MazeChase
             if (ghostEatTime <= 150)
                 return true;
             return false;
+        }
+
+        public bool isPlayerMoving()
+        {
+            return isMoving;
         }
 
         void nextFrame(GameTime gameTime)
