@@ -58,8 +58,8 @@ namespace MazeChase
         Ghost red, blue, pink, orange;
         Vector2 origin;
 
-        SoundEffect deathSound, newLifeSound, eatSound, beginningMusic, congrats;
-        SoundEffectInstance deathSoundInstance, newLifeInstance, eatInstance, musicInstance, congratsInstance;
+        SoundEffect deathSound, newLifeSound, beginningMusic, congrats;
+        SoundEffectInstance deathSoundInstance, newLifeInstance, musicInstance, congratsInstance;
 
         KeyboardState keyPresses, oldKeyPresses;
 
@@ -100,6 +100,9 @@ namespace MazeChase
 
         protected override void LoadContent()
         {
+            beginningMusic = Content.Load<SoundEffect>(@"pacman_beginning");
+            musicInstance = beginningMusic.CreateInstance();
+
             deathSound = Content.Load<SoundEffect>(@"pacman_death");
             deathSoundInstance = deathSound.CreateInstance();
 
@@ -141,9 +144,6 @@ namespace MazeChase
                 exportHighScores();
                 this.Exit();
             }
-
-            //Console.WriteLine(gameMode);
-            //Console.WriteLine(scoreManager.getRemainingLives());
 
             keyPresses = Keyboard.GetState();
 
@@ -198,6 +198,7 @@ namespace MazeChase
                     if (keyPresses.IsKeyDown(Keys.Enter) && keyPresses != oldKeyPresses)
                     {
                         scoreManager.setLives(3);
+                        musicInstance.Play();
                         scoreManager.reset();
                         //currentLevel = 0
                         player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
@@ -224,6 +225,7 @@ namespace MazeChase
                     if (keyPresses.IsKeyDown(Keys.Enter) && keyPresses != oldKeyPresses)
                     {
                         scoreManager.setLives(3);
+                        musicInstance.Play();
                         scoreManager.reset();
                         //currentLevel = 0
                         player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
@@ -289,6 +291,7 @@ namespace MazeChase
                 if (keyPresses.IsKeyDown(Keys.Enter) && keyPresses != oldKeyPresses)
                 {
                     scoreManager.setLives(3);
+                    musicInstance.Play();
                     scoreManager.reset();
                     //currentLevel = 0
                     player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
@@ -356,7 +359,7 @@ namespace MazeChase
                         blue = new Ghost(this.Content, 2, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
                         pink = new Ghost(this.Content, 3, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
                         orange = new Ghost(this.Content, 4, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
-                    }
+                }
             }
 
             }

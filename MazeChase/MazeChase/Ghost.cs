@@ -316,17 +316,14 @@ namespace MazeChase
                         case mode.ATTACK:
                             if (rand.Next() % 2 == 0)
                             {
-                                Console.WriteLine("red mode");
                                 movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving());
                             }
                             else if (rand.Next() % 3 == 0)
                             {
-                                Console.WriteLine("pink mode");
                                 movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove(), player.isPlayerMoving(), true);
                             }
                             else
                             {
-                                Console.WriteLine("orange mode");
                                 if (Math.Sqrt(Math.Pow(player.getPosition().X - viewportPosition.X, 2.0) + Math.Pow(player.getPosition().Y - viewportPosition.Y, 2.0)) < 150)
                                 {
                                     movementDirection = mapManager.getWanderDirection(movementDirection, lastInt);

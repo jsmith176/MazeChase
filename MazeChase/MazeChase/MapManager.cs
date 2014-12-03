@@ -301,7 +301,6 @@ namespace MazeChase
                 break;
             }
 
-            Console.WriteLine(returner);
             return returner;
         }
 
@@ -335,14 +334,6 @@ namespace MazeChase
                     returner = getWanderDirection(previousDir, from);
                 }
             }
-
-            //if (from > 120 && from < 128)
-            //{
-            //    Console.Write("");
-                
-            //    Console.WriteLine(returner);
-            //    Game1.pause = true;
-            //}
             
             if(previousDir != returner)
             {
