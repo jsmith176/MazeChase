@@ -11,6 +11,7 @@ namespace MazeChase
 {
     class Ghost
     {
+        int pathingMode;
         MapManager mapManager;
         ScoreManager scoreManager;
         Player player;
@@ -28,9 +29,10 @@ namespace MazeChase
         Random rand;
         bool previouslyEaten;
 
-        public Ghost(ContentManager content, MapManager mapManager, ScoreManager scoreManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition)
+        public Ghost(ContentManager content, int AImode, MapManager mapManager, ScoreManager scoreManager, Player player, Texture2D texture, Vector2 firstFrame, Vector2 lastFrame, Vector2 spawnPosition, Vector2 defensePosition)
         {
             this.mapManager = mapManager;
+            pathingMode = AImode;
             this.scoreManager = scoreManager;
             this.player = player;
             this.texture = texture;
@@ -310,38 +312,46 @@ namespace MazeChase
 
         void pickDirection()
         {
-            switch (currentMode)
+            switch (pathingMode)
             {
-                case mode.ATTACK:
-                    //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
-                    //Console.WriteLine(movementDirection);
-                    break;
-                case mode.FLEE:
-                    //targetPosition = player.getPosition();
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
-                    pickFleeDirection();
-                    break;
-                case mode.REGENERATE:
-                    targetPosition = cagePosition;
-                    movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection, direction.STILL);
-                    while (viewportPosition.X % 2 != 0)
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                switch (currentMode)
+                {
+                    case mode.ATTACK:
+                        //targetPosition = player.getPosition();
+                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
+                        //Console.WriteLine(movementDirection);
+                        break;
+                    case mode.FLEE:
+                        //targetPosition = player.getPosition();
+                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, player.getLastMove());
+                        pickFleeDirection();
+                        break;
+                    case mode.REGENERATE:
+                        targetPosition = cagePosition;
+                        movementDirection = mapManager.getFloydDirection(lastInt, targetPosition, movementDirection, direction.STILL);
+                        while (viewportPosition.X % 2 != 0)
+                            {
+                                viewportPosition.X++;
+                            }
+                        while (viewportPosition.Y % 2 != 0)
                         {
-                            viewportPosition.X++;
+                            viewportPosition.Y++;
                         }
-                    while (viewportPosition.Y % 2 != 0)
-                    {
-                        viewportPosition.Y++;
-                    }
-                    if (mapManager.isCageUnderLocation(viewportPosition))
-                    {
-                        currentMode = mode.ATTACK;
-                    }
-                    break;
-                case mode.SCATTER:
-                    //targetPosition = scatterLocation;
-                    movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, direction.STILL);
-                    break;
+                        if (mapManager.isCageUnderLocation(viewportPosition))
+                        {
+                            currentMode = mode.ATTACK;
+                        }
+                        break;
+                    case mode.SCATTER:
+                        //targetPosition = scatterLocation;
+                        movementDirection = mapManager.getFloydDirection(lastInt, player.getLastInt(), movementDirection, direction.STILL);
+                        break;
+                }
+                break;
             }
         }
 

@@ -26,15 +26,6 @@ Algorithms:
 
 Extra Credit:
 •	Implementation of levels
-•	Implementation of animation into the Maze structure.  For example, passages that randomly open and close.
-•	Animated reconstitution of chase bots from a centralized location
-•	Use of TIDE special effects:  parallax and/or tile animation.
-•	Other non-trivial ideas (please consult with me)
-
-
-Tips:
-•	Recommend that you implement the maze first and then construct the internal (graph) representation.  This should be done before introducing any of the characters.
-•	Use a build a little, test a little development approach.  Do not bet the farm on a “grand design” that you are unable to implement.
 
 */
 
@@ -106,10 +97,10 @@ namespace MazeChase
 
 
             // Initialize Ghost
-            red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8));// top right
-            blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((62 * 16) + 8, (44 * 16) + 8));// bottom right
-            pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((0 * 16) + 8, (0 * 16) + 8));// top left
-            orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (44 * 16) + 8));// botttom left
+            red = new Ghost(this.Content, 1, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((62 * 16) + 8, (0 * 16) + 8));// top right
+            blue = new Ghost(this.Content, 2, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((62 * 16) + 8, (44 * 16) + 8));// bottom right
+            pink = new Ghost(this.Content, 3, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((0 * 16) + 8, (0 * 16) + 8));// top left
+            orange = new Ghost(this.Content, 4, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((0 * 16) + 8, (44 * 16) + 8));// botttom left
         }
 
         protected override void LoadContent()
@@ -215,10 +206,10 @@ namespace MazeChase
                         scoreManager.reset();
                         //currentLevel = 0
                         player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
-                        red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
-                        blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
-                        pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
-                        orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
+                        red = new Ghost(this.Content, 1, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
+                        blue = new Ghost(this.Content, 2, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
+                        pink = new Ghost(this.Content, 3, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
+                        orange = new Ghost(this.Content, 4, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
                         gameMode = 2;
                         hiScoreName = "";
                         currentIndex = 0;
@@ -241,10 +232,10 @@ namespace MazeChase
                         scoreManager.reset();
                         //currentLevel = 0
                         player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
-                        red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
-                        blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
-                        pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
-                        orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
+                        red = new Ghost(this.Content, 1, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
+                        blue = new Ghost(this.Content, 2,  mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
+                        pink = new Ghost(this.Content, 3, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
+                        orange = new Ghost(this.Content, 4, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
                         gameMode = 2;
                         hiScoreName = "";
                         currentIndex = 0;
@@ -306,10 +297,10 @@ namespace MazeChase
                     scoreManager.reset();
                     //currentLevel = 0
                     player = new Player(this.Content, inputManager, mapManager, scoreManager, origin);
-                    red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
-                    blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
-                    pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
-                    orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
+                    red = new Ghost(this.Content, 1, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
+                    blue = new Ghost(this.Content, 2, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
+                    pink = new Ghost(this.Content, 3, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
+                    orange = new Ghost(this.Content, 4, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
                     gameMode = 2;
                     hiScoreName = "";
                     currentIndex = 0;
@@ -366,10 +357,10 @@ namespace MazeChase
             else if (player.isDead)
             {
                 player.deathAnimation(gameTime);
-                        red = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
-                        blue = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
-                        pink = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
-                        orange = new Ghost(this.Content, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
+                        red = new Ghost(this.Content, 1, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 0), new Vector2(7, 0), new Vector2((28 * 16) + 8, (22 * 16) + 8), new Vector2((61 * 16) + 8, (1 * 16) + 8));// top right
+                        blue = new Ghost(this.Content, 2, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 1), new Vector2(7, 1), new Vector2((31 * 16) + 8, (19 * 16) + 8), new Vector2((61 * 16) + 8, (43 * 16) + 8));// bottom right
+                        pink = new Ghost(this.Content, 3, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 2), new Vector2(7, 2), new Vector2((34 * 16) + 8, (19 * 16) + 8), new Vector2((1 * 16) + 8, (1 * 16) + 8));// top left
+                        orange = new Ghost(this.Content, 4, mapManager, scoreManager, player, ghostTexture, new Vector2(0, 3), new Vector2(7, 3), new Vector2((37 * 16) + 8, (22 * 16) + 8), new Vector2((1 * 16) + 8, (43 * 16) + 8));// botttom left
                     }
             }
 
