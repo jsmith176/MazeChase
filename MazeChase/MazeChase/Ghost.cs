@@ -36,11 +36,13 @@ namespace MazeChase
             this.texture = texture;
             this.firstFrame = firstFrame;
             scaredFrame = new Vector2(0, 5);
-            currentFrame = new Vector2(0, 0);
+            currentFrame = firstFrame;
             this.lastFrame = lastFrame;
             frameSize = new Vector2(24, 24);
             position = spawnPosition;
-            sourceRectangle = new Rectangle(0, 0, 24, 24);
+            sourceRectangle = new Rectangle((int)currentFrame.X * (int)frameSize.X,
+                        (int)currentFrame.Y * (int)frameSize.Y,
+                        (int)frameSize.X, (int)frameSize.Y);
             color = Color.White;
             movementDirection = direction.STILL;
             rand = new Random();
@@ -52,6 +54,7 @@ namespace MazeChase
             playerDeathSoundInstance = playerDeathSound.CreateInstance();
             ghostDeathSoundInstance = ghostDeathSound.CreateInstance();
             previouslyEaten = false;
+            viewportPosition = new Vector2(position.X - mapManager.getViewport().X, position.Y - mapManager.getViewport().Y);
         }
 
         public virtual void Update(GameTime gameTime)
