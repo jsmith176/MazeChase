@@ -1536,10 +1536,9 @@
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha" />
-          <Static Index="13" BlendMode="Alpha" />
           <Static Index="13" BlendMode="Alpha">
             <Properties>
-              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
+              <Property Key="CageEntrance" Type="Int32"><![CDATA[1]]></Property>
             </Properties>
           </Static>
           <Static Index="13" BlendMode="Alpha">
@@ -1567,7 +1566,16 @@
               <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
             </Properties>
           </Static>
-          <Static Index="13" BlendMode="Alpha" />
+          <Static Index="13" BlendMode="Alpha">
+            <Properties>
+              <Property Key="Cage" Type="Int32"><![CDATA[1]]></Property>
+            </Properties>
+          </Static>
+          <Static Index="13" BlendMode="Alpha">
+            <Properties>
+              <Property Key="CageEntrance" Type="Int32"><![CDATA[1]]></Property>
+            </Properties>
+          </Static>
           <Static Index="13" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
           <Static Index="22" BlendMode="Alpha" />
